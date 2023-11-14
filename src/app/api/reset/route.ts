@@ -22,6 +22,8 @@ import {
   stringToDoubleBoardCoordinate,
 } from "@models/exports";
 
+import { createGameNode } from "@middleware/create_game_node";
+
 /**
  * Reset Dev DB
  */
@@ -92,20 +94,7 @@ export async function POST() {
           player_white: node.data.PW.toString(),
         };
 
-        await neo4jSession.executeWrite((tx) =>
-          tx.run(
-            /* cypher */ `
-              WITH properties($gameNodeProps) AS props
-
-              CREATE (:GameNode{
-                player_black: props.player_black,
-                player_white: props.player_white,
-                id:           $customGameId
-              })
-            `,
-            { gameNodeProps, customGameId }
-          )
-        );
+        await createGameNode(gameNodeProps, customGameId);
       }
 
       if (nextCoords) {
@@ -130,15 +119,15 @@ export async function POST() {
 
           WITH properties(mtml) AS mtm
 
-          CREATE  (:BoardNode{
-                    x: mtm.from.x,
-                    y: mtm.from.y
-                  })
+          CREATE   (:BoardNode{
+                     x: mtm.from.x,
+                     y: mtm.from.y
+                   })
                   -[:PLAYS_NEXT]
                  ->(:BoardNode{
-                    x: mtm.to.x,
-                    y: mtm.to.y
-                 })
+                     x: mtm.to.x,
+                     y: mtm.to.y
+                   })
         `,
         { moveToMoveLinks }
       )
