@@ -24,6 +24,7 @@ import {
 import {
   createBoardCoordinatesNodes,
   createGameNode,
+  createGamePaths,
   deleteEverything,
 } from "@middleware/exports";
 
@@ -89,26 +90,7 @@ export async function POST() {
       }
     }
 
-    await neo4jSession.executeWrite((tx) =>
-      tx.run(
-        /* cypher */ `
-          UNWIND $moveToMoveLinks AS mtml
-
-          WITH properties(mtml) AS mtm
-
-          CREATE   (:BoardNode{
-                     x: mtm.from.x,
-                     y: mtm.from.y
-                   })
-                  -[:PLAYS_NEXT]
-                 ->(:BoardNode{
-                     x: mtm.to.x,
-                     y: mtm.to.y
-                   })
-        `,
-        { moveToMoveLinks }
-      )
-    );
+    await createGamePaths(moveToMoveLinks);
 
     //------------------------------------------------------
 
