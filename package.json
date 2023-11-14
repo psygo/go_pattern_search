@@ -30,6 +30,7 @@
   "dependencies": {
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.16",
+    "@sabaki/immutable-gametree": "^1.9.4",
     "@sabaki/sgf": "^3.4.7",
     "lodash": "^4.17.21",
     "neo4j-driver": "^5.14.0",
