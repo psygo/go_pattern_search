@@ -18,45 +18,22 @@ import {
   BoardCoordinate,
   GameNodeProperties,
   MoveToMoveProperties,
-  allCoords,
   stringToDoubleBoardCoordinate,
 } from "@models/exports";
 
-import { createGameNode } from "@middleware/create_game_node";
+import {
+  createBoardCoordinatesNodes,
+  createGameNode,
+  deleteEverything,
+} from "@middleware/exports";
 
 /**
  * Reset Dev DB
  */
 export async function POST() {
   try {
-    //------------------------------------------------------
-    // 1. Delete Everything
-
-    await neo4jSession.executeWrite((tx) =>
-      tx.run(/* cypher */ `
-        MATCH (n)
-        DETACH DELETE n
-      `)
-    );
-
-    //------------------------------------------------------
-    // 2. Create Board Coordinates Nodes
-
-    await neo4jSession.executeWrite((tx) =>
-      tx.run(
-        /* cypher */ `
-          UNWIND $allCoords AS coord
-
-          WITH properties(coord) AS coordProps
-
-          CREATE (:BoardNode{
-            x: coordProps.x,
-            y: coordProps.y
-          })
-        `,
-        { allCoords }
-      )
-    );
+    await deleteEverything();
+    await createBoardCoordinatesNodes();
 
     //------------------------------------------------------
     // 3. SGF
