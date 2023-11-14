@@ -1,6 +1,25 @@
 {
   "name": "go_pattern_search",
-  "version": "0.1.0",
+  "version": "0.0.1",
+  "description": "Search patterns in Go files",
+  "author": "Philippe Fanaro",
+  "contributors": [
+    {
+      "name": "Philippe Fanaro",
+      "email": "philippefanaro@gmail.com"
+    }
+  ],
+  "keywords": [
+    "go",
+    "igo",
+    "baduk",
+    "weiqi",
+    "sgf",
+    "neo4j",
+    "graph-database",
+    "graph",
+    "pattern-search"
+  ],
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -11,6 +30,7 @@
   "dependencies": {
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.16",
+    "@sabaki/sgf": "^3.4.7",
     "lodash": "^4.17.21",
     "neo4j-driver": "^5.14.0",
     "next": "14.0.2",

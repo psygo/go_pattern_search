@@ -5,7 +5,7 @@ In this project, we replicate the SGF game trees as graphs inside Neo4j, and the
 ## Current Stack
 
 - Neo4j
-  - If in-memory, one could choose the package `graphology`, I guess.
+  - If in-memory, one could choose the package [graphology](https://github.com/graphology/graphology), I guess.
 - NextJS (ReactJS) + MUI
 - Sabaki's SGF Parser
 - Custom HTML Canvas for Displaying and Editing the SGF files.

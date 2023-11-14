@@ -11,6 +11,9 @@ dependencies:
   '@mui/icons-material':
     specifier: ^5.14.16
     version: 5.14.16(@mui/material@5.14.17)(@types/react@18.2.37)(react@18.2.0)
+  '@sabaki/sgf':
+    specifier: ^3.4.7
+    version: 3.4.7
   lodash:
     specifier: ^4.17.21
     version: 4.17.21
@@ -610,6 +613,15 @@ packages:
   /@rushstack/eslint-patch@1.5.1:
     resolution: {integrity: sha512-6i/8UoL0P5y4leBIGzvkZdS85RDMG9y1ihZzmTZQ5LdHUYmZ7pKFoj8X0236s3lusPs1Fa5HTQUpwI+UfTcmeA==}
     dev: true
+
+  /@sabaki/sgf@3.4.7:
+    resolution: {integrity: sha512-513CQMEejYVqaIKWK+P3AL1TXv2cqdUVOI+3mJDGcDEw5fWlz8puEYn+aQrGjnxJrn5XUUX0fefndEJbam65Sw==}
+    dependencies:
+      doken: 1.0.2
+    optionalDependencies:
+      iconv-lite: 0.4.24
+      jschardet: 2.3.0
+    dev: false
 
   /@swc/helpers@0.5.2:
     resolution: {integrity: sha512-E4KcWTpoLHqwPHLxidpOqQbcrZVgi0rsmmZXUle1jXmJfuIf/UWpczUJ7MZZ5tlxytgJXyp0w4PGkkeLiuIdZw==}
@@ -1249,6 +1261,10 @@ packages:
     dependencies:
       esutils: 2.0.3
     dev: true
+
+  /doken@1.0.2:
+    resolution: {integrity: sha512-JSVsMxaB5yikb6wBDQTGIcyNyUytrYQE7WGyGAC0EoFunUTV7Wag4p5JC2bXKuTfD7t847dy7TWcwyETUbYAiw==}
+    dev: false
 
   /dom-helpers@5.2.1:
     resolution: {integrity: sha512-nRCa7CK3VTrM2NmGkIy4cbK7IZlgBE/PYMn55rrXefr5xXDP0LdtfPnblFDoVdcAfslJ7or6iqAUnx0CCGIWQA==}
@@ -1917,6 +1933,15 @@ packages:
       react-is: 16.13.1
     dev: false
 
+  /iconv-lite@0.4.24:
+    resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
+    engines: {node: '>=0.10.0'}
+    requiresBuild: true
+    dependencies:
+      safer-buffer: 2.1.2
+    dev: false
+    optional: true
+
   /ieee754@1.2.1:
     resolution: {integrity: sha512-dcyqhDvX1C46lXZcVqCpK+FtMRQVdIMN6/Df5js2zouUsqG7I6sFxitIC+7KYK29KdXOLHdu9zL4sFnoVQnqaA==}
     dev: false
@@ -2157,6 +2182,13 @@ packages:
     dependencies:
       argparse: 2.0.1
     dev: true
+
+  /jschardet@2.3.0:
+    resolution: {integrity: sha512-6I6xT7XN/7sBB7q8ObzKbmv5vN+blzLcboDE1BNEsEfmRXJValMxO6OIRT69ylPBRemS3rw6US+CMCar0OBc9g==}
+    engines: {node: '>=0.1.90'}
+    requiresBuild: true
+    dev: false
+    optional: true
 
   /json-buffer@3.0.1:
     resolution: {integrity: sha512-4bV5BfR2mqfQTJm+V5tPPdf+ZpuhiIvTuAB5g8kcrXOZpTT/QwwVRWBywX1ozr6lEuPdbHxwaJlm9G6mI2sfSQ==}
@@ -2689,6 +2721,12 @@ packages:
       get-intrinsic: 1.2.2
       is-regex: 1.1.4
     dev: true
+
+  /safer-buffer@2.1.2:
+    resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
+    requiresBuild: true
+    dev: false
+    optional: true
 
   /scheduler@0.23.0:
     resolution: {integrity: sha512-CtuThmgHNg7zIZWAXi3AsyIzA3n4xx7aNyjwC2VJldO2LMVDhFK+63xGqq6CsJH4rTAt6/M+N4GhZiDYPx9eUw==}
