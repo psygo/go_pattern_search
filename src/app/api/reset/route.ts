@@ -14,6 +14,12 @@ import { neo4jSession } from "@config/db";
 
 import { getId } from "@utils/sgf";
 
+import {
+  allCoords,
+  BoardCoordinate,
+  BoardNodeProperties,
+} from "@models/exports";
+
 /**
  * Reset Dev DB
  */
@@ -30,7 +36,26 @@ export async function POST() {
     );
 
     //------------------------------------------------------
-    // 2. SGF
+    // 2. Create Board Coordinates Nodes
+
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          UNWIND $allCoords AS coord
+
+          WITH coord, properties(coord) as coordProps
+
+          CREATE (:BoardNode{
+            x: coordProps.x,
+            y: coordProps.y
+          })
+        `,
+        { allCoords }
+      )
+    );
+
+    //------------------------------------------------------
+    // 3. SGF
 
     const gameFilename =
       "ai-sensei_20231108_aaron12345_vs_psygo.sgf";
@@ -48,9 +73,10 @@ export async function POST() {
 
     const gameTree = gameTrees.first();
 
-    while (true) {
-      const currentNode = gameTree;
+    for (const node of gameTree.listNodes()) {
+      // console.log(node);
     }
+
     //------------------------------------------------------
 
     return new NextResponse("Reset DB Successfully", {
