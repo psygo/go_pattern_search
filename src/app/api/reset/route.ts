@@ -15,7 +15,9 @@ export async function POST() {
   try {
     await deleteEverything();
     await createBoardCoordinatesNodes();
-    await sgfToNeo4j();
+    await sgfToNeo4j(
+      "ai-sensei_20231108_aaron12345_vs_psygo.sgf"
+    );
 
     return new NextResponse("Reset DB Successfully", {
       status: 201,
