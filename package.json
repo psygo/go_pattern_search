@@ -33,6 +33,7 @@
     "@sabaki/immutable-gametree": "^1.9.4",
     "@sabaki/sgf": "^3.4.7",
     "lodash": "^4.17.21",
+    "nanoid": "^5.0.3",
     "neo4j-driver": "^5.14.0",
     "next": "14.0.2",
     "react": "^18",

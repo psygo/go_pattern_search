@@ -13,3 +13,4 @@ In this project, we replicate the SGF game trees as graphs inside Neo4j, and the
 ## References
 
 - [Sabaki's SGF Parser](https://github.com/SabakiHQ/sgf)
+- [SGF's Official Documentation](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)

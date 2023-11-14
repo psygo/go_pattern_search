@@ -1,23 +1,25 @@
 import {} from "@utils/array";
 
-import { writeFileSync } from "fs";
-
 import { join } from "path";
 
+import { nanoid } from "nanoid";
+
 // @ts-ignore
-import { parseFile, stringify } from "@sabaki/sgf";
+import { parseFile } from "@sabaki/sgf";
 const GameTree = require("@sabaki/immutable-gametree");
 
 import { NextResponse } from "next/server";
 
-import { neo4jSession } from "@config/db";
+import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import { getId } from "@utils/sgf";
 
 import {
-  allCoords,
   BoardCoordinate,
-  BoardNodeProperties,
+  GameNodeProperties,
+  MoveToMoveProperties,
+  allCoords,
+  stringToDoubleBoardCoordinate,
 } from "@models/exports";
 
 /**
@@ -43,7 +45,7 @@ export async function POST() {
         /* cypher */ `
           UNWIND $allCoords AS coord
 
-          WITH coord, properties(coord) as coordProps
+          WITH properties(coord) AS coordProps
 
           CREATE (:BoardNode{
             x: coordProps.x,
@@ -65,17 +67,82 @@ export async function POST() {
       "games",
       gameFilename
     );
+    const customGameId = nanoid(NANOID_SIZE);
 
     const rootNodes = parseFile(gamePath);
     const gameTrees = rootNodes.map((rootNode: any) => {
       return new GameTree({ getId, root: rootNode });
     });
+    const firstGameTree = gameTrees.first();
 
-    const gameTree = gameTrees.first();
+    const moveToMoveLinks: MoveToMoveProperties[] = [];
+    let currentCoords = "";
+    let nextCoords = "";
+    for (const node of firstGameTree.listNodes()) {
+      currentCoords = nextCoords;
+      if (node.data.B) {
+        nextCoords = node.data.B.toString();
+      } else if (node.data.W) {
+        nextCoords = node.data.W.toString();
+      }
 
-    for (const node of gameTree.listNodes()) {
-      // console.log(node);
+      if (node.data.PB || node.data.PW) {
+        const gameNodeProps: GameNodeProperties = {
+          player_black: node.data.PB.toString(),
+          player_white: node.data.PW.toString(),
+        };
+
+        await neo4jSession.executeWrite((tx) =>
+          tx.run(
+            /* cypher */ `
+              WITH properties($gameNodeProps) AS props
+
+              CREATE (:GameNode{
+                player_black: props.player_black,
+                player_white: props.player_white,
+                id:           $customGameId
+              })
+            `,
+            { gameNodeProps, customGameId }
+          )
+        );
+      }
+
+      if (nextCoords) {
+        const moveToMoveProperties: MoveToMoveProperties = {
+          from:
+            currentCoords === ""
+              ? BoardCoordinate.BEGINNING_OF_GAME
+              : stringToDoubleBoardCoordinate(
+                  currentCoords
+                ),
+          to: stringToDoubleBoardCoordinate(nextCoords),
+        };
+
+        moveToMoveLinks.push(moveToMoveProperties);
+      }
     }
+
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          UNWIND $moveToMoveLinks AS mtml
+
+          WITH properties(mtml) AS mtm
+
+          CREATE  (:BoardNode{
+                    x: mtm.from.x,
+                    y: mtm.from.y
+                  })
+                  -[:PLAYS_NEXT]
+                 ->(:BoardNode{
+                    x: mtm.to.x,
+                    y: mtm.to.y
+                 })
+        `,
+        { moveToMoveLinks }
+      )
+    );
 
     //------------------------------------------------------
 
