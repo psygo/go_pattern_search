@@ -62,6 +62,32 @@ export async function createGamePaths(
         { restOfTheMoves, gameNodeId }
       )
     );
+
+    const lastMove = restOfTheMoves.last();
+
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          WITH properties($lastMove) AS l
+          
+          MATCH (bFrom:BoardNode{
+                  x: l.from.x,
+                  y: l.from.y
+                }),
+                (bTo:BoardNode{
+                  x: l.to.x,
+                  y: l.to.y
+                })
+                
+          WITH bFrom, bTo
+
+          CREATE   (bFrom)
+                  -[:PLAYS_LAST { game_id: $gameNodeId }]
+                 ->(bTo)
+        `,
+        { lastMove, gameNodeId }
+      )
+    );
   } catch (e) {
     console.error(e);
   }

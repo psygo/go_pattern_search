@@ -12,7 +12,7 @@
 
 ### 0.2.1. Health
 
-GET http://localhost:3000/api/health
+GET {{API_URL}}/health
 
 ### 0.2.2. Reset DB
 
