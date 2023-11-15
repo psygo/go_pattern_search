@@ -24,8 +24,12 @@ export async function createGamePaths(
                 
           WITH g, bTo
 
-          CREATE (g)-[:PLAYS_NEXT] ->(bTo),
-                 (g)-[:PLAYS_FIRST]->(bTo)
+          CREATE   (g)
+                  -[:PLAYS_NEXT  { game_id: $gameNodeId }]
+                 ->(bTo),
+                   (g)
+                  -[:PLAYS_FIRST { game_id: $gameNodeId }]
+                 ->(bTo)
         `,
         { firstMove, gameNodeId }
       )
@@ -49,9 +53,11 @@ export async function createGamePaths(
                 
           WITH bFrom, bTo
 
-          CREATE (bFrom)-[:PLAYS_NEXT]->(bTo)
+          CREATE   (bFrom)
+                  -[:PLAYS_NEXT { game_id: $gameNodeId }]
+                 ->(bTo)
         `,
-        { restOfTheMoves }
+        { restOfTheMoves, gameNodeId }
       )
     );
   } catch (e) {
