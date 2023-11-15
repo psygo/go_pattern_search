@@ -5,7 +5,7 @@ import { NextResponse } from "next/server";
 import {
   createBoardCoordinatesNodes,
   deleteEverything,
-  sgfToNeo4j,
+  sgfsToNeo4j,
 } from "@middleware/exports";
 
 /**
@@ -15,9 +15,7 @@ export async function POST() {
   try {
     await deleteEverything();
     await createBoardCoordinatesNodes();
-    await sgfToNeo4j(
-      "ai-sensei_20231108_aaron12345_vs_psygo.sgf"
-    );
+    await sgfsToNeo4j();
 
     return new NextResponse("Reset DB Successfully", {
       status: 201,

@@ -1,3 +1,6 @@
+import { readdirSync } from "fs";
+import { join } from "path";
+
 import { nanoid } from "nanoid";
 
 import { NANOID_SIZE } from "@config/db";
@@ -16,6 +19,20 @@ import {
 
 import { createGameNode } from "./create_game_node";
 import { createGamePaths } from "./create_game_paths";
+
+export async function sgfsToNeo4j() {
+  const gamesFolderPath = join(
+    __dirname,
+    "../../../../..",
+    "games"
+  );
+
+  const gameFiles = readdirSync(gamesFolderPath);
+
+  for (const filename of gameFiles) {
+    await sgfToNeo4j(filename);
+  }
+}
 
 async function createFirstNode(
   node: any,
