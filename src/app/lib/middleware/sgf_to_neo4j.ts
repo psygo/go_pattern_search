@@ -3,9 +3,15 @@ import { nanoid } from "nanoid";
 import { NANOID_SIZE } from "@config/db";
 
 import {
+  BoardCoordinate,
   Filename,
+  GameNodeProperties,
+  MoveToMoveProperties,
   sgfFileToGameTrees,
+  stringToDoubleBoardCoordinate,
 } from "@models/exports";
+
+import { createGameNode } from "./create_game_node";
 
 export async function sgfToNeo4j(filename: Filename) {
   try {
@@ -15,40 +21,43 @@ export async function sgfToNeo4j(filename: Filename) {
 
     const firstGameTree = gameTrees.first();
 
-    // const moveToMoveLinks: MoveToMoveProperties[] = [];
-    // let currentCoords = "";
-    // let nextCoords = "";
-    // for (const node of firstGameTree.listNodes()) {
-    //   currentCoords = nextCoords;
-    //   if (node.data.B) {
-    //     nextCoords = node.data.B.toString();
-    //   } else if (node.data.W) {
-    //     nextCoords = node.data.W.toString();
-    //   }
+    const moveToMoveLinks: MoveToMoveProperties[] = [];
+    let currentCoords = "";
+    let nextCoords = "";
 
-    //   if (node.data.PB || node.data.PW) {
-    //     const gameNodeProps: GameNodeProperties = {
-    //       player_black: node.data.PB.toString(),
-    //       player_white: node.data.PW.toString(),
-    //     };
+    function updateCoords(node: any) {
+      currentCoords = nextCoords;
+      if (node.data.B) {
+        nextCoords = node.data.B.toString();
+      } else if (node.data.W) {
+        nextCoords = node.data.W.toString();
+      }
+    }
 
-    //     await createGameNode(gameNodeProps, customGameId);
-    //   }
+    for (const node of firstGameTree.listNodes()) {
+      updateCoords(node);
 
-    //   if (nextCoords) {
-    //     const moveToMoveProperties: MoveToMoveProperties = {
-    //       from:
-    //         currentCoords === ""
-    //           ? BoardCoordinate.BEGINNING_OF_GAME
-    //           : stringToDoubleBoardCoordinate(
-    //               currentCoords
-    //             ),
-    //       to: stringToDoubleBoardCoordinate(nextCoords),
-    //     };
+      if (node.data.PB || node.data.PW) {
+        const gameNodeProps: GameNodeProperties = {
+          player_black: node.data.PB.toString(),
+          player_white: node.data.PW.toString(),
+        };
 
-    //     moveToMoveLinks.push(moveToMoveProperties);
-    //   }
-    // }
+        await createGameNode(gameNodeProps, customGameId);
+      } else if (nextCoords) {
+        const moveToMoveProperties: MoveToMoveProperties = {
+          from:
+            currentCoords === ""
+              ? BoardCoordinate.BEGINNING_OF_GAME
+              : stringToDoubleBoardCoordinate(
+                  currentCoords
+                ),
+          to: stringToDoubleBoardCoordinate(nextCoords),
+        };
+
+        moveToMoveLinks.push(moveToMoveProperties);
+      }
+    }
 
     // await createGamePaths(moveToMoveLinks);
   } catch (e) {
