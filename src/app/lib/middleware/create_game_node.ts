@@ -10,12 +10,13 @@ export async function createGameNode(
     await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          WITH properties($gameNodeProps) AS props
+          WITH properties($gameNodeProperties) AS props
 
           CREATE (:GameNode{
+            id:           $customGameId,
+            sgf:          props.sgf,
             player_black: props.player_black,
-            player_white: props.player_white,
-            id:           $customGameId
+            player_white: props.player_white
           })
         `,
         { gameNodeProperties, customGameId }

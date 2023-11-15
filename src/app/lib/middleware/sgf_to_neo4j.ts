@@ -7,6 +7,7 @@ import {
   Filename,
   GameNodeProperties,
   MoveToMoveProperties,
+  sgfAsString,
   sgfFileToGameTrees,
   stringToDoubleBoardCoordinate,
 } from "@models/exports";
@@ -17,6 +18,7 @@ export async function sgfToNeo4j(filename: Filename) {
   try {
     const customGameId = nanoid(NANOID_SIZE);
 
+    const sgfString = sgfAsString(filename);
     const gameTrees = sgfFileToGameTrees(filename);
 
     const firstGameTree = gameTrees.first();
@@ -39,6 +41,7 @@ export async function sgfToNeo4j(filename: Filename) {
 
       if (node.data.PB || node.data.PW) {
         const gameNodeProps: GameNodeProperties = {
+          sgf: sgfString,
           player_black: node.data.PB.toString(),
           player_white: node.data.PW.toString(),
         };

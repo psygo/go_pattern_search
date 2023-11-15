@@ -1,3 +1,4 @@
+import { readFileSync } from "fs";
 import { join } from "path";
 
 // @ts-ignore
@@ -14,7 +15,21 @@ export const getId = (
     id++
 )(0);
 
+export function sgfAsString(filename: Filename) {
+  const gamePath = join(
+    __dirname,
+    "../../../../..",
+    "games",
+    filename
+  );
+
+  const sgfString = readFileSync(gamePath).toString();
+
+  return sgfString;
+}
+
 export type GameTrees = GameTree[];
+
 export function sgfFileToGameTrees(filename: Filename) {
   const gamePath = join(
     __dirname,

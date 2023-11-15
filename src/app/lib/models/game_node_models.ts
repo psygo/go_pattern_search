@@ -1,4 +1,7 @@
+import { Sgf } from "./utils/exports";
+
 export interface GameNodeProperties {
+  sgf: Sgf;
   player_white: string;
   player_black: string;
 }
