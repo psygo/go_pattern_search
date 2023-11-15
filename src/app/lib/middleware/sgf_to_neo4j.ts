@@ -13,6 +13,7 @@ import {
 } from "@models/exports";
 
 import { createGameNode } from "./create_game_node";
+import { createGamePaths } from "./create_game_paths";
 
 export async function sgfToNeo4j(filename: Filename) {
   try {
@@ -36,33 +37,39 @@ export async function sgfToNeo4j(filename: Filename) {
       }
     }
 
+    async function createFirstNode(node: any) {
+      const gameNodeProps: GameNodeProperties = {
+        sgf: sgfString,
+        player_black: node.data.PB.toString(),
+        player_white: node.data.PW.toString(),
+      };
+
+      await createGameNode(gameNodeProps, customGameId);
+    }
+
+    function addPath() {
+      const moveToMoveProperties: MoveToMoveProperties = {
+        from:
+          currentCoords === ""
+            ? BoardCoordinate.BEGINNING_OF_GAME
+            : stringToDoubleBoardCoordinate(currentCoords),
+        to: stringToDoubleBoardCoordinate(nextCoords),
+      };
+
+      moveToMoveLinks.push(moveToMoveProperties);
+    }
+
     for (const node of firstGameTree.listNodes()) {
       updateCoords(node);
 
       if (node.data.PB || node.data.PW) {
-        const gameNodeProps: GameNodeProperties = {
-          sgf: sgfString,
-          player_black: node.data.PB.toString(),
-          player_white: node.data.PW.toString(),
-        };
-
-        await createGameNode(gameNodeProps, customGameId);
+        await createFirstNode(node);
       } else if (nextCoords) {
-        const moveToMoveProperties: MoveToMoveProperties = {
-          from:
-            currentCoords === ""
-              ? BoardCoordinate.BEGINNING_OF_GAME
-              : stringToDoubleBoardCoordinate(
-                  currentCoords
-                ),
-          to: stringToDoubleBoardCoordinate(nextCoords),
-        };
-
-        moveToMoveLinks.push(moveToMoveProperties);
+        addPath();
       }
     }
 
-    // await createGamePaths(moveToMoveLinks);
+    await createGamePaths(moveToMoveLinks, customGameId);
   } catch (e) {
     console.error(e);
   }
