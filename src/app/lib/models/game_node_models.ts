@@ -1,6 +1,7 @@
-import { Sgf } from "./utils/exports";
+import { Id, Sgf } from "./utils/exports";
 
 export interface GameNodeProperties {
+  id: Id;
   sgf: Sgf;
   player_white: string;
   player_black: string;

@@ -6,7 +6,9 @@ import {
   BoardCoordinate,
   Filename,
   GameNodeProperties,
+  Id,
   MoveToMoveProperties,
+  Sgf,
   sgfAsString,
   sgfFileToGameTrees,
   stringToDoubleBoardCoordinate,
@@ -15,9 +17,24 @@ import {
 import { createGameNode } from "./create_game_node";
 import { createGamePaths } from "./create_game_paths";
 
+async function createFirstNode(
+  node: any,
+  id: Id,
+  sgfString: Sgf
+) {
+  const gameNodeProps: GameNodeProperties = {
+    id,
+    sgf: sgfString,
+    player_black: node.data.PB.toString(),
+    player_white: node.data.PW.toString(),
+  };
+
+  await createGameNode(gameNodeProps);
+}
+
 export async function sgfToNeo4j(filename: Filename) {
   try {
-    const customGameId = nanoid(NANOID_SIZE);
+    const customGameId: Id = nanoid(NANOID_SIZE);
 
     const sgfString = sgfAsString(filename);
     const gameTrees = sgfFileToGameTrees(filename);
@@ -37,16 +54,6 @@ export async function sgfToNeo4j(filename: Filename) {
       }
     }
 
-    async function createFirstNode(node: any) {
-      const gameNodeProps: GameNodeProperties = {
-        sgf: sgfString,
-        player_black: node.data.PB.toString(),
-        player_white: node.data.PW.toString(),
-      };
-
-      await createGameNode(gameNodeProps, customGameId);
-    }
-
     function addPath() {
       const moveToMoveProperties: MoveToMoveProperties = {
         from:
@@ -63,7 +70,11 @@ export async function sgfToNeo4j(filename: Filename) {
       updateCoords(node);
 
       if (node.data.PB || node.data.PW) {
-        await createFirstNode(node);
+        await createFirstNode(
+          node,
+          customGameId,
+          sgfString
+        );
       } else if (nextCoords) {
         addPath();
       }

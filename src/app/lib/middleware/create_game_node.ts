@@ -1,10 +1,9 @@
 import { neo4jSession } from "@config/db";
 
-import { GameNodeProperties, Id } from "@models/exports";
+import { GameNodeProperties } from "@models/exports";
 
 export async function createGameNode(
-  gameNodeProperties: GameNodeProperties,
-  customGameId: Id
+  gameNodeProperties: GameNodeProperties
 ) {
   try {
     await neo4jSession.executeWrite((tx) =>
@@ -13,13 +12,13 @@ export async function createGameNode(
           WITH properties($gameNodeProperties) AS props
 
           CREATE (:GameNode{
-            id:           $customGameId,
+            id:           props.id,
             sgf:          props.sgf,
             player_black: props.player_black,
             player_white: props.player_white
           })
         `,
-        { gameNodeProperties, customGameId }
+        { gameNodeProperties }
       )
     );
   } catch (e) {
