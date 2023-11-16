@@ -37,7 +37,10 @@ export type GameNode = WithGameId &
 export type MoveNodeData = Pick<
   SgfData,
   "AB" | "AW" | "B" | "W"
->;
+> & {
+  move: [string];
+};
+
 export type MoveNode = WithGameId &
   WithTreeNodeId &
   WithParentId &

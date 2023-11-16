@@ -60,7 +60,8 @@ async function createMoveNodes(moveNodes: MoveNode[]) {
                        AB:      move.data.AB,
                        AW:      move.data.AW,
                        B:       move.data.B,
-                       W:       move.data.W
+                       W:       move.data.W,
+                       move:    move.data.move
                      })
           }
         `,
@@ -102,21 +103,24 @@ export async function sgfToNeo4j(filename: Filename) {
   //--------------------------------------------------------
   // 2. Move Nodes
 
-  const rawMoveNoves = allNodes.slice(1);
-  const moveNoves = rawMoveNoves.map<MoveNode>((m) => ({
+  const rawMoveNodes = allNodes.slice(1);
+  // @ts-ignore
+  const moveNodes = rawMoveNodes.map<MoveNode>((m) => ({
     game_id: gameId,
     id: m.id as TreeNodeId,
-    // @ts-ignore
     parentId: m.parentId as ParentId,
     data: {
       AB: m.data.AB ?? [],
       AW: m.data.AW ?? [],
       B: m.data.B ?? [],
       W: m.data.W ?? [],
+      move: m.data.B?.first() ?? m.data.W?.first() ?? [],
     },
   }));
 
-  await createMoveNodes(moveNoves);
+  console.log(moveNodes);
+
+  await createMoveNodes(moveNodes);
 
   //--------------------------------------------------------
 }
