@@ -6,7 +6,12 @@ import { parseFile } from "@sabaki/sgf";
 // @ts-ignore
 import GameTree from "@sabaki/immutable-gametree";
 
-import { Filename } from "./files";
+import {
+  Filename,
+  TreeNodeId,
+  WithParentId,
+  WithTreeNodeId,
+} from "@models/utils/exports";
 
 //----------------------------------------------------------
 // Game Tree and SGF
@@ -23,10 +28,21 @@ export enum Players {
  * come from reparsing the SGF string again on the frontend.
  */
 export type GameNodeData = Pick<SgfData, "AB" | "AW">;
+
 export type MoveNodeData = Pick<
   SgfData,
   "AB" | "AW" | "B" | "W"
 >;
+
+export type MoveNode = WithTreeNodeId &
+  WithParentId &
+  MoveNodeData;
+
+export type GameTreeNodeObj = WithTreeNodeId & {
+  data: SgfData;
+  parentId: TreeNodeId | null;
+  children: GameTreeNodeObj[];
+};
 
 /**
  * Only the more or less useful SGF fields.
@@ -67,25 +83,11 @@ export type SgfData = {
   W?: [string]; // What White Plays
 };
 
-export type GameTreeNodeId = number;
-
-export type GameTreeNodeObj = {
-  id: GameTreeNodeId;
-  data: SgfData;
-  parentId: GameTreeNodeId | null;
-  children: GameTreeNodeObj[];
-};
-
-export type GameTreeNodeObjOnNeo4j = Omit<
-  GameTreeNodeObj,
-  "children"
->;
-
 //----------------------------------------------------------
 // Parsing
 
 export const getId = (
-  (id: GameTreeNodeId) => () =>
+  (id: TreeNodeId) => () =>
     id++
 )(0);
 

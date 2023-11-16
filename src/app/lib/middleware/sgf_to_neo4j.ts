@@ -5,16 +5,19 @@ import { NANOID_SIZE, neo4jSession } from "@config/db";
 import {
   Filename,
   GameId,
-  GameNode,
   GameNodeData,
+  GameTreeNodeObj,
+  MoveNode,
   MoveNodeData,
+  ParentId,
   Sgf,
   SgfData,
+  TreeNodeId,
   sgfAsString,
   sgfFileToGameTrees,
 } from "@models/exports";
 
-export async function createGameNode(
+async function createGameNode(
   gameId: GameId,
   sgfString: Sgf,
   gameNodeData: GameNodeData
@@ -41,6 +44,11 @@ export async function createGameNode(
   }
 }
 
+async function createMoveNodes(
+  gameId: GameId,
+  moveNodes: MoveNode[]
+) {}
+
 export async function sgfToNeo4j(filename: Filename) {
   const gameId: GameId = nanoid(NANOID_SIZE);
 
@@ -49,7 +57,9 @@ export async function sgfToNeo4j(filename: Filename) {
   const gameTrees = sgfFileToGameTrees(filename);
   const firstGameTree = gameTrees.first();
 
-  const allNodes = [...firstGameTree.listNodes()];
+  const allNodes: GameTreeNodeObj[] = [
+    ...firstGameTree.listNodes(),
+  ];
 
   //--------------------------------------------------------
   // 1. Game Node
@@ -70,9 +80,10 @@ export async function sgfToNeo4j(filename: Filename) {
   // 2. Move Nodes
 
   const moves = allNodes.slice(1);
-  const usefulMoveNodes = moves.map((m) => ({
-    id: m.id,
-    parentId: m.parentId,
+  const usefulMoveNodes = moves.map<MoveNode>((m) => ({
+    id: m.id as TreeNodeId,
+    // @ts-ignore
+    parentId: m.parentId as ParentId,
     data: <MoveNodeData>{
       AB: m.data.AB ?? [],
       AW: m.data.AW ?? [],

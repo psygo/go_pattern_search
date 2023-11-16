@@ -5,5 +5,4 @@ export * from "./mixin_models";
 export * from "./node_labels";
 export * from "./nodes_models";
 export * from "./react_force_graph_models";
-export * from "./sgf";
 export * from "./validation_utils";

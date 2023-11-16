@@ -1,19 +1,3 @@
-import {
-  Sgf,
-  SgfData,
-  TreeNodeId,
-  WithGameId,
-} from "./utils/exports";
-
-export type GameNode = WithGameId & {
-  sgf: Sgf;
-  data: SgfData;
-};
-
-export type MoveNode = Omit<GameNode, "sgf"> & {
-  parentId: TreeNodeId;
-};
-
 export enum BoardCoordinate {
   BEGINNING_OF_GAME = "Beginning of the Game",
   A = "a",
@@ -44,14 +28,7 @@ export enum BoardCoordinate {
   Z = "z",
 }
 
-export const allCoords: BoardNodeProperties[] = [];
-Object.values(BoardCoordinate).forEach((b1) => {
-  Object.values(BoardCoordinate).forEach((b2) => {
-    allCoords.push({ x: b1, y: b2 });
-  });
-});
-
-export type BoardNodeProperties = {
+export type BoardCoordinates = {
   x: BoardCoordinate;
   y: BoardCoordinate;
 };
@@ -66,7 +43,7 @@ export function stringToBoardCoordinate(
 
 export function stringToDoubleBoardCoordinate(
   s: string
-): BoardNodeProperties {
+): BoardCoordinates {
   return {
     x: stringToBoardCoordinate(s[0]),
     y: stringToBoardCoordinate(s[1]),
