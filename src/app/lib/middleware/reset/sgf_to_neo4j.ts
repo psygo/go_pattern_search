@@ -114,11 +114,13 @@ export async function sgfToNeo4j(filename: Filename) {
       AW: m.data.AW ?? [],
       B: m.data.B ?? [],
       W: m.data.W ?? [],
-      move: m.data.B?.first() ?? m.data.W?.first() ?? [],
+      // TODO: Create index on `move`
+      move: m.data.B?.first() ?? m.data.W?.first() ?? "",
+      // TODO: Add a field with the full path as a string,
+      //       so we can match as regexes directly (also
+      //       create an index).
     },
   }));
-
-  console.log(moveNodes);
 
   await createMoveNodes(moveNodes);
 
