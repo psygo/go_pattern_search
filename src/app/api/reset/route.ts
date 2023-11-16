@@ -12,7 +12,7 @@ import {
 export async function POST() {
   try {
     await deleteEverything();
-    await createBoardCoordinatesNodes();
+    // await createBoardCoordinatesNodes();
     await sgfToNeo4j("test1.sgf");
 
     return new NextResponse("Reset DB Successfully", {
