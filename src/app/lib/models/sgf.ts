@@ -73,7 +73,7 @@ export const getId = (
     id++
 )(0);
 
-export function sgfAsString(filename: Filename) {
+export function sgfAsString(filename: Filename): Sgf {
   const gamePath = join(
     __dirname,
     "../../../../..",

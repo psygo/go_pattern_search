@@ -39,19 +39,57 @@ async function createGameNode(gameNode: GameNode) {
   }
 }
 
-async function createMoveNodes(
-  gameId: GameId,
-  moveNodes: MoveNode[]
-) {}
+async function createMoveNodes(moveNodes: MoveNode[]) {
+  try {
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          // 1. Create All The Move Nodes
+
+          UNWIND $moveNodes AS move
+          
+          CREATE (:MoveNode{
+                   game_id: move.game_id,
+                   id:      move.id,
+                   AB:      move.data.AB,
+                   AW:      move.data.AW,
+                   B:       move.data.B,
+                   W:       move.data.W
+                 })
+          
+          // 2. Tie them to their Parents
+
+          WITH move
+
+          MATCH (parent{
+                  game_id: move.game_id,
+                  id:      move.parentId
+                }),
+                (m:MoveNode{
+                  game_id: move.game_id,
+                  id:      move.id
+                })
+
+          WHERE parent:GameNode
+             OR parent:MoveNode
+            
+          CREATE (parent)-[:NEXT_MOVE]->(m)
+        `,
+        { moveNodes }
+      )
+    );
+  } catch (e) {
+    console.error(e);
+  }
+}
 
 export async function sgfToNeo4j(filename: Filename) {
   const gameId: GameId = nanoid(NANOID_SIZE);
 
-  const sgfString = sgfAsString(filename);
+  const sgf = sgfAsString(filename);
 
   const gameTrees = sgfFileToGameTrees(filename);
   const firstGameTree = gameTrees.first();
-
   const allNodes: GameTreeNodeObj[] = [
     ...firstGameTree.listNodes(),
   ];
@@ -67,7 +105,7 @@ export async function sgfToNeo4j(filename: Filename) {
   const gameNode: GameNode = {
     id: 0,
     game_id: gameId,
-    sgf: sgfString,
+    sgf: sgf,
     data: gameNodeData,
   };
   await createGameNode(gameNode);
@@ -75,12 +113,13 @@ export async function sgfToNeo4j(filename: Filename) {
   //--------------------------------------------------------
   // 2. Move Nodes
 
-  const moves = allNodes.slice(1);
-  const usefulMoveNodes = moves.map<MoveNode>((m) => ({
+  const rawMoveNoves = allNodes.slice(1);
+  const moveNoves = rawMoveNoves.map<MoveNode>((m) => ({
+    game_id: gameId,
     id: m.id as TreeNodeId,
     // @ts-ignore
     parentId: m.parentId as ParentId,
-    data: <MoveNodeData>{
+    data: {
       AB: m.data.AB ?? [],
       AW: m.data.AW ?? [],
       B: m.data.B ?? [],
@@ -88,47 +127,7 @@ export async function sgfToNeo4j(filename: Filename) {
     },
   }));
 
-  try {
-    await neo4jSession.executeWrite((tx) =>
-      tx.run(
-        /* cypher */ `
-          // 1. Create All The Move Nodes
-
-          UNWIND $usefulMoveNodes AS move
-          
-          CREATE (:MoveNode{
-                   game_id: $gameId,
-                   id:      move.id,
-                   AB:      move.data.AB,
-                   AW:      move.data.AW,
-                   B:       move.data.B,
-                   W:       move.data.W
-                 })
-          
-          // 2. Tie them to their Parents
-
-          WITH move
-
-          MATCH (parent{
-                  game_id: $gameId,
-                  id:      move.parentId
-                }),
-                (m:MoveNode{
-                  game_id: $gameId,
-                  id:      move.id
-                })
-
-          WHERE parent:GameNode
-             OR parent:MoveNode
-            
-          CREATE (parent)-[:NEXT_MOVE]->(m)
-        `,
-        { gameId, usefulMoveNodes }
-      )
-    );
-  } catch (e) {
-    console.error(e);
-  }
+  await createMoveNodes(moveNoves);
 
   //--------------------------------------------------------
 }

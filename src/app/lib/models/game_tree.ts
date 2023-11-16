@@ -38,8 +38,8 @@ export type MoveNodeData = Pick<
   SgfData,
   "AB" | "AW" | "B" | "W"
 >;
-
-export type MoveNode = WithTreeNodeId &
+export type MoveNode = WithGameId &
+  WithTreeNodeId &
   WithParentId &
   MoveNodeData;
 
