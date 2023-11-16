@@ -7,6 +7,7 @@ import {
   GameId,
   GameNode,
   GameNodeData,
+  MoveNodeData,
   Sgf,
   SgfData,
   sgfAsString,
@@ -55,8 +56,8 @@ export async function sgfToNeo4j(filename: Filename) {
 
   const gameNodeData: SgfData = allNodes.first().data;
   const usefulGameNodeData: GameNodeData = {
-    AB: gameNodeData.AB,
-    AW: gameNodeData.AW,
+    AB: gameNodeData.AB ?? [],
+    AW: gameNodeData.AW ?? [],
   };
 
   await createGameNode(
@@ -69,6 +70,16 @@ export async function sgfToNeo4j(filename: Filename) {
   // 2. Move Nodes
 
   const moves = allNodes.slice(1);
+  const usefulMoveNodes = moves.map((m) => ({
+    id: m.id,
+    parentId: m.parentId,
+    data: <MoveNodeData>{
+      AB: m.data.AB ?? [],
+      AW: m.data.AW ?? [],
+      B: m.data.B ?? [],
+      W: m.data.W ?? [],
+    },
+  }));
 
   try {
     await neo4jSession.executeWrite((tx) =>
@@ -76,11 +87,15 @@ export async function sgfToNeo4j(filename: Filename) {
         /* cypher */ `
           // 1. Create All The Move Nodes
 
-          UNWIND $moves AS move
+          UNWIND $usefulMoveNodes AS move
           
           CREATE (:MoveNode{
                    game_id: $gameId,
-                   id:      move.id
+                   id:      move.id,
+                   AB:      move.data.AB,
+                   AW:      move.data.AW,
+                   B:       move.data.B,
+                   W:       move.data.W
                  })
           
           // 2. Tie them to their Parents
@@ -92,8 +107,8 @@ export async function sgfToNeo4j(filename: Filename) {
                   id:      move.parentId
                 }),
                 (m:MoveNode{
-                  game_id: $gameId
-                  id:      move.id,
+                  game_id: $gameId,
+                  id:      move.id
                 })
 
           WHERE parent:GameNode
@@ -101,7 +116,7 @@ export async function sgfToNeo4j(filename: Filename) {
             
           CREATE (parent)-[:NEXT_MOVE]->(m)
         `,
-        { gameId, moves }
+        { gameId, usefulMoveNodes }
       )
     );
   } catch (e) {

@@ -18,7 +18,16 @@ export enum Players {
   White = "W",
 }
 
+/**
+ * Only the necessary data for pattern search, the rest will
+ * come from reparsing the SGF string again on the frontend.
+ */
 export type GameNodeData = Pick<SgfData, "AB" | "AW">;
+export type MoveNodeData = Pick<
+  SgfData,
+  "AB" | "AW" | "B" | "W"
+>;
+
 /**
  * Only the more or less useful SGF fields.
  *
