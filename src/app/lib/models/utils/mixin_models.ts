@@ -1,7 +1,8 @@
-export type Id = string | number;
+export type TreeNodeId = number;
+export type GameId = string;
 
-export type WithId = {
-  id: Id;
+export type WithGameId = {
+  game_id: GameId;
 };
 
 export type WithCreatedAt = {

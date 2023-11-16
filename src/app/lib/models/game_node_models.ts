@@ -1,11 +1,18 @@
-import { Id, Sgf } from "./utils/exports";
+import {
+  Sgf,
+  SgfData,
+  TreeNodeId,
+  WithGameId,
+} from "./utils/exports";
 
-export interface GameNodeProperties {
-  id: Id;
+export type GameNode = WithGameId & {
   sgf: Sgf;
-  player_white: string;
-  player_black: string;
-}
+  data: SgfData;
+};
+
+export type MoveNode = Omit<GameNode, "sgf"> & {
+  parentId: TreeNodeId;
+};
 
 export enum BoardCoordinate {
   BEGINNING_OF_GAME = "Beginning of the Game",
@@ -44,10 +51,10 @@ Object.values(BoardCoordinate).forEach((b1) => {
   });
 });
 
-export interface BoardNodeProperties {
+export type BoardNodeProperties = {
   x: BoardCoordinate;
   y: BoardCoordinate;
-}
+};
 
 export function stringToBoardCoordinate(
   s: string

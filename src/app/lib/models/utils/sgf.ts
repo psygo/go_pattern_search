@@ -8,10 +8,75 @@ import GameTree from "@sabaki/immutable-gametree";
 
 import { Filename } from "./files";
 
+//----------------------------------------------------------
+// Game Tree and SGF
+
 export type Sgf = string;
 
+export enum Players {
+  Black = "B",
+  White = "W",
+}
+
+export type GameNodeData = Pick<SgfData, "AB" | "AW">;
+/**
+ * Only the more or less useful SGF fields.
+ *
+ * References:
+ *
+ * - [Red Bean - SGF's Official Documentation](https://www.red-bean.com/sgf/)
+ * - [Alternative SGF's Documentation](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
+ */
+export type SgfData = {
+  // 1. Metadata
+  GM?: ["1"]; // Game Type (GM = '1' is Go)
+  FF?: [string]; // File Format
+  CA?: [string]; // Character Set
+  AP?: [string]; // Application used to produce the file
+  // 2. Game Info
+  KM?: [string]; // Komi
+  SZ?: [string]; // Board Size
+  DT?: [string]; // Date
+  HA?: [string]; // Number of Handicap Stones
+  RU?: [string]; // Rules Set in Use
+  GN?: [string]; // Game Name
+  EV?: [string]; // Event
+  // 3. Players
+  PB?: [string]; // Black Player
+  BR?: [string]; // Black's Rating
+  PW?: [string]; // White Player
+  WR?: [string]; // White's Rating
+  // 4. Comments
+  C?: [string]; // (Move) Comments
+  GC?: [string]; // Game Comment
+  // 5. Editing the Goban
+  PL?: [Players]; // Who plays next
+  AB?: string[]; // Add Black stones
+  AW?: string[]; // Add White stones
+  // 6. Moves
+  B?: [string]; // What Black plays
+  W?: [string]; // What White Plays
+};
+
+export type GameTreeNodeId = number;
+
+export type GameTreeNodeObj = {
+  id: GameTreeNodeId;
+  data: SgfData;
+  parentId: GameTreeNodeId | null;
+  children: GameTreeNodeObj[];
+};
+
+export type GameTreeNodeObjOnNeo4j = Omit<
+  GameTreeNodeObj,
+  "children"
+>;
+
+//----------------------------------------------------------
+// Parsing
+
 export const getId = (
-  (id) => () =>
+  (id: GameTreeNodeId) => () =>
     id++
 )(0);
 
@@ -38,7 +103,7 @@ export function sgfFileToGameTrees(filename: Filename) {
     filename
   );
 
-  const rootNodes = parseFile(gamePath);
+  const rootNodes = parseFile(gamePath, { getId });
 
   const gameTrees: GameTree[] = rootNodes.map(
     (rootNode: any) => {
@@ -48,3 +113,5 @@ export function sgfFileToGameTrees(filename: Filename) {
 
   return gameTrees;
 }
+
+//----------------------------------------------------------

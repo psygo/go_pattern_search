@@ -1,106 +1,94 @@
-import { readdirSync } from "fs";
-import { join } from "path";
-
 import { nanoid } from "nanoid";
 
-import {} from "@utils/array";
-
-import { NANOID_SIZE } from "@config/db";
+import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import {
-  BoardCoordinate,
   Filename,
-  GameNodeProperties,
-  Id,
-  MoveToMoveProperties,
+  GameId,
+  GameNode,
+  GameNodeData,
   Sgf,
+  SgfData,
   sgfAsString,
   sgfFileToGameTrees,
-  stringToDoubleBoardCoordinate,
 } from "@models/exports";
 
-import { createGameNode } from "./create_game_node";
-import { createGamePaths } from "./create_game_paths";
-
-export async function sgfsToNeo4j() {
-  const gamesFolderPath = join(
-    __dirname,
-    "../../../../..",
-    "games"
-  );
-
-  const gameFiles = readdirSync(gamesFolderPath);
-
-  for (const filename of gameFiles) {
-    await sgfToNeo4j(filename);
-  }
-}
-
-async function createFirstNode(
-  node: any,
-  id: Id,
-  sgfString: Sgf
+export async function createGameNode(
+  gameId: GameId,
+  sgfString: Sgf,
+  gameNodeData: GameNodeData
 ) {
-  const gameNodeProps: GameNodeProperties = {
-    id,
-    sgf: sgfString,
-    player_black: node.data.PB.toString(),
-    player_white: node.data.PW.toString(),
-  };
-
-  await createGameNode(gameNodeProps);
-}
-
-export async function sgfToNeo4j(filename: Filename) {
   try {
-    const customGameId: Id = nanoid(NANOID_SIZE);
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          WITH properties($gameNodeData) AS props
 
-    const sgfString = sgfAsString(filename);
-    const gameTrees = sgfFileToGameTrees(filename);
-
-    const firstGameTree = gameTrees.first();
-
-    const moveToMoveLinks: MoveToMoveProperties[] = [];
-    let currentCoords = "";
-    let nextCoords = "";
-
-    function updateCoords(node: any) {
-      currentCoords = nextCoords;
-      if (node.data.B) {
-        nextCoords = node.data.B.toString();
-      } else if (node.data.W) {
-        nextCoords = node.data.W.toString();
-      }
-    }
-
-    function addPath() {
-      const moveToMoveProperties: MoveToMoveProperties = {
-        from:
-          currentCoords === ""
-            ? BoardCoordinate.BEGINNING_OF_GAME
-            : stringToDoubleBoardCoordinate(currentCoords),
-        to: stringToDoubleBoardCoordinate(nextCoords),
-      };
-
-      moveToMoveLinks.push(moveToMoveProperties);
-    }
-
-    for (const node of firstGameTree.listNodes()) {
-      updateCoords(node);
-
-      if (node.data.PB || node.data.PW) {
-        await createFirstNode(
-          node,
-          customGameId,
-          sgfString
-        );
-      } else if (nextCoords) {
-        addPath();
-      }
-    }
-
-    await createGamePaths(moveToMoveLinks, customGameId);
+          CREATE (:GameNode{
+            game_id: $gameId,
+            id:      0,
+            sgf:     $sgfString,
+            AB:      props.AB,
+            AW:      props.AW
+          })
+        `,
+        { gameId, sgfString, gameNodeData }
+      )
+    );
   } catch (e) {
     console.error(e);
   }
+}
+
+export async function sgfToNeo4j(filename: Filename) {
+  const customGameId: GameId = nanoid(NANOID_SIZE);
+
+  const sgfString = sgfAsString(filename);
+
+  const gameTrees = sgfFileToGameTrees(filename);
+  const firstGameTree = gameTrees.first();
+
+  const allNodes = [...firstGameTree.listNodes()];
+
+  //--------------------------------------------------------
+  // 1. Game Node
+
+  const gameNodeData: SgfData = allNodes.first().data;
+  const usefulGameNodeData: GameNodeData = {
+    AB: gameNodeData.AB,
+    AW: gameNodeData.AW,
+  };
+
+  await createGameNode(
+    customGameId,
+    sgfString,
+    usefulGameNodeData
+  );
+
+  //--------------------------------------------------------
+  // 2. Move Nodes
+
+  const moves = allNodes.slice(1);
+
+  try {
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(
+        /* cypher */ `
+          UNWIND moves AS move
+
+          CREATE (:MoveNode{
+            game_id: $gameId,
+            sgf:     $sgfString,
+            AB:      props.AB,
+            AW:      props.AW
+          })
+        `,
+        {}
+      )
+    );
+  } catch (e) {
+    console.error(e);
+  }
+
+  //--------------------------------------------------------
 }
