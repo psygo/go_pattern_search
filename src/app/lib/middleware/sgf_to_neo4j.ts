@@ -79,24 +79,27 @@ export async function sgfToNeo4j(filename: Filename) {
           UNWIND $moves AS move
           
           CREATE (:MoveNode{
-            game_id: $gameId,
-            id:      move.id
-          })
+                   game_id: $gameId,
+                   id:      move.id
+                 })
           
           // 2. Tie them to their Parents
 
           WITH move
 
-          MATCH (parent),
-                (m:MoveNode{ id: move.id, game_id: $gameId})
+          MATCH (parent{
+                  game_id: $gameId,
+                  id:      move.parentId
+                }),
+                (m:MoveNode{
+                  game_id: $gameId
+                  id:      move.id,
+                })
 
-          WHERE ((parent:GameNode) OR (parent:MoveNode))
-            AND parent.game_id = $gameId
-            AND parent.id = move.parentId
+          WHERE parent:GameNode
+             OR parent:MoveNode
             
-          CREATE   (parent)
-                  -[:NEXT_MOVE]
-                 ->(m)
+          CREATE (parent)-[:NEXT_MOVE]->(m)
         `,
         { gameId, moves }
       )
