@@ -9,9 +9,7 @@ import {
   GameNodeData,
   GameTreeNodeObj,
   MoveNode,
-  MoveNodeData,
   ParentId,
-  Sgf,
   SgfData,
   TreeNodeId,
   sgfAsString,
@@ -44,36 +42,23 @@ async function createMoveNodes(moveNodes: MoveNode[]) {
     await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          // 1. Create All The Move Nodes
-
           UNWIND $moveNodes AS move
-          
-          CREATE (:MoveNode{
-                   game_id: move.game_id,
-                   id:      move.id,
-                   AB:      move.data.AB,
-                   AW:      move.data.AW,
-                   B:       move.data.B,
-                   W:       move.data.W
-                 })
-          
-          // 2. Tie them to their Parents
 
-          WITH move
+          CALL {
+            WITH move
 
-          MATCH (parent{
-                  game_id: move.game_id,
-                  id:      move.parentId
-                }),
-                (m:MoveNode{
-                  game_id: move.game_id,
-                  id:      move.id
-                })
+            MATCH (parent:GameNode|MoveNode{
+              game_id: move.game_id, 
+              id:      move.parentId
+            })
 
-          WHERE parent:GameNode
-             OR parent:MoveNode
-            
-          CREATE (parent)-[:NEXT_MOVE]->(m)
+            CREATE   (parent)
+                    -[:NEXT_MOVE]
+                   ->(m:MoveNode{
+                       game_id: move.game_id,
+                       id:      move.id
+                     })
+          }
         `,
         { moveNodes }
       )
