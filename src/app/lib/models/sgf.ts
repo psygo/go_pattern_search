@@ -6,12 +6,14 @@ import { parseFile } from "@sabaki/sgf";
 // @ts-ignore
 import GameTree from "@sabaki/immutable-gametree";
 
+import { Filename } from "@models/utils/exports";
+
 import {
-  Filename,
+  GameTrees,
   TreeNodeId,
   WithParentId,
   WithTreeNodeId,
-} from "@models/utils/exports";
+} from "./game_tree";
 
 //----------------------------------------------------------
 // Game Tree and SGF
@@ -103,8 +105,6 @@ export function sgfAsString(filename: Filename) {
 
   return sgfString;
 }
-
-export type GameTrees = GameTree[];
 
 export function sgfFileToGameTrees(filename: Filename) {
   const gamePath = join(

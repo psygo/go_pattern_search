@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import {
   deleteEverything,
   sgfToNeo4j,
-} from "@middleware/exports";
+} from "@middleware/reset/exports";
 
 /**
  * Reset Dev DB
