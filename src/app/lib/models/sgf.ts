@@ -8,43 +8,19 @@ import GameTree from "@sabaki/immutable-gametree";
 
 import { Filename } from "@models/utils/exports";
 
-import {
-  GameTrees,
-  TreeNodeId,
-  WithParentId,
-  WithTreeNodeId,
-} from "./game_tree";
+import { TreeNodeId } from "./game_tree";
 
 //----------------------------------------------------------
-// Game Tree and SGF
+// SGF
 
 export type Sgf = string;
+
+export type WithSgf = { sgf: Sgf };
 
 export enum Players {
   Black = "B",
   White = "W",
 }
-
-/**
- * Only the necessary data for pattern search, the rest will
- * come from reparsing the SGF string again on the frontend.
- */
-export type GameNodeData = Pick<SgfData, "AB" | "AW">;
-
-export type MoveNodeData = Pick<
-  SgfData,
-  "AB" | "AW" | "B" | "W"
->;
-
-export type MoveNode = WithTreeNodeId &
-  WithParentId &
-  MoveNodeData;
-
-export type GameTreeNodeObj = WithTreeNodeId & {
-  data: SgfData;
-  parentId: TreeNodeId | null;
-  children: GameTreeNodeObj[];
-};
 
 /**
  * Only the more or less useful SGF fields.
@@ -88,6 +64,10 @@ export type SgfData = {
 //----------------------------------------------------------
 // Parsing
 
+/**
+ * The first suggestion on Sabaki's SGF Parser
+ * documentation.
+ */
 export const getId = (
   (id: TreeNodeId) => () =>
     id++

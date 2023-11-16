@@ -5,6 +5,7 @@ import { NANOID_SIZE, neo4jSession } from "@config/db";
 import {
   Filename,
   GameId,
+  GameNode,
   GameNodeData,
   GameTreeNodeObj,
   MoveNode,
@@ -17,26 +18,20 @@ import {
   sgfFileToGameTrees,
 } from "@models/exports";
 
-async function createGameNode(
-  gameId: GameId,
-  sgfString: Sgf,
-  gameNodeData: GameNodeData
-) {
+async function createGameNode(gameNode: GameNode) {
   try {
     await neo4jSession.executeWrite((tx) =>
       tx.run(
         /* cypher */ `
-          WITH properties($gameNodeData) AS props
-
           CREATE (:GameNode{
-            game_id: $gameId,
+            game_id: $gameNode.game_id,
             id:      0,
-            sgf:     $sgfString,
-            AB:      props.AB,
-            AW:      props.AW
+            sgf:     $gameNode.sgf,
+            AB:      $gameNode.data.AB,
+            AW:      $gameNode.data.AW
           })
         `,
-        { gameId, sgfString, gameNodeData }
+        { gameNode }
       )
     );
   } catch (e) {
@@ -64,17 +59,18 @@ export async function sgfToNeo4j(filename: Filename) {
   //--------------------------------------------------------
   // 1. Game Node
 
-  const gameNodeData: SgfData = allNodes.first().data;
-  const usefulGameNodeData: GameNodeData = {
-    AB: gameNodeData.AB ?? [],
-    AW: gameNodeData.AW ?? [],
+  const rawGameNodeData: SgfData = allNodes.first().data;
+  const gameNodeData: GameNodeData = {
+    AB: rawGameNodeData.AB ?? [],
+    AW: rawGameNodeData.AW ?? [],
   };
-
-  await createGameNode(
-    gameId,
-    sgfString,
-    usefulGameNodeData
-  );
+  const gameNode: GameNode = {
+    id: 0,
+    game_id: gameId,
+    sgf: sgfString,
+    data: gameNodeData,
+  };
+  await createGameNode(gameNode);
 
   //--------------------------------------------------------
   // 2. Move Nodes
