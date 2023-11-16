@@ -56,7 +56,11 @@ async function createMoveNodes(moveNodes: MoveNode[]) {
                     -[:NEXT_MOVE]
                    ->(m:MoveNode{
                        game_id: move.game_id,
-                       id:      move.id
+                       id:      move.id,
+                       AB:      move.data.AB,
+                       AW:      move.data.AW,
+                       B:       move.data.B,
+                       W:       move.data.W
                      })
           }
         `,
