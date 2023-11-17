@@ -2,6 +2,9 @@
 
 In this project, we replicate the SGF game trees as graphs inside Neo4j, and then outsource the search through patterns to Neo4j, as it is an optimized graph database.
 
+<!-- TODO: Mention Waltheri Pattern Search -->
+<!-- TODO: Mention that this problem could also be modeled as a Regex problem -->
+
 ## Current Stack
 
 - Neo4j
