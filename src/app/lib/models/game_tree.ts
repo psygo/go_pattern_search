@@ -30,7 +30,7 @@ export type GameNodeData = Pick<SgfData, "AB" | "AW">;
 export type GameNode = WithGameId &
   WithTreeNodeId &
   WithSgf & {
-    id: 0;
+    id: number;
     data: GameNodeData;
   };
 

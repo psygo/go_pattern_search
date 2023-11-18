@@ -1,17 +1,13 @@
 import { NextResponse } from "next/server";
 
-import {
-  deleteEverything,
-  sgfToNeo4j,
-} from "@middleware/reset/exports";
+import { reset } from "@middleware/reset/exports";
 
 /**
  * Reset Dev DB
  */
 export async function POST() {
   try {
-    await deleteEverything();
-    await sgfToNeo4j("test1.sgf");
+    await reset();
 
     return new NextResponse("Reset DB Successfully", {
       status: 201,

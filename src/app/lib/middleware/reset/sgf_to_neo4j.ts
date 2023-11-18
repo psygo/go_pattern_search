@@ -1,8 +1,12 @@
+import { join } from "path";
+import { readdirSync } from "fs";
+
 import { nanoid } from "nanoid";
 
 import { NANOID_SIZE, neo4jSession } from "@config/db";
 
 import {
+  Directory,
   Filename,
   GameId,
   GameNode,
@@ -16,6 +20,46 @@ import {
   sgfFileToGameTrees,
 } from "@models/exports";
 
+export async function createGameAndMoveNodesIndexes() {
+  try {
+    // 1. Game Node - Game Id
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        // 1. Game Id
+        CREATE INDEX game_node_game_id_idx
+           FOR (m:GameNode)
+            ON (m.game_id)
+      `)
+    );
+    // 2. Move Node - Game Id
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        CREATE INDEX move_node_game_id_idx
+           FOR (m:MoveNode)
+            ON (m.game_id)
+      `)
+    );
+    // 3. Move Node - move
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        CREATE INDEX move_node_move_idx
+           FOR (m:MoveNode)
+            ON (m.move)
+      `)
+    );
+    // 4. Move Node - stones
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        CREATE INDEX move_node_stones_idx
+           FOR (m:MoveNode)
+            ON (m.stones)
+      `)
+    );
+  } catch (e) {
+    console.error(e);
+  }
+}
+
 async function createGameNode(gameNode: GameNode) {
   try {
     await neo4jSession.executeWrite((tx) =>
@@ -23,7 +67,7 @@ async function createGameNode(gameNode: GameNode) {
         /* cypher */ `
           CREATE (:GameNode{
             game_id: $gameNode.game_id,
-            id:      0,
+            id:      $gameNode.id,
             sgf:     $gameNode.sgf,
             AB:      $gameNode.data.AB,
             AW:      $gameNode.data.AW
@@ -73,6 +117,22 @@ async function createMoveNodes(moveNodes: MoveNode[]) {
   }
 }
 
+export async function sgfsToNeo4j(
+  directory: Directory = "games"
+) {
+  const gamesDir = join(
+    __dirname,
+    "../../../../..",
+    directory
+  );
+
+  const filenames = readdirSync(gamesDir);
+
+  for (const filename of filenames) {
+    await sgfToNeo4j(filename);
+  }
+}
+
 export async function sgfToNeo4j(filename: Filename) {
   const gameId: GameId = nanoid(NANOID_SIZE);
 
@@ -87,13 +147,14 @@ export async function sgfToNeo4j(filename: Filename) {
   //--------------------------------------------------------
   // 1. Game Node
 
-  const rawGameNodeData: SgfData = allNodes.first().data;
+  const rawGameNode = allNodes.first();
+  const rawGameNodeData: SgfData = rawGameNode.data;
   const gameNodeData: GameNodeData = {
     AB: rawGameNodeData.AB ?? [],
     AW: rawGameNodeData.AW ?? [],
   };
   const gameNode: GameNode = {
-    id: 0,
+    id: rawGameNode.id,
     game_id: gameId,
     sgf: sgf,
     data: gameNodeData,
