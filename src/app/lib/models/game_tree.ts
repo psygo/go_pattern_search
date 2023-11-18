@@ -2,6 +2,7 @@
 import GameTree from "@sabaki/immutable-gametree";
 
 import { SgfData, WithSgf } from "./sgf";
+import { BoardCoordinates } from "./board_coordinates";
 
 //----------------------------------------------------------
 // 1. Game Tree Models from Sabaki's SGF Parser
@@ -44,7 +45,7 @@ export type MoveNodeData = Pick<
   SgfData,
   "AB" | "AW" | "B" | "W"
 > & {
-  move: string;
+  move: BoardCoordinates;
 } & WithAddedStones;
 
 export type MoveNode = WithGameId &

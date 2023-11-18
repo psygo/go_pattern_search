@@ -1,3 +1,6 @@
+/**
+ * Goes up to 26x26 with this alphabet (A-Z)
+ */
 export enum BoardCoordinate {
   BEGINNING_OF_GAME = "Beginning of the Game",
   A = "a",
@@ -28,6 +31,11 @@ export enum BoardCoordinate {
   Z = "z",
 }
 
+export type BoardCoordinates = {
+  0: string;
+  length: 2;
+} & string;
+
 export function stringToBoardCoordinate(
   s: string
 ): BoardCoordinate {
@@ -53,7 +61,9 @@ export function coordinateComplement(
   );
 }
 
-export function allGlobalRoations(pattern: string[]) {
+export function allGlobalRoations(
+  pattern: BoardCoordinates[]
+) {
   return [
     pattern,
     pattern.map(globalRotate90),
@@ -65,7 +75,9 @@ export function allGlobalRoations(pattern: string[]) {
 /**
  * E.g. 'bc' -90-> 'qb'
  */
-export function globalRotate90(coordinates: string) {
+export function globalRotate90(
+  coordinates: BoardCoordinates
+) {
   const x = coordinateComplement(
     stringToBoardCoordinate(coordinates[1])
   );
@@ -77,7 +89,9 @@ export function globalRotate90(coordinates: string) {
 /**
  * E.g. 'bc' -90-> 'qb' -90-> 'rq'
  */
-export function globalRotate180(coordinates: string) {
+export function globalRotate180(
+  coordinates: BoardCoordinates
+) {
   const x = coordinateComplement(
     stringToBoardCoordinate(coordinates[0])
   );
@@ -91,7 +105,9 @@ export function globalRotate180(coordinates: string) {
 /**
  * E.g. 'bc' -90-> 'qb' -90-> 'rq' -90-> 'cr'
  */
-export function globalRotate270(coordinates: string) {
+export function globalRotate270(
+  coordinates: BoardCoordinates
+) {
   const x = coordinates[1];
   const y = coordinateComplement(
     stringToBoardCoordinate(coordinates[0])

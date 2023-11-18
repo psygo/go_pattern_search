@@ -9,6 +9,7 @@ import GameTree from "@sabaki/immutable-gametree";
 import { Filename } from "@models/utils/exports";
 
 import { TreeNodeId } from "./game_tree";
+import { BoardCoordinates } from "./board_coordinates";
 
 //----------------------------------------------------------
 // SGF
@@ -54,11 +55,11 @@ export type SgfData = {
   GC?: [string]; // Game Comment
   // 5. Editing the Goban
   PL?: [Player]; // Who plays next
-  AB?: string[]; // Add Black stones
-  AW?: string[]; // Add White stones
+  AB?: BoardCoordinates[]; // Add Black stones
+  AW?: BoardCoordinates[]; // Add White stones
   // 6. Moves
-  B?: [string]; // What Black plays
-  W?: [string]; // What White Plays
+  B?: [BoardCoordinates]; // What Black plays
+  W?: [BoardCoordinates]; // What White Plays
 };
 
 //----------------------------------------------------------
