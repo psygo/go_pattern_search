@@ -5,6 +5,12 @@ In this project, we replicate the SGF game trees as graphs inside Neo4j, and the
 <!-- TODO: Mention Waltheri Pattern Search -->
 <!-- TODO: Mention that this problem could also be modeled as a Regex problem -->
 
+<!-- Tasks: -->
+<!-- TODO: URL-based filtering for the search -->
+<!-- TODO: Stone-based filtering -->
+<!-- TODO: Rotation on Searches -->
+<!-- TODO: Also regular-search, such as player name, date, etc. -->
+
 ## Current Stack
 
 - Neo4j
