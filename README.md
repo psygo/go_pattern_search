@@ -4,7 +4,7 @@ In this project, we replicate the SGF game trees as graphs inside Neo4j, and the
 
 This project is heavily influenced by [Waltheri's Pattern Search](http://ps.waltheri.net/). In that project, its author used each game's last snapshot as a way of making comparisons with other games.
 
-Another alternative to modeling this problem is through _Regular Expressions_, I believe. Since SGF files track move coordinates as strings, we could search patterns in strings as patterns in the game. Coincidentally, regular expressions are also used fact optimizations in my graph approach.
+Another alternative to modeling this problem is through _Regular Expressions_ &mdash; regexes can actually be modeled as graphs as well &mdash;, I believe. Since SGF files track move coordinates as strings, we could search patterns in strings as patterns in the game. Coincidentally, regular expressions are also used fact optimizations in my graph approach.
 
 ## Tasks
 

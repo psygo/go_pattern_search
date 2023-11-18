@@ -1,11 +1,10 @@
 // @ts-ignore
 import GameTree from "@sabaki/immutable-gametree";
 
+import { SgfData, WithSgf } from "./sgf";
+
 //----------------------------------------------------------
 // 1. Game Tree Models from Sabaki's SGF Parser
-
-import { SgfData, WithSgf } from "./sgf";
-import { WithGameId } from "./exports";
 
 export type GameTrees = GameTree[];
 
@@ -17,6 +16,12 @@ export type WithTreeNodeId = {
 };
 export type WithParentId = {
   parentId: ParentId;
+};
+
+export type GameId = string;
+
+export type WithGameId = {
+  game_id: GameId;
 };
 
 //----------------------------------------------------------

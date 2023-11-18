@@ -175,7 +175,6 @@ export async function sgfToNeo4j(filename: Filename) {
       AW: m.data.AW ?? [],
       B: m.data.B ?? [],
       W: m.data.W ?? [],
-      // TODO: Create index on `move`
       move: m.data.B?.first() ?? m.data.W?.first() ?? "",
       // TODO: Add a field with the full path as a string,
       //       so we can match as regexes directly (also
