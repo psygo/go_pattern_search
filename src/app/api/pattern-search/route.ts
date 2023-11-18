@@ -6,7 +6,9 @@ import { neo4jSession } from "@config/db";
 
 import {
   BoardCoordinates,
-  allGlobalRoations,
+  allGlobalRotations,
+  allGlobalRotationsAndPermutations,
+  permute,
 } from "@models/board_coordinates";
 
 // TODO: Move this to params so the URL tracks it as well
@@ -26,7 +28,12 @@ export async function POST(req: NextRequest) {
     );
 
     const patternLength = pattern.length;
-    const allRotations = allGlobalRoations(pattern);
+    const allRotations = allGlobalRotations(pattern);
+
+    console.log(allRotations);
+
+    // console.log(permute(pattern));
+    console.log(allGlobalRotationsAndPermutations(pattern));
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
@@ -37,8 +44,21 @@ export async function POST(req: NextRequest) {
                      -[:NEXT_MOVE*${patternLength - 1}]
                     ->(:MoveNode)
 
-          WHERE mFirst.move = HEAD($patterns[0]) 
-            AND (   [m IN NODES(p) | m.move] = $patterns[0]
+          WHERE (
+                      mFirst.move = HEAD($patterns[0]) 
+                  AND [m IN NODES(p) | m.move] = $patterns[0]
+                )
+             OR (
+                      mFirst.move = HEAD($patterns[1]) 
+                  AND [m IN NODES(p) | m.move] = $patterns[1]
+                )
+             OR (
+                      mFirst.move = HEAD($patterns[2]) 
+                  AND [m IN NODES(p) | m.move] = $patterns[2]
+                )
+             OR (
+                      mFirst.move = HEAD($patterns[3]) 
+                  AND [m IN NODES(p) | m.move] = $patterns[3]
                 )
 
           MATCH (g:GameNode)-[:NEXT_MOVE*]->(mFirst)

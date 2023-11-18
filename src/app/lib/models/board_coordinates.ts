@@ -31,6 +31,9 @@ export enum BoardCoordinate {
   Z = "z",
 }
 
+/**
+ * Source [Stack Overflow - *How do I declare a string that is of a specific length using typescript?*](https://stackoverflow.com/a/77232369/4756173)
+ */
 export type BoardCoordinates = {
   0: string;
   length: 2;
@@ -61,7 +64,13 @@ export function coordinateComplement(
   );
 }
 
-export function allGlobalRoations(
+export function allGlobalRotationsAndPermutations(
+  pattern: BoardCoordinates[]
+) {
+  return allGlobalRotations(pattern).map(permute).flat();
+}
+
+export function allGlobalRotations(
   pattern: BoardCoordinates[]
 ) {
   return [
@@ -70,6 +79,39 @@ export function allGlobalRoations(
     pattern.map(globalRotate180),
     pattern.map(globalRotate270),
   ];
+}
+
+/**
+ * A seemingly very performant way of generating all
+ * permutations.
+ *
+ * Source: [Stack Overflow - *Permutations in JavaScript?*](https://stackoverflow.com/a/37580979/4756173)
+ */
+export function permute(initialArray: BoardCoordinates[]) {
+  const length = initialArray.length;
+
+  let result = [initialArray.slice()],
+    c = new Array(length).fill(0),
+    i = 1,
+    k,
+    p;
+
+  while (i < length) {
+    if (c[i] < i) {
+      k = i % 2 && c[i];
+      p = initialArray[i];
+      initialArray[i] = initialArray[k];
+      initialArray[k] = p;
+      ++c[i];
+      i = 1;
+      result.push(initialArray.slice());
+    } else {
+      c[i] = 0;
+      ++i;
+    }
+  }
+
+  return result;
 }
 
 /**
@@ -83,7 +125,7 @@ export function globalRotate90(
   );
   const y = coordinates[0];
 
-  return `${x}${y}`;
+  return `${x}${y}` as BoardCoordinates;
 }
 
 /**
@@ -99,7 +141,7 @@ export function globalRotate180(
     stringToBoardCoordinate(coordinates[1])
   );
 
-  return `${x}${y}`;
+  return `${x}${y}` as BoardCoordinates;
 }
 
 /**
@@ -113,5 +155,5 @@ export function globalRotate270(
     stringToBoardCoordinate(coordinates[0])
   );
 
-  return `${x}${y}`;
+  return `${x}${y}` as BoardCoordinates;
 }

@@ -10,7 +10,9 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 - Pattern-Search
   - [x] Sequential Pattern-Search
-  - [ ] Stone-based filtering
+  - Stone-based filtering
+    - [ ] Contains only selected stones
+    - [ ] Contains selected stones
   - [ ] Rotation on Searches
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
@@ -34,6 +36,9 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
     - [ ] Stone-based (for edited stones)
     - [ ] Rotation
     - [ ] Region-based
+    - Stone-based filtering
+      - [ ] Contains only selected stones
+      - [ ] Contains selected stones
   - [ ] URL-based filtering for the search
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
