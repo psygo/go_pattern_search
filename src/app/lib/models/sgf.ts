@@ -17,7 +17,7 @@ export type Sgf = string;
 
 export type WithSgf = { sgf: Sgf };
 
-export enum Players {
+export enum Player {
   Black = "B",
   White = "W",
 }
@@ -53,7 +53,7 @@ export type SgfData = {
   C?: [string]; // (Move) Comments
   GC?: [string]; // Game Comment
   // 5. Editing the Goban
-  PL?: [Players]; // Who plays next
+  PL?: [Player]; // Who plays next
   AB?: string[]; // Add Black stones
   AW?: string[]; // Add White stones
   // 6. Moves

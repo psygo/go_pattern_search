@@ -27,24 +27,25 @@ export type WithGameId = {
 //----------------------------------------------------------
 // 2. Game Tree on Neo4j
 
-/**
- * Only the necessary data for pattern search, the rest will
- * come from reparsing the SGF string again on the frontend.
- */
+export type WithAddedStones = {
+  ab: string;
+  aw: string;
+};
+
 export type GameNodeData = Pick<SgfData, "AB" | "AW">;
 export type GameNode = WithGameId &
   WithTreeNodeId &
   WithSgf & {
     id: number;
     data: GameNodeData;
-  };
+  } & WithAddedStones;
 
 export type MoveNodeData = Pick<
   SgfData,
   "AB" | "AW" | "B" | "W"
 > & {
   move: string;
-};
+} & WithAddedStones;
 
 export type MoveNode = WithGameId &
   WithTreeNodeId &

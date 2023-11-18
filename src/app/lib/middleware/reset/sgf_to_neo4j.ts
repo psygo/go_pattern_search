@@ -14,6 +14,7 @@ import {
   GameTreeNodeObj,
   MoveNode,
   ParentId,
+  Player,
   SgfData,
   TreeNodeId,
   sgfAsString,
@@ -70,7 +71,9 @@ async function createGameNode(gameNode: GameNode) {
             id:      $gameNode.id,
             sgf:     $gameNode.sgf,
             AB:      $gameNode.data.AB,
-            AW:      $gameNode.data.AW
+            AW:      $gameNode.data.AW,
+            ab:      $gameNode.data.ab,
+            aw:      $gameNode.data.aw
           })
         `,
         { gameNode }
@@ -105,6 +108,8 @@ async function createMoveNodes(moveNodes: MoveNode[]) {
                        AW:      move.data.AW,
                        B:       move.data.B,
                        W:       move.data.W,
+                       ab:      move.data.ab,
+                       aw:      move.data.aw,
                        move:    move.data.move
                      })
           }
@@ -152,7 +157,11 @@ export async function sgfToNeo4j(filename: Filename) {
   const gameNodeData: GameNodeData = {
     AB: rawGameNodeData.AB ?? [],
     AW: rawGameNodeData.AW ?? [],
+    // @ts-ignore
+    ab: addedStonesToString(rawGameNodeData, Player.Black),
+    aw: addedStonesToString(rawGameNodeData, Player.White),
   };
+  // @ts-ignore
   const gameNode: GameNode = {
     id: rawGameNode.id,
     game_id: gameId,
@@ -175,14 +184,27 @@ export async function sgfToNeo4j(filename: Filename) {
       AW: m.data.AW ?? [],
       B: m.data.B ?? [],
       W: m.data.W ?? [],
-      move: m.data.B?.first() ?? m.data.W?.first() ?? "",
-      // TODO: Add a field with the full path as a string,
-      //       so we can match as regexes directly (also
-      //       create an index).
+      ab: addedStonesToString(m.data, Player.Black),
+      aw: addedStonesToString(m.data, Player.White),
+      move: currentMove(m.data),
     },
   }));
 
   await createMoveNodes(moveNodes);
 
   //--------------------------------------------------------
+}
+
+function currentMove(sgfData: SgfData) {
+  return sgfData.B?.first() ?? sgfData.W?.first() ?? "";
+}
+
+function addedStonesToString(
+  sgfData: SgfData,
+  player: Player
+) {
+  const addedStones =
+    (player === Player.Black ? sgfData.AB : sgfData.AW) ??
+    [];
+  return addedStones.join("");
 }
