@@ -131,7 +131,13 @@ export async function sgfsToNeo4j(
     directory
   );
 
-  const filenames = readdirSync(gamesDir);
+  // const filenames = readdirSync(gamesDir);
+  const filenames = [
+    "test3.sgf",
+    "test4.sgf",
+    "test5.sgf",
+    "test6.sgf",
+  ];
 
   for (const filename of filenames) {
     await sgfToNeo4j(filename);

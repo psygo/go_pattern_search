@@ -28,12 +28,11 @@ export async function POST(req: NextRequest) {
     );
 
     const patternLength = pattern.length;
-    const allRotations = allGlobalRotations(pattern);
+    const allPatterns =
+      allGlobalRotationsAndPermutations(pattern);
 
-    console.log(allRotations);
-
-    // console.log(permute(pattern));
-    console.log(allGlobalRotationsAndPermutations(pattern));
+    // console.log(allPatterns);
+    console.log(allPatterns.length);
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
@@ -44,28 +43,17 @@ export async function POST(req: NextRequest) {
                      -[:NEXT_MOVE*${patternLength - 1}]
                     ->(:MoveNode)
 
-          WHERE (
-                      mFirst.move = HEAD($patterns[0]) 
-                  AND [m IN NODES(p) | m.move] = $patterns[0]
-                )
-             OR (
-                      mFirst.move = HEAD($patterns[1]) 
-                  AND [m IN NODES(p) | m.move] = $patterns[1]
-                )
-             OR (
-                      mFirst.move = HEAD($patterns[2]) 
-                  AND [m IN NODES(p) | m.move] = $patterns[2]
-                )
-             OR (
-                      mFirst.move = HEAD($patterns[3]) 
-                  AND [m IN NODES(p) | m.move] = $patterns[3]
-                )
+          WHERE ANY(
+            pattern IN $patterns 
+            WHERE mFirst.move = HEAD(pattern) 
+              AND [m IN NODES(p) | m.move] = pattern
+          )
 
           MATCH (g:GameNode)-[:NEXT_MOVE*]->(mFirst)
 
-          RETURN g
+          RETURN DISTINCT(g)
         `,
-        { patterns: allRotations }
+        { patterns: allPatterns }
       )
     );
 
