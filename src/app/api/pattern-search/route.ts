@@ -4,6 +4,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { neo4jSession } from "@config/db";
 
+import {
+  allGlobalRoations,
+} from "@models/board_coordinates";
+
 const patternSearchReqBodySchema = z.object({
   pattern: z.array(z.string()),
 });
@@ -17,13 +21,16 @@ export async function POST(req: NextRequest) {
       await req.json()
     );
 
-    const results = await neo4jSession.executeWrite((tx) =>
-      tx.run(/* cypher */ `
-      `)
-    );
+    const allRotations = allGlobalRoations(pattern);
+    
+    console.log(allRotations)
 
-    console.log(results);
+    // const results = await neo4jSession.executeWrite((tx) =>
+    //   tx.run(/* cypher */ `
+    //   `)
+    // );
 
+    return new NextResponse("ok");
     // return NextResponse.json({ nodes });
   } catch (e) {
     console.error(e);

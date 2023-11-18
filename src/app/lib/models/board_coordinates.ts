@@ -28,24 +28,74 @@ export enum BoardCoordinate {
   Z = "z",
 }
 
-export type BoardCoordinates = {
-  x: BoardCoordinate;
-  y: BoardCoordinate;
-};
-
 export function stringToBoardCoordinate(
   s: string
 ): BoardCoordinate {
   return Object.values(BoardCoordinate).find(
-    (linkLabel) => linkLabel === s.toLowerCase()
+    (bc) => bc === s.toLowerCase()
   )!;
 }
 
-export function stringToDoubleBoardCoordinate(
-  s: string
-): BoardCoordinates {
-  return {
-    x: stringToBoardCoordinate(s[0]),
-    y: stringToBoardCoordinate(s[1]),
-  };
+export function coordinateComplement(
+  bc: BoardCoordinate,
+  boardSize: number = 19
+) {
+  const boardCoordinatesArray =
+    Object.values(BoardCoordinate);
+
+  const bcIdx = boardCoordinatesArray.indexOf(bc);
+
+  // `+ 1` because of `BoardCoordinate.BEGINNING_OF_GAME`
+  const bcComplementIdx = boardSize - bcIdx + 1;
+
+  return stringToBoardCoordinate(
+    boardCoordinatesArray[bcComplementIdx]
+  );
+}
+
+export function allGlobalRoations(pattern: string[]) {
+  return [
+    pattern,
+    pattern.map(globalRotate90),
+    pattern.map(globalRotate180),
+    pattern.map(globalRotate270),
+  ];
+}
+
+/**
+ * E.g. 'bc' -90-> 'qb'
+ */
+export function globalRotate90(coordinates: string) {
+  const x = coordinateComplement(
+    stringToBoardCoordinate(coordinates[1])
+  );
+  const y = coordinates[0];
+
+  return `${x}${y}`;
+}
+
+/**
+ * E.g. 'bc' -90-> 'qb' -90-> 'rq'
+ */
+export function globalRotate180(coordinates: string) {
+  const x = coordinateComplement(
+    stringToBoardCoordinate(coordinates[0])
+  );
+  const y = coordinateComplement(
+    stringToBoardCoordinate(coordinates[1])
+  );
+
+  return `${x}${y}`;
+}
+
+/**
+ * E.g. 'bc' -90-> 'qb' -90-> 'rq' -90-> 'cr'
+ */
+export function globalRotate270(coordinates: string) {
+  const x = coordinates[1];
+  const y = coordinateComplement(
+    stringToBoardCoordinate(coordinates[0])
+  );
+
+  return `${x}${y}`;
 }

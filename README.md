@@ -14,6 +14,7 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
   - [ ] Rotation on Searches
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
+  - [ ] Quadrant-barsed pattern search (reflections also count)
 - DB
   - [ ] SGF fields for the game nodes
   - Indexes
@@ -32,6 +33,7 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
     - [ ] Sequential
     - [ ] Stone-based (for edited stones)
     - [ ] Rotation
+    - [ ] Region-based
   - [ ] URL-based filtering for the search
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
