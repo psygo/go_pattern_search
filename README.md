@@ -4,39 +4,58 @@ In this project, we replicate the SGF game trees as graphs inside Neo4j, and the
 
 This project is heavily influenced by [Waltheri's Pattern Search](http://ps.waltheri.net/). In that project, its author used each game's last snapshot as a way of making comparisons with other games.
 
-Another alternative to modeling this problem is through *Regular Expressions*, I believe. Since SGF files track move coordinates as strings, we could search patterns in strings as patterns in the game. Coincidentally, regular expressions are also used fact optimizations in my graph approach.
+Another alternative to modeling this problem is through _Regular Expressions_, I believe. Since SGF files track move coordinates as strings, we could search patterns in strings as patterns in the game. Coincidentally, regular expressions are also used fact optimizations in my graph approach.
 
-<!-- Tasks: -->
-<!-- TODO: URL-based filtering for the search -->
-<!-- TODO: Stone-based filtering -->
-<!-- TODO: Rotation on Searches -->
-<!-- TODO: Also regular-search, such as player name, date, etc. -->
+## Tasks
 
-## Current Stack
+- Pattern-Search
+  - [x] Sequential Pattern-Search
+  - [ ] Stone-based filtering
+  - [ ] Rotation on Searches
+  - [ ] Regular-search, such as player name, date, etc.
+  - [ ] Add text/move-comment search.
+- UI
+  - Goban Component
+    - [ ] Stone placement
+    - [ ] Stone deletion
+    - [ ] Move numbering
+  - Filters
+    - [ ] Sequential
+    - [ ] Stone-based (for edited stones)
+    - [ ] Rotation
+  - [ ] URL-based filtering for the search
+  - [ ] Regular-search, such as player name, date, etc.
+  - [ ] Add text/move-comment search.
+- DB
+  - [ ] Add large number of games (GoGod? Go4Go?)
+  - [ ] Add tsumegos
+  - [ ] Add lecture-based content (à la Yunguseng Dojang (Inseong Hwang))
+
+## 1. Current Stack
 
 - Neo4j
   - If in-memory, one could choose the package [Graphology](https://github.com/graphology/graphology), I guess.
 - NextJS (ReactJS) + MUI
 - Sabaki's SGF Parser
-- Custom HTML Canvas for Displaying and Editing the SGF files.
+- Custom Go Board HTML Canvas Component
 
-## References
+## 2. References
 
-### Pattern Search
+### 2.1. Pattern Search
 
 - [Waltheri's Pattern Search](http://ps.waltheri.net/)
 
-### SGF
+### 2.2. SGF
 
 - [Sabaki's SGF Parser](https://github.com/SabakiHQ/sgf)
 - [Red Bean - SGF's Official Documentation](https://www.red-bean.com/sgf/)
   - [Alternative SGF's Documentation](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
 
-### Related Questions on Stack Overflow
+### 2.3. Related Questions on Stack Overflow
 
 - [How to Recursively Create a Tree with Cypher (Neo4j)](https://stackoverflow.com/q/77495108/4756173)
 - [How to (Efficiently) Find Subpaths in Recursive Trees through Cypher (Graph vs Regex)](https://stackoverflow.com/q/77497411/4756173)
 
-### Miscellanea
+### 2.4. Miscellanea
 
 - [Graphology](https://github.com/graphology/graphology)
