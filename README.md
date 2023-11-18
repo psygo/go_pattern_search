@@ -14,6 +14,15 @@ Another alternative to modeling this problem is through _Regular Expressions_, I
   - [ ] Rotation on Searches
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
+- DB
+  - [ ] SGF fields for the game nodes
+  - Indexes
+    - [ ] Index on moves
+    - [ ] Index on edited stones
+  - Data
+    - [ ] Add large number of games (GoGod? Go4Go?)
+    - [ ] Add tsumegos
+    - [ ] Add lecture-based content (à la Yunguseng Dojang (Inseong Hwang))
 - UI
   - Goban Component
     - [ ] Stone placement
@@ -26,10 +35,6 @@ Another alternative to modeling this problem is through _Regular Expressions_, I
   - [ ] URL-based filtering for the search
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
-- DB
-  - [ ] Add large number of games (GoGod? Go4Go?)
-  - [ ] Add tsumegos
-  - [ ] Add lecture-based content (à la Yunguseng Dojang (Inseong Hwang))
 
 ## 1. Current Stack
 
