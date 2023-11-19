@@ -99,6 +99,10 @@ export function allReflections(
   ];
 }
 
+/**
+ * Reflection over a horizontal line in the middle, e.g.
+ * 'ab' ---> 'ar'
+ */
 export function reflectHorizontally(
   coordinates: BoardCoordinates
 ) {
@@ -110,6 +114,10 @@ export function reflectHorizontally(
   return `${x}${y}` as BoardCoordinates;
 }
 
+/**
+ * Reflection over a vertical line in the middle, e.g.
+ * 'ab' -|-> 'sb'
+ */
 export function reflectVertically(
   coordinates: BoardCoordinates
 ) {
