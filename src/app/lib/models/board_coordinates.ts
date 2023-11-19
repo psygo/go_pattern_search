@@ -1,5 +1,8 @@
 import _ from "lodash";
 
+//----------------------------------------------------------
+// Board Coordinates
+
 /**
  * Goes up to 26x26 with this alphabet (A-Z)
  */
@@ -66,8 +69,11 @@ export function coordinateComplement(
   );
 }
 
+//----------------------------------------------------------
+// Isomorphisms
+
 // TODO: Are these all the isomorphisms?
-export function allReflectionsGlobalRotationsAndPermutations(
+export function allIsomorphisms(
   pattern: BoardCoordinates[]
 ) {
   return _.uniqBy(
@@ -78,16 +84,8 @@ export function allReflectionsGlobalRotationsAndPermutations(
   );
 }
 
-export function allGlobalRotations(
-  pattern: BoardCoordinates[]
-) {
-  return [
-    pattern,
-    pattern.map(globalRotate90),
-    pattern.map(globalRotate180),
-    pattern.map(globalRotate270),
-  ];
-}
+//----------------------------------------------------------
+// Reflections
 
 export function allReflections(
   pattern: BoardCoordinates[]
@@ -129,6 +127,9 @@ export function reflectVertically(
   return `${x}${y}` as BoardCoordinates;
 }
 
+//----------------------------------------------------------
+// Permutations
+
 // TODO: This might be better off on the frontend instead of
 //       annoying the backend.
 /**
@@ -162,6 +163,20 @@ export function permute(initialArray: BoardCoordinates[]) {
   }
 
   return result;
+}
+
+//----------------------------------------------------------
+// Global Rotations
+
+export function allGlobalRotations(
+  pattern: BoardCoordinates[]
+) {
+  return [
+    pattern,
+    pattern.map(globalRotate90),
+    pattern.map(globalRotate180),
+    pattern.map(globalRotate270),
+  ];
 }
 
 /**
@@ -207,3 +222,5 @@ export function globalRotate270(
 
   return `${x}${y}` as BoardCoordinates;
 }
+
+//----------------------------------------------------------

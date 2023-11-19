@@ -6,7 +6,7 @@ import { neo4jSession } from "@config/db";
 
 import {
   BoardCoordinates,
-  allReflectionsGlobalRotationsAndPermutations,
+  allIsomorphisms,
 } from "@models/board_coordinates";
 
 // TODO: Move this to params so the URL tracks it as well
@@ -26,8 +26,7 @@ export async function POST(req: NextRequest) {
     );
 
     const patternLength = pattern.length;
-    const allPatterns =
-      allReflectionsGlobalRotationsAndPermutations(pattern);
+    const allPatterns = allIsomorphisms(pattern);
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
