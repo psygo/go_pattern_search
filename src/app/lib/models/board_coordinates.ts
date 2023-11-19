@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 /**
  * Goes up to 26x26 with this alphabet (A-Z)
  */
@@ -64,10 +66,16 @@ export function coordinateComplement(
   );
 }
 
-export function allGlobalRotationsAndPermutations(
+// TODO: Are these all the isomorphisms?
+export function allReflectionsGlobalRotationsAndPermutations(
   pattern: BoardCoordinates[]
 ) {
-  return allGlobalRotations(pattern).map(permute).flat();
+  return _.uniqBy(
+    allReflections(pattern)
+      .flatMap(allGlobalRotations)
+      .flatMap(permute),
+    (pattern) => pattern.join("")
+  );
 }
 
 export function allGlobalRotations(
@@ -81,6 +89,40 @@ export function allGlobalRotations(
   ];
 }
 
+export function allReflections(
+  pattern: BoardCoordinates[]
+) {
+  return [
+    pattern,
+    pattern.map(reflectHorizontally),
+    pattern.map(reflectVertically),
+  ];
+}
+
+export function reflectHorizontally(
+  coordinates: BoardCoordinates
+) {
+  const x = coordinates[0];
+  const y = coordinateComplement(
+    stringToBoardCoordinate(coordinates[1])
+  );
+
+  return `${x}${y}` as BoardCoordinates;
+}
+
+export function reflectVertically(
+  coordinates: BoardCoordinates
+) {
+  const x = coordinateComplement(
+    stringToBoardCoordinate(coordinates[0])
+  );
+  const y = coordinates[1];
+
+  return `${x}${y}` as BoardCoordinates;
+}
+
+// TODO: This might be better off on the frontend instead of
+//       annoying the backend.
 /**
  * A seemingly very performant way of generating all
  * permutations.

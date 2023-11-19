@@ -6,9 +6,7 @@ import { neo4jSession } from "@config/db";
 
 import {
   BoardCoordinates,
-  allGlobalRotations,
-  allGlobalRotationsAndPermutations,
-  permute,
+  allReflectionsGlobalRotationsAndPermutations,
 } from "@models/board_coordinates";
 
 // TODO: Move this to params so the URL tracks it as well
@@ -29,10 +27,7 @@ export async function POST(req: NextRequest) {
 
     const patternLength = pattern.length;
     const allPatterns =
-      allGlobalRotationsAndPermutations(pattern);
-
-    // console.log(allPatterns);
-    console.log(allPatterns.length);
+      allReflectionsGlobalRotationsAndPermutations(pattern);
 
     const results = await neo4jSession.executeWrite((tx) =>
       tx.run(
@@ -61,8 +56,7 @@ export async function POST(req: NextRequest) {
       console.log(r.get("g"));
     });
 
-    return new NextResponse("ok");
-    // return NextResponse.json({ nodes });
+    return new NextResponse("Ok");
   } catch (e) {
     console.error(e);
 
