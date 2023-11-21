@@ -2,7 +2,7 @@
 
 In this project, we replicate the SGF game trees as graphs inside Neo4j, and then outsource the search through patterns to Neo4j, as it is an optimized graph database.
 
-This project is heavily influenced by [Waltheri's Go Pattern Search](http://ps.waltheri.net/). In that project, its author used each game's last snapshot as a way of making comparisons with other games.
+This project is heavily influenced and inspired by [Waltheri's Go Pattern Search](http://ps.waltheri.net/). In that project, its author used each game's last snapshot as a way of making comparisons with other games.
 
 Another alternative to modeling this problem is through _Regular Expressions_ &mdash; regexes can actually be modeled as graphs as well &mdash;, I believe. Since SGF files track move coordinates as strings, we could search patterns in strings as patterns in the game. Coincidentally, regular expressions are also used fact optimizations in my graph approach.
 
@@ -68,7 +68,7 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 - [Sabaki's SGF Parser](https://github.com/SabakiHQ/sgf)
 - [Red Bean - SGF's Official Documentation](https://www.red-bean.com/sgf/)
-  - [Alternative SGF's Documentation](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
+  - [Alternative SGF Documentation](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
 
 ### 3.4. Related Questions on Stack Overflow
 
@@ -77,4 +77,4 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 ### 3.5. Miscellanea
 
-- [Graphology](https://github.com/graphology/graphology)
+- [Graphology](https://github.com/graphology/graphology): a JS package for dealing with graphs.
