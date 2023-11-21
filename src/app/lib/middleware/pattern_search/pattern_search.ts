@@ -17,7 +17,7 @@ export async function patternSearch(
 }
 
 /**
- * An adaptation of [@cybersam's answer on Stack Overflow](https://stackoverflow.com/a/77499034/4756173)
+ * An adaptation of [@cybersam's answer on Stack Overflow](https://stackoverflow.com/a/77499034/4756173).
  */
 async function sequentialPatternSearch(pattern: Pattern) {
   try {

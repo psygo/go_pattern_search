@@ -6,7 +6,9 @@ This project is heavily influenced and inspired by [Waltheri's Go Pattern Search
 
 Another alternative to modeling this problem is through _Regular Expressions_ &mdash; regexes can actually be modeled as graphs as well &mdash;, I believe. Since SGF files track move coordinates as strings, we could search patterns in strings as patterns in the game. Coincidentally, regular expressions are also used fact optimizations in my graph approach.
 
-## 1. Tasks
+## 1. Tasks and Ideas
+
+### 1.1. Tasks
 
 - Pattern-Search
   - [x] Sequential Pattern-Search
@@ -42,6 +44,11 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
   - [ ] URL-based filtering for the search
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
+
+### 1.2. Ideas
+
+- [ ] Webscrape [101 Weiqi](https://www.101weiqi.com/) for its tsumegos.
+- [ ] Include Yunguseng Dojang's files so we can index their large library.
 
 ## 2. Tech Stack
 

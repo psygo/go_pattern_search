@@ -33,19 +33,24 @@ export type WithGameId = {
 //----------------------------------------------------------
 // 2. Game Tree on Neo4j
 
+/**
+ * All the stones added up to the move.
+ *
+ * Useful for when doing the stone-based pattern-search.
+ */
 export type WithAddedStones = {
-  ab: string;
-  aw: string;
+  all_black_stones?: string;
+  all_white_stones?: string;
 };
 
-export type GameNodeData = Pick<SgfData, "AB" | "AW">;
+export type GameNodeData = Pick<SgfData, "AB" | "AW"> &
+  WithAddedStones;
 
 export type GameNode = WithGameId &
   WithTreeNodeId &
   WithSgf & {
-    id: number;
     data: GameNodeData;
-  } & WithAddedStones;
+  };
 
 export type NeoGameNode = WithId & {
   type: NeoNodeLabel.GameNode;
@@ -61,8 +66,7 @@ export type MoveNodeData = Pick<
 
 export type MoveNode = WithGameId &
   WithTreeNodeId &
-  WithParentId &
-  MoveNodeData;
+  WithParentId & { data: MoveNodeData };
 
 export type NeoMoveNove = WithId & {
   type: NeoNodeLabel.MoveNode;

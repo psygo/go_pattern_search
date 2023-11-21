@@ -14,7 +14,6 @@ import {
   GameTreeNodeObj,
   MoveNode,
   ParentId,
-  Player,
   SgfData,
   TreeNodeId,
   sgfAsString,
@@ -23,16 +22,14 @@ import {
 
 export async function createGameAndMoveNodesIndexes() {
   try {
-    // 1. Game Node - Game Id
+    // 1. Game Id
     await neo4jSession.executeWrite((tx) =>
       tx.run(/* cypher */ `
-        // 1. Game Id
         CREATE INDEX game_node_game_id_idx
            FOR (m:GameNode)
             ON (m.game_id)
       `)
     );
-    // 2. Move Node - Game Id
     await neo4jSession.executeWrite((tx) =>
       tx.run(/* cypher */ `
         CREATE INDEX move_node_game_id_idx
@@ -40,7 +37,8 @@ export async function createGameAndMoveNodesIndexes() {
             ON (m.game_id)
       `)
     );
-    // 3. Move Node - move
+
+    // 2. Move Node - move
     await neo4jSession.executeWrite((tx) =>
       tx.run(/* cypher */ `
         CREATE INDEX move_node_move_idx
@@ -48,12 +46,34 @@ export async function createGameAndMoveNodesIndexes() {
             ON (m.move)
       `)
     );
-    // 4. Move Node - stones
+
+    // 3. All Stones
     await neo4jSession.executeWrite((tx) =>
       tx.run(/* cypher */ `
-        CREATE INDEX move_node_stones_idx
+        CREATE INDEX game_node_all_black_stones_idx
+           FOR (m:GameNode)
+            ON (m.all_black_stones)
+      `)
+    );
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        CREATE INDEX move_node_all_black_stones_idx
            FOR (m:MoveNode)
-            ON (m.stones)
+            ON (m.all_black_stones)
+      `)
+    );
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        CREATE INDEX game_node_all_white_stones_idx
+           FOR (m:GameNode)
+            ON (m.all_white_stones)
+      `)
+    );
+    await neo4jSession.executeWrite((tx) =>
+      tx.run(/* cypher */ `
+        CREATE INDEX move_node_all_white_stones_idx
+           FOR (m:MoveNode)
+            ON (m.all_white_stones)
       `)
     );
   } catch (e) {
@@ -67,13 +87,13 @@ async function createGameNode(gameNode: GameNode) {
       tx.run(
         /* cypher */ `
           CREATE (:GameNode{
-            game_id: $gameNode.game_id,
-            id:      $gameNode.id,
-            sgf:     $gameNode.sgf,
-            AB:      $gameNode.data.AB,
-            AW:      $gameNode.data.AW,
-            ab:      $gameNode.data.ab,
-            aw:      $gameNode.data.aw
+            game_id:          $gameNode.game_id,
+            id:               $gameNode.id,
+            sgf:              $gameNode.sgf,
+            AB:               $gameNode.data.AB,
+            AW:               $gameNode.data.AW,
+            all_black_stones: $gameNode.data.AB,
+            all_white_stones: $gameNode.data.AW
           })
         `,
         { gameNode }
@@ -102,15 +122,15 @@ async function createMoveNodes(moveNodes: MoveNode[]) {
             CREATE   (parent)
                     -[:NEXT_MOVE]
                    ->(m:MoveNode{
-                       game_id: move.game_id,
-                       id:      move.id,
-                       AB:      move.data.AB,
-                       AW:      move.data.AW,
-                       B:       move.data.B,
-                       W:       move.data.W,
-                       ab:      move.data.ab,
-                       aw:      move.data.aw,
-                       move:    move.data.move
+                       game_id:          move.game_id,
+                       id:               move.id,
+                       AB:               move.data.AB,
+                       AW:               move.data.AW,
+                       B:                move.data.B,
+                       W:                move.data.W,
+                       move:             move.data.move,
+                       all_black_stones: parent.all_black_stones + move.data.AB + move.data.B,
+                       all_white_stones: parent.all_white_stones + move.data.AW + move.data.W
                      })
           }
         `,
@@ -133,6 +153,8 @@ export async function sgfsToNeo4j(
 
   // const filenames = readdirSync(gamesDir);
   const filenames = [
+    "test1.sgf",
+    "test2.sgf",
     "test3.sgf",
     "test4.sgf",
     "test5.sgf",
@@ -160,41 +182,39 @@ export async function sgfToNeo4j(filename: Filename) {
 
   const rawGameNode = allNodes.first();
   const rawGameNodeData: SgfData = rawGameNode.data;
+
   const gameNodeData: GameNodeData = {
     AB: rawGameNodeData.AB ?? [],
     AW: rawGameNodeData.AW ?? [],
-    // @ts-ignore
-    ab: addedStonesToString(rawGameNodeData, Player.Black),
-    aw: addedStonesToString(rawGameNodeData, Player.White),
   };
-  // @ts-ignore
   const gameNode: GameNode = {
     id: rawGameNode.id,
     game_id: gameId,
     sgf: sgf,
     data: gameNodeData,
   };
+
   await createGameNode(gameNode);
 
   //--------------------------------------------------------
   // 2. Move Nodes
 
   const rawMoveNodes = allNodes.slice(1);
-  // @ts-ignore
-  const moveNodes = rawMoveNodes.map<MoveNode>((m) => ({
-    game_id: gameId,
-    id: m.id as TreeNodeId,
-    parentId: m.parentId as ParentId,
-    data: {
-      AB: m.data.AB ?? [],
-      AW: m.data.AW ?? [],
-      B: m.data.B ?? [],
-      W: m.data.W ?? [],
-      ab: addedStonesToString(m.data, Player.Black),
-      aw: addedStonesToString(m.data, Player.White),
-      move: currentMove(m.data),
-    },
-  }));
+
+  const moveNodes = rawMoveNodes.map((m) => {
+    return <MoveNode>{
+      game_id: gameId,
+      id: m.id as TreeNodeId,
+      parentId: m.parentId as ParentId,
+      data: {
+        AB: m.data.AB ?? [],
+        AW: m.data.AW ?? [],
+        B: m.data.B ?? [],
+        W: m.data.W ?? [],
+        move: currentMove(m.data),
+      },
+    };
+  });
 
   await createMoveNodes(moveNodes);
 
@@ -203,14 +223,4 @@ export async function sgfToNeo4j(filename: Filename) {
 
 function currentMove(sgfData: SgfData) {
   return sgfData.B?.first() ?? sgfData.W?.first() ?? "";
-}
-
-function addedStonesToString(
-  sgfData: SgfData,
-  player: Player
-) {
-  const addedStones =
-    (player === Player.Black ? sgfData.AB : sgfData.AW) ??
-    [];
-  return addedStones.join("");
 }
