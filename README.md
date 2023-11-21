@@ -59,17 +59,22 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 - [Waltheri on Github](https://github.com/waltheri)
   - [Waltheri's List of Go Libraries and Resources](https://github.com/waltheri/go-libraries)
 
-### 3.2. SGF
+### 3.2 Board Editor
+
+- [Sabaki's Board Editor: Shudan](https://github.com/SabakiHQ/Shudan)
+  - [Trying to Make Shudan Work With NextJS](https://github.com/SabakiHQ/Shudan/issues/1#issuecomment-1820779837)
+
+### 3.3. SGF
 
 - [Sabaki's SGF Parser](https://github.com/SabakiHQ/sgf)
 - [Red Bean - SGF's Official Documentation](https://www.red-bean.com/sgf/)
   - [Alternative SGF's Documentation](https://homepages.cwi.nl/~aeb/go/misc/sgf.html)
 
-### 3.3. Related Questions on Stack Overflow
+### 3.4. Related Questions on Stack Overflow
 
 - [How to Recursively Create a Tree with Cypher (Neo4j)](https://stackoverflow.com/q/77495108/4756173)
 - [How to (Efficiently) Find Subpaths in Recursive Trees through Cypher (Graph vs Regex)](https://stackoverflow.com/q/77497411/4756173)
 
-### 3.4. Miscellanea
+### 3.5. Miscellanea
 
 - [Graphology](https://github.com/graphology/graphology)
