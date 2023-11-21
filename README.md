@@ -57,6 +57,7 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 - [Waltheri's Go Pattern Search](http://ps.waltheri.net/)
 - [Waltheri on Github](https://github.com/waltheri)
+  - [Waltheri's List of Go Libraries and Resources](https://github.com/waltheri/go-libraries)
 
 ### 3.2. SGF
 
