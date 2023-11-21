@@ -38,12 +38,15 @@ async function deleteAllNodesAndRelationships() {
   }
 }
 
+/**
+ * Based on [@cybersam's hack for reconfiguring Neo4j](https://stackoverflow.com/a/52596026/4756173).
+ */
 async function deleteAllIndexes() {
   try {
     await neo4jSession.executeWrite((tx) =>
       tx.run(/* cypher */ `
-        CALL apoc.schema.assert({},{},true) YIELD label, key
-        RETURN *
+        CALL  apoc.schema.assert({}, {}, true) 
+        YIELD label, key
       `)
     );
   } catch (e) {
