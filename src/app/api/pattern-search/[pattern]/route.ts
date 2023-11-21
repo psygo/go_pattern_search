@@ -27,16 +27,12 @@ export async function GET(
     const { pattern } =
       PatternSearchReqParamsSchema.parse(params);
 
-    const results = await patternSearch(
+    const gameNodes = await patternSearch(
       pattern,
       isStoneSearch
     );
 
-    // results?.records.map((r) => {
-    //   console.log(r.get("g"));
-    // });
-
-    return new NextResponse("Ok");
+    return NextResponse.json(gameNodes);
   } catch (e) {
     console.error(e);
 

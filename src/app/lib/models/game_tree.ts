@@ -1,6 +1,11 @@
 // @ts-ignore
 import GameTree from "@sabaki/immutable-gametree";
 
+import {
+  NeoNodeLabel,
+  WithId,
+} from "@models/utils/exports";
+
 import { SgfData, WithSgf } from "./sgf";
 import { BoardCoordinates } from "./board_coordinates";
 
@@ -34,12 +39,18 @@ export type WithAddedStones = {
 };
 
 export type GameNodeData = Pick<SgfData, "AB" | "AW">;
+
 export type GameNode = WithGameId &
   WithTreeNodeId &
   WithSgf & {
     id: number;
     data: GameNodeData;
   } & WithAddedStones;
+
+export type NeoGameNode = WithId & {
+  type: NeoNodeLabel.GameNode;
+  properties: GameNode;
+};
 
 export type MoveNodeData = Pick<
   SgfData,
@@ -52,6 +63,11 @@ export type MoveNode = WithGameId &
   WithTreeNodeId &
   WithParentId &
   MoveNodeData;
+
+export type NeoMoveNove = WithId & {
+  type: NeoNodeLabel.MoveNode;
+  properties: MoveNode;
+};
 
 export type GameTreeNodeObj = WithTreeNodeId & {
   data: SgfData;

@@ -1,5 +1,5 @@
 import { NeoNodeLabel } from "./node_labels";
-import { Id, WithExtId, WithId } from "./mixin_models";
+import { Id, WithId } from "./mixin_models";
 
 export type NeoNodeBase = {
   labels: NeoNodeLabel[];
@@ -16,6 +16,6 @@ export type OutNode<N extends NeoNodeLabel> = OutNodeAny & {
   properties: NodeProperties<N>;
 };
 
-export type NodePropertiesAny = {} & WithExtId;
+export type NodePropertiesAny = {};
 export type NodeProperties<N extends NeoNodeLabel> =
   NodePropertiesAny;
