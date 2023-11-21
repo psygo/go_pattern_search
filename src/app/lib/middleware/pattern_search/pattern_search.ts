@@ -7,7 +7,10 @@ import { allIsomorphisms } from "./isomorphism";
 /**
  * An adaptation of [@cybersam's answer on Stack Overflow](https://stackoverflow.com/a/77499034/4756173)
  */
-export async function patternSearch(pattern: Pattern) {
+export async function patternSearch(
+  pattern: Pattern,
+  isStoneSearch: boolean = false
+) {
   try {
     const patternLength = pattern.length;
     const allPatterns = allIsomorphisms(pattern);
@@ -33,8 +36,6 @@ export async function patternSearch(pattern: Pattern) {
         { patterns: allPatterns }
       )
     );
-
-    console.log(results.records);
 
     return results;
   } catch (e) {
