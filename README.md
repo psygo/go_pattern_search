@@ -45,8 +45,7 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 ## 2. Tech Stack
 
-- Neo4j
-  - If in-memory, one could choose the package [Graphology](https://github.com/graphology/graphology), I guess.
+- Neo4j (Graph DBMS)
 - NextJS (ReactJS) + MUI
 - Sabaki's SGF Parser
 - Custom Go Board HTML Canvas Component
@@ -78,3 +77,6 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 ### 3.5. Miscellanea
 
 - [Graphology](https://github.com/graphology/graphology): a JS package for dealing with graphs.
+- For editing Cypher code as strings with syntax highlighting on VS Code, I'm using the following extensions:
+  - [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
+  - [Anthony Gatlin - Cypher Query Language Tools for Neoj](https://marketplace.visualstudio.com/items?itemName=AnthonyJGatlin.vscode-cypher-query-language-tools)
