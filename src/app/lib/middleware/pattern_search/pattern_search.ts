@@ -39,6 +39,6 @@ export async function patternSearch(
 
     return results;
   } catch (e) {
-    console.log(e);
+    console.error(e);
   }
 }
