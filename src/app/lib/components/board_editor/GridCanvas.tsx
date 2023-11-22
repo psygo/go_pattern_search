@@ -32,11 +32,13 @@ export function GridCanvas({
       const step = width / 19;
       for (let x = 0; x <= width; x += step) {
         gridCtx.moveTo(0.5 + x + p, p);
+        gridCtx.fillText("A", x + p - 2.5, p - 2.5);
         gridCtx.lineTo(0.5 + x + p, height + p);
       }
 
       for (let x = 0; x <= height; x += step) {
         gridCtx.moveTo(p, 0.5 + x + p);
+        gridCtx.fillText("A", p - 10, x + p + 5);
         gridCtx.lineTo(width + p, 0.5 + x + p);
       }
 
