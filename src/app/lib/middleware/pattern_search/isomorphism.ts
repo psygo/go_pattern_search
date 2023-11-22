@@ -5,6 +5,7 @@ import {
   coordinateComplement,
   stringToBoardCoordinate,
 } from "@models/exports";
+import { Pattern } from "../../models/validation/pattern";
 
 // TODO: Are these all the isomorphisms?
 export function allIsomorphisms(
@@ -35,7 +36,7 @@ export function allReflections(
  * Reflection over a horizontal line in the middle, e.g.
  * 'ab' ---> 'ar'
  */
-export function reflectHorizontally(
+function reflectHorizontally(
   coordinates: BoardCoordinates
 ) {
   const x = coordinates[0];
@@ -50,9 +51,7 @@ export function reflectHorizontally(
  * Reflection over a vertical line in the middle, e.g.
  * 'ab' -|-> 'sb'
  */
-export function reflectVertically(
-  coordinates: BoardCoordinates
-) {
+function reflectVertically(coordinates: BoardCoordinates) {
   const x = coordinateComplement(
     stringToBoardCoordinate(coordinates[0])
   );
@@ -116,9 +115,7 @@ export function allGlobalRotations(
 /**
  * E.g. 'bc' -90-> 'qb'
  */
-export function globalRotate90(
-  coordinates: BoardCoordinates
-) {
+function globalRotate90(coordinates: BoardCoordinates) {
   const x = coordinateComplement(
     stringToBoardCoordinate(coordinates[1])
   );
@@ -130,9 +127,7 @@ export function globalRotate90(
 /**
  * E.g. 'bc' -90-> 'qb' -90-> 'rq'
  */
-export function globalRotate180(
-  coordinates: BoardCoordinates
-) {
+function globalRotate180(coordinates: BoardCoordinates) {
   const x = coordinateComplement(
     stringToBoardCoordinate(coordinates[0])
   );
@@ -146,9 +141,7 @@ export function globalRotate180(
 /**
  * E.g. 'bc' -90-> 'qb' -90-> 'rq' -90-> 'cr'
  */
-export function globalRotate270(
-  coordinates: BoardCoordinates
-) {
+function globalRotate270(coordinates: BoardCoordinates) {
   const x = coordinates[1];
   const y = coordinateComplement(
     stringToBoardCoordinate(coordinates[0])

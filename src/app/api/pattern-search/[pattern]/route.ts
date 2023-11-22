@@ -19,6 +19,9 @@ export async function GET(
   { params }: PatternSearchParams
 ) {
   try {
+    // TODO: this should be another endpoint actually, since
+    //       we need to input the black and white stones
+    //       separately.
     const { searchParams } = new URL(req.url);
     const { "stone-search": isStoneSearch } =
       PatternSearchReqSearchParamsSchema.parse(
