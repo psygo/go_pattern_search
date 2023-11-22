@@ -1,9 +1,8 @@
 import { useEffect, useRef } from "react";
 
-export type BackgroundCanvasProps = {
-  width: number;
-  height: number;
-};
+import { BoardEditorProps } from "./BoardEditor";
+
+type BackgroundCanvasProps = BoardEditorProps
 export function BackgroundCanvas({
   width,
   height,
