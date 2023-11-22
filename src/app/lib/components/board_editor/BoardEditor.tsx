@@ -1,29 +1,18 @@
 import { useEffect, useRef } from "react";
 
 import { Box } from "@mui/material";
+import { BackgroundCanvas } from "./BackgroundCanvas";
 
 export function BoardEditor() {
   const width = 500;
   const height = 500;
 
-  const backgroundCanvasRef = useRef(
-    document.createElement("canvas")
-  );
   const gridCanvasRef = useRef(
     document.createElement("canvas")
   );
   const stonesCanvasRef = useRef(
     document.createElement("canvas")
   );
-
-  function setupBackground() {
-    const backgroundCanvas = backgroundCanvasRef.current!;
-    const backgroundCtx =
-      backgroundCanvas.getContext("2d")!;
-
-    backgroundCtx.fillStyle = "#E4B063";
-    backgroundCtx.fillRect(0, 0, width, height);
-  }
 
   function setupGrid() {
     const gridCanvas = gridCanvasRef.current!;
@@ -58,7 +47,6 @@ export function BoardEditor() {
   }
 
   useEffect(() => {
-    setupBackground();
     setupGrid();
   }, []);
 
@@ -82,16 +70,7 @@ export function BoardEditor() {
         }}
         id="grid"
       ></canvas>
-      <canvas
-        ref={backgroundCanvasRef}
-        width={width}
-        height={height}
-        style={{
-          position: "absolute",
-          zIndex: 0,
-        }}
-        id="background"
-      ></canvas>
+      <BackgroundCanvas width={width} height={height} />
     </Box>
   );
 }
