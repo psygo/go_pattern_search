@@ -48,7 +48,7 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 ### 1.2. Ideas
 
 - [ ] Webscrape [101 Weiqi](https://www.101weiqi.com/) for its tsumegos.
-- [ ] Include Yunguseng Dojang's files so we can index their large library.
+- [ ] Include [Yunguseng Dojang](https://yunguseng.com/)'s files so we can index their large library.
 
 ## 2. Tech Stack
 
@@ -69,6 +69,7 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 - [Sabaki's Board Editor: Shudan](https://github.com/SabakiHQ/Shudan)
   - [Trying to Make Shudan Work With NextJS](https://github.com/SabakiHQ/Shudan/issues/1#issuecomment-1820779837)
+- [WGo.js](http://wgo.waltheri.net/): the editor used in Waltheri's Pattern Search.
 
 ### 3.3. SGF
 
@@ -87,3 +88,5 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 - For editing Cypher code as strings with syntax highlighting on VS Code, I'm using the following extensions:
   - [es6-string-html](https://marketplace.visualstudio.com/items?itemName=Tobermory.es6-string-html)
   - [Anthony Gatlin - Cypher Query Language Tools for Neoj](https://marketplace.visualstudio.com/items?itemName=AnthonyJGatlin.vscode-cypher-query-language-tools)
+- [101 Weiqi](https://www.101weiqi.com/): Chinese website with various types of Go content. Probably the biggest tsumego database (pros create and transcribe tsumegos everyday).
+- [Yunguseng Dojang](https://yunguseng.com/): In-seong Hwang 8d's online school, with extensive not-yet-index content.
