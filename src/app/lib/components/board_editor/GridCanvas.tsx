@@ -12,11 +12,11 @@ export function GridCanvas({
   );
 
   useEffect(() => {
-    function setupGrid() {
-      const gridCanvas = gridCanvasRef.current!;
-      const gridCtx = gridCanvas.getContext("2d")!;
-      const p = 10;
+    const gridCanvas = gridCanvasRef.current!;
+    const gridCtx = gridCanvas.getContext("2d")!;
+    const p = 10;
 
+    function setupGridWidthHeightAndScale() {
       gridCanvas.style.width = width + "px";
       gridCanvas.style.height = height + "px";
 
@@ -28,7 +28,9 @@ export function GridCanvas({
       gridCanvas.height = height * scale;
 
       gridCtx.scale(scale, scale);
+    }
 
+    function drawGrid() {
       const step = width / 19;
       for (let x = 0; x <= width; x += step) {
         gridCtx.moveTo(0.5 + x + p, p);
@@ -44,6 +46,11 @@ export function GridCanvas({
 
       gridCtx.strokeStyle = "black";
       gridCtx.stroke();
+    }
+
+    function setupGrid() {
+      setupGridWidthHeightAndScale();
+      drawGrid();
     }
 
     setupGrid();
