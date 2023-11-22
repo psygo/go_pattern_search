@@ -1,5 +1,6 @@
-import { Box } from "@mui/material";
 import { useEffect, useRef } from "react";
+
+import { Box } from "@mui/material";
 
 export function BoardEditor() {
   const width = 500;
@@ -42,8 +43,6 @@ export function BoardEditor() {
           width,
           height,
           position: "absolute",
-          top: 0,
-          left: 0,
           zIndex: 2,
         }}
         id="stones"
@@ -54,8 +53,6 @@ export function BoardEditor() {
           width,
           height,
           position: "absolute",
-          top: 0,
-          left: 0,
           zIndex: 1,
         }}
         id="grid"
@@ -66,8 +63,6 @@ export function BoardEditor() {
           width,
           height,
           position: "absolute",
-          top: 0,
-          left: 0,
           zIndex: 0,
         }}
         id="background"

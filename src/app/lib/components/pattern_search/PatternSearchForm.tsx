@@ -7,7 +7,6 @@ import {
 
 import {
   Stack,
-  TextField,
   ToggleButton,
   Typography,
 } from "@mui/material";
@@ -23,24 +22,9 @@ export function PatternSearchForm() {
     searchParams.get("stone-search") === "true";
 
   return (
-    <>
-      <BoardEditor />
-
-      <form id="pattern-search">
-        <Stack spacing={2} width={200}>
-          {/* TODO: This is only temporary, this should actually be tracked by the board editor */}
-          <TextField
-            id="pattern"
-            value={pattern}
-            onChange={(e) => {
-              router.push(
-                `?pattern=${e.target.value}&stone-search=${isStoneSearch}`,
-                {
-                  scroll: false,
-                }
-              );
-            }}
-          />
+    <form id="pattern-search">
+      <Stack spacing={2} direction="row">
+        <Stack id="filters" spacing={2}>
           <ToggleButton
             sx={{ maxWidth: "max-content" }}
             value="check"
@@ -59,7 +43,9 @@ export function PatternSearchForm() {
             </Typography>
           </ToggleButton>
         </Stack>
-      </form>
-    </>
+
+        <BoardEditor />
+      </Stack>
+    </form>
   );
 }
