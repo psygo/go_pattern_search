@@ -30,8 +30,14 @@ export type WithGameId = {
   game_id: GameId;
 };
 
+export type GameTreeNodeObj = WithTreeNodeId & {
+  data: SgfData;
+  parentId: TreeNodeId | null;
+  children: GameTreeNodeObj[];
+};
+
 //----------------------------------------------------------
-// 2. Game Tree on Neo4j
+// 2. Common to Game and Move Nodes
 
 /**
  * All the stones added up to the move.
@@ -42,6 +48,9 @@ export type WithAddedStones = {
   all_black_stones?: string;
   all_white_stones?: string;
 };
+
+//----------------------------------------------------------
+// 3. Game Node
 
 export type GameNodeData = Pick<SgfData, "AB" | "AW"> &
   WithAddedStones;
@@ -57,6 +66,9 @@ export type NeoGameNode = WithId & {
   properties: GameNode;
 };
 
+//----------------------------------------------------------
+// 4. Move Node
+
 export type MoveNodeData = Pick<
   SgfData,
   "AB" | "AW" | "B" | "W"
@@ -71,12 +83,6 @@ export type MoveNode = WithGameId &
 export type NeoMoveNove = WithId & {
   type: NeoNodeLabel.MoveNode;
   properties: MoveNode;
-};
-
-export type GameTreeNodeObj = WithTreeNodeId & {
-  data: SgfData;
-  parentId: TreeNodeId | null;
-  children: GameTreeNodeObj[];
 };
 
 //----------------------------------------------------------
