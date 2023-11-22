@@ -1,1 +1,1 @@
-export * from "./pattern_search_form";
+export * from "./PatternSearchForm";
