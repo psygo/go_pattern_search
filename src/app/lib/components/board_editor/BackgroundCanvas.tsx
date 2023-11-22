@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 import { BoardEditorProps } from "./BoardEditor";
 
-type BackgroundCanvasProps = BoardEditorProps
+type BackgroundCanvasProps = BoardEditorProps;
 export function BackgroundCanvas({
   width,
   height,
