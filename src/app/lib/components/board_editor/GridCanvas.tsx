@@ -1,7 +1,13 @@
 import { useEffect, useRef } from "react";
+
+import {} from "@utils/array";
+
 import { boardCoordinatesIterator } from "@models/board_coordinates";
 
-import { boardGridIterator } from "./board_utils";
+import {
+  boardGridArray,
+  boardGridIterator,
+} from "./board_utils";
 import { BoardEditorProps } from "./BoardEditor";
 
 type GridCanvasProps = BoardEditorProps;
@@ -31,39 +37,38 @@ export function GridCanvas({
     }
 
     function drawGrid() {
-      const p = 10;
+      const p = 15;
+      const grid = boardGridArray(width, boardSize, p);
+
+      const lastGridLineCoord = grid.last();
 
       function drawXGrid() {
         const xCoordLegendIterator =
           boardCoordinatesIterator();
-        for (const x of boardGridIterator(
-          width,
-          boardSize
-        )) {
-          const legend = (
+
+        for (const x of grid) {
+          const legendX = (
             xCoordLegendIterator.next().value as string
           ).toUpperCase();
 
-          gridCtx.moveTo(0.5 + x + p, p);
-          gridCtx.fillText(legend, x + p - 2.5, p - 2.5);
-          gridCtx.lineTo(0.5 + x + p, height - p - 5);
+          gridCtx.moveTo(x, p);
+          gridCtx.fillText(legendX, x - 2.5, p - 2.5);
+          gridCtx.lineTo(x, lastGridLineCoord);
         }
       }
 
       function drawYGrid() {
         const yCoordLegendIterator =
           boardCoordinatesIterator();
-        for (const y of boardGridIterator(
-          height,
-          boardSize
-        )) {
-          const legend = (
+
+        for (const y of grid) {
+          const legendY = (
             yCoordLegendIterator.next().value as string
           ).toUpperCase();
 
-          gridCtx.moveTo(p, 0.5 + y + p);
-          gridCtx.fillText(legend, p - 10, y + p + 5);
-          gridCtx.lineTo(width - p - 5, 0.5 + y + p);
+          gridCtx.moveTo(p, y);
+          gridCtx.fillText(legendY, p - 10, y + 5);
+          gridCtx.lineTo(lastGridLineCoord, y);
         }
       }
 
