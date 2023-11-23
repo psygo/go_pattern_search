@@ -73,6 +73,7 @@ export function StonesCanvas({
     if (!moves.includes(move)) {
       setMoves(moves.concat(move));
 
+      // 1. Stone
       stonesCtx.beginPath();
       stonesCtx.arc(centerX, centerY, 12, 0, 2 * Math.PI);
 
@@ -83,6 +84,18 @@ export function StonesCanvas({
       stonesCtx.strokeStyle =
         currentPlayer === Player.Black ? "white" : "black";
       stonesCtx.stroke();
+
+      // 2. Move Numbering
+      const moveNumber = moves.length + 1;
+      stonesCtx.textAlign = "center";
+      stonesCtx.fillStyle =
+        currentPlayer === Player.Black ? "white" : "black";
+      stonesCtx.font = "10pt sans-serif";
+      stonesCtx.fillText(
+        moveNumber.toString(),
+        centerX,
+        centerY + 4.5
+      );
 
       toggleCurrentPlayer();
     }

@@ -42,7 +42,7 @@ export function coordsToMove(
   const coordX = Object.values(BoardCoordinate)[idxX + 1];
   const coordY = Object.values(BoardCoordinate)[idxY + 1];
 
-  const move = (coordX + coordY) as BoardCoordinates;
+  const move = `${coordX}${coordY}` as BoardCoordinates;
 
   return move;
 }
