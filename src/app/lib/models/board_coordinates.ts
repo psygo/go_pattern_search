@@ -1,8 +1,5 @@
-//----------------------------------------------------------
-// Board Coordinates
-
 /**
- * Goes up to 26x26 with this alphabet (A-Z)
+ * Goes up to 26x26 with this alphabet (A-Z).
  */
 export enum BoardCoordinate {
   BEGINNING_OF_GAME = "Beginning of the Game",
@@ -48,6 +45,10 @@ export function stringToBoardCoordinate(
   return Object.values(BoardCoordinate).find(
     (bc) => bc === s.toLowerCase()
   )!;
+}
+
+export function boardCoordinatesIterator() {
+  return Object.values(BoardCoordinate).slice(1).values();
 }
 
 export function coordinateComplement(
