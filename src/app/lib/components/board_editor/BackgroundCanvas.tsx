@@ -2,13 +2,9 @@ import { useEffect, useRef } from "react";
 
 import { BoardEditorProps } from "./BoardEditor";
 
-type BackgroundCanvasProps = Omit<
-  BoardEditorProps,
-  "boardSize"
->;
+type BackgroundCanvasProps = Pick<BoardEditorProps, "size">;
 export function BackgroundCanvas({
-  width,
-  height,
+  size,
 }: BackgroundCanvasProps) {
   const backgroundCanvasRef =
     useRef<HTMLCanvasElement>(null);
@@ -20,17 +16,17 @@ export function BackgroundCanvas({
         backgroundCanvas.getContext("2d")!;
 
       backgroundCtx.fillStyle = "#E4B063";
-      backgroundCtx.fillRect(0, 0, width, height);
+      backgroundCtx.fillRect(0, 0, size, size);
     }
 
     setupBackground();
-  }, [width, height]);
+  }, [size]);
 
   return (
     <canvas
       ref={backgroundCanvasRef}
-      width={width}
-      height={height}
+      width={size}
+      height={size}
       style={{
         position: "absolute",
         zIndex: 0,

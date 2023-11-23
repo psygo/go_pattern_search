@@ -12,8 +12,7 @@ import { BoardEditorProps } from "./BoardEditor";
 
 type GridCanvasProps = BoardEditorProps;
 export function GridCanvas({
-  width,
-  height,
+  size,
   boardSize = 19,
 }: GridCanvasProps) {
   const gridCanvasRef = useRef<HTMLCanvasElement>(null);
@@ -23,22 +22,22 @@ export function GridCanvas({
     const gridCtx = gridCanvas.getContext("2d")!;
 
     function setupGridWidthHeightAndScale() {
-      gridCanvas.style.width = width + "px";
-      gridCanvas.style.height = height + "px";
+      gridCanvas.style.width = size + "px";
+      gridCanvas.style.height = size + "px";
 
       // Otherwise we get blurry lines
       // Referenece: [Stack Overflow - Canvas drawings, like lines, are blurry](https://stackoverflow.com/a/59143499/4756173)
       const scale = window.devicePixelRatio;
 
-      gridCanvas.width = width * scale;
-      gridCanvas.height = height * scale;
+      gridCanvas.width = size * scale;
+      gridCanvas.height = size * scale;
 
       gridCtx.scale(scale, scale);
     }
 
     function drawGrid() {
       const p = 15;
-      const grid = boardGridArray(width, boardSize, p);
+      const grid = boardGridArray(size, boardSize, p);
 
       const lastGridLineCoord = grid.last();
 
@@ -85,7 +84,7 @@ export function GridCanvas({
     }
 
     setupGrid();
-  }, [width, height, boardSize]);
+  }, [size, boardSize]);
 
   return (
     <canvas

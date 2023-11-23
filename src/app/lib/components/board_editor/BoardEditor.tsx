@@ -5,28 +5,18 @@ import { GridCanvas } from "./GridCanvas";
 import { StonesCanvas } from "./StonesCanvas";
 
 export type BoardEditorProps = {
-  width: number;
-  height: number;
+  size: number;
   boardSize?: number;
 };
 export function BoardEditor({
-  width,
-  height,
+  size,
   boardSize = 19,
 }: BoardEditorProps) {
   return (
     <Box sx={{ position: "relative" }}>
-      <StonesCanvas
-        width={width}
-        height={height}
-        boardSize={boardSize}
-      />
-      <GridCanvas
-        width={width}
-        height={height}
-        boardSize={boardSize}
-      />
-      <BackgroundCanvas width={width} height={height} />
+      <StonesCanvas size={size} boardSize={boardSize} />
+      <GridCanvas size={size} boardSize={boardSize} />
+      <BackgroundCanvas size={size} />
     </Box>
   );
 }
