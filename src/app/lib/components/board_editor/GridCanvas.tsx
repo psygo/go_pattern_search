@@ -45,7 +45,7 @@ export function GridCanvas({
 
           gridCtx.moveTo(0.5 + x + p, p);
           gridCtx.fillText(legend, x + p - 2.5, p - 2.5);
-          gridCtx.lineTo(0.5 + x + p, height + p);
+          gridCtx.lineTo(0.5 + x + p, height - p - 5);
         }
       }
 
@@ -62,7 +62,7 @@ export function GridCanvas({
 
           gridCtx.moveTo(p, 0.5 + y + p);
           gridCtx.fillText(legend, p - 10, y + p + 5);
-          gridCtx.lineTo(width + p, 0.5 + y + p);
+          gridCtx.lineTo(width - p - 5, 0.5 + y + p);
         }
       }
 
