@@ -81,6 +81,8 @@ export function StonesCanvas({
 
     if (!currentMoves.includes(move)) {
       setCurrentMoves(currentMoves.concat(move));
+      // TODO: if the next move is the same as in `allMoves`,
+      //       then don't overwrite `allmoves`
       setAllMoves(currentMoves.concat(move));
 
       drawStone(stonesCtx, centerX, centerY);
@@ -136,7 +138,6 @@ export function StonesCanvas({
     // 3. Clear the Stone
     const stonesCanvas = stonesCanvasRef.current!;
     const stonesCtx = stonesCanvas.getContext("2d")!;
-    const rect = stonesCanvas.getBoundingClientRect();
 
     stonesCtx.clearRect(
       x - stoneRadius - borderStrokeWidth,
@@ -151,9 +152,24 @@ export function StonesCanvas({
 
   function handleRedo() {
     // 1. Find Next Move
+    const nextMoveIdx = currentMoves.length;
+
+    if (nextMoveIdx === allMoves.length) return;
+
+    const nextMove = allMoves[nextMoveIdx];
+
     // 2. Draw Next Move
-    //    Probably the same as clicking
-    // 3. Update Moves
+    const [x, y] = moveToCoords(boardGrid, nextMove);
+
+    const stonesCanvas = stonesCanvasRef.current!;
+    const stonesCtx = stonesCanvas.getContext("2d")!;
+
+    drawStone(stonesCtx, x, y);
+    drawMoveNumber(stonesCtx, x, y);
+
+    // 3. Update Moves and Player
+    toggleCurrentPlayer();
+    setCurrentMoves(currentMoves.concat(nextMove));
   }
 
   return (

@@ -1,5 +1,5 @@
 import {
-  BoardCoordinate,
+  BoardCoordinateValues,
   BoardCoordinates,
 } from "@models/exports";
 
@@ -39,8 +39,8 @@ export function coordsToMove(
   const idxX = grid.findIndex((coord) => coord === x);
   const idxY = grid.findIndex((coord) => coord === y);
 
-  const coordX = Object.values(BoardCoordinate)[idxX + 1];
-  const coordY = Object.values(BoardCoordinate)[idxY + 1];
+  const coordX = BoardCoordinateValues[idxX + 1];
+  const coordY = BoardCoordinateValues[idxY + 1];
 
   const move = `${coordX}${coordY}` as BoardCoordinates;
 
@@ -51,10 +51,10 @@ export function moveToCoords(
   grid: number[],
   move: BoardCoordinates
 ) {
-  const idxX = Object.values(BoardCoordinate).findIndex(
+  const idxX = BoardCoordinateValues.findIndex(
     (bc) => bc === move[0]
   );
-  const idxY = Object.values(BoardCoordinate).findIndex(
+  const idxY = BoardCoordinateValues.findIndex(
     (bc) => bc === move[1]
   );
 

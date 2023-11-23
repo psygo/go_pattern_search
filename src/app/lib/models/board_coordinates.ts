@@ -31,6 +31,9 @@ export enum BoardCoordinate {
   Z = "z",
 }
 
+export const BoardCoordinateValues =
+  Object.values(BoardCoordinate);
+
 /**
  * Source [Stack Overflow - *How do I declare a string that is of a specific length using typescript?*](https://stackoverflow.com/a/77232369/4756173)
  */
@@ -42,28 +45,25 @@ export type BoardCoordinates = {
 export function stringToBoardCoordinate(
   s: string
 ): BoardCoordinate {
-  return Object.values(BoardCoordinate).find(
+  return BoardCoordinateValues.find(
     (bc) => bc === s.toLowerCase()
   )!;
 }
 
 export function boardCoordinatesIterator() {
-  return Object.values(BoardCoordinate).slice(1).values();
+  return BoardCoordinateValues.slice(1).values();
 }
 
 export function coordinateComplement(
   bc: BoardCoordinate,
   boardSize: number = 19
 ) {
-  const boardCoordinatesArray =
-    Object.values(BoardCoordinate);
-
-  const bcIdx = boardCoordinatesArray.indexOf(bc);
+  const bcIdx = BoardCoordinateValues.indexOf(bc);
 
   // `+ 1` because of `BoardCoordinate.BEGINNING_OF_GAME`
   const bcComplementIdx = boardSize - bcIdx + 1;
 
   return stringToBoardCoordinate(
-    boardCoordinatesArray[bcComplementIdx]
+    BoardCoordinateValues[bcComplementIdx]
   );
 }
