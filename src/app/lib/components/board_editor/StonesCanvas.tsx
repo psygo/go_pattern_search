@@ -2,6 +2,7 @@ import {
   MouseEvent,
   useCallback,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -178,12 +179,16 @@ export function StonesCanvas({
         ref={stonesCanvasRef}
         onClick={handleClick}
         style={{
-          position: "relative",
           zIndex: 2,
         }}
         id="stones"
       ></canvas>
-      <Stack direction="row" justifyContent="center">
+
+      <Stack
+        id="board-controls"
+        direction="row"
+        justifyContent="center"
+      >
         <IconButton onClick={handleUndo}>
           <ArrowBack />
         </IconButton>
