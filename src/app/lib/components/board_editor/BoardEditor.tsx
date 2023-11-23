@@ -16,8 +16,16 @@ export function BoardEditor({
 }: BoardEditorProps) {
   return (
     <Box sx={{ position: "relative" }}>
-      <StonesCanvas width={width} height={height} />
-      <GridCanvas width={width} height={height} />
+      <StonesCanvas
+        width={width}
+        height={height}
+        boardSize={boardSize}
+      />
+      <GridCanvas
+        width={width}
+        height={height}
+        boardSize={boardSize}
+      />
       <BackgroundCanvas width={width} height={height} />
     </Box>
   );

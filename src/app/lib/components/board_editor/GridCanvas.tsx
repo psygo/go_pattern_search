@@ -1,8 +1,8 @@
 import { useEffect, useRef } from "react";
+import { boardCoordinatesIterator } from "@models/board_coordinates";
 
 import { boardGridIterator } from "./board_utils";
 import { BoardEditorProps } from "./BoardEditor";
-import { boardCoordinatesIterator } from "../../models/board_coordinates";
 
 type GridCanvasProps = BoardEditorProps;
 export function GridCanvas({
@@ -15,7 +15,6 @@ export function GridCanvas({
   useEffect(() => {
     const gridCanvas = gridCanvasRef.current!;
     const gridCtx = gridCanvas.getContext("2d")!;
-    const p = 10;
 
     function setupGridWidthHeightAndScale() {
       gridCanvas.style.width = width + "px";
@@ -32,6 +31,8 @@ export function GridCanvas({
     }
 
     function drawGrid() {
+      const p = 10;
+
       function drawXGrid() {
         const xCoordLegendIterator =
           boardCoordinatesIterator();
