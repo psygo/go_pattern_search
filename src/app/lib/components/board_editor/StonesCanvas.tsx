@@ -6,11 +6,13 @@ import {
   useState,
 } from "react";
 
+import { IconButton, Stack } from "@mui/material";
 import {
-  BoardCoordinate,
-  BoardCoordinates,
-  Player,
-} from "@models/exports";
+  ArrowBack,
+  ArrowForward,
+} from "@mui/icons-material";
+
+import { BoardCoordinates, Player } from "@models/exports";
 
 import {
   boardGridArray,
@@ -35,9 +37,12 @@ export function StonesCanvas({
   const [currentPlayer, setCurrentPlayer] = useState(
     Player.Black
   );
-  const [moves, setMoves] = useState<BoardCoordinates[]>(
-    []
-  );
+  const [currentMoves, setCurrentMoves] = useState<
+    BoardCoordinates[]
+  >([]);
+  const [allMoves, setAllMoves] = useState<
+    BoardCoordinates[]
+  >([]);
 
   const toggleCurrentPlayer = useCallback(() => {
     setCurrentPlayer(
@@ -70,8 +75,9 @@ export function StonesCanvas({
     );
     const move = coordsToMove(boardGrid, centerX, centerY);
 
-    if (!moves.includes(move)) {
-      setMoves(moves.concat(move));
+    if (!currentMoves.includes(move)) {
+      setCurrentMoves(currentMoves.concat(move));
+      setAllMoves(currentMoves.concat(move));
 
       // 1. Stone
       stonesCtx.beginPath();
@@ -86,7 +92,7 @@ export function StonesCanvas({
       stonesCtx.stroke();
 
       // 2. Move Numbering
-      const moveNumber = moves.length + 1;
+      const moveNumber = currentMoves.length + 1;
       stonesCtx.textAlign = "center";
       stonesCtx.fillStyle =
         currentPlayer === Player.Black ? "white" : "black";
@@ -101,15 +107,43 @@ export function StonesCanvas({
     }
   }
 
+  function handleUndo() {
+    // 1. Find Last Move
+    const lastMove = currentMoves.last();
+
+    // 2. Find the Stone Coordinates
+
+    // 3. Clear the Stone
+
+    // 4. Update Moves
+  }
+
+  function handleRedo() {
+    // 1. Find Next Move
+    // 2. Draw Next Move
+    //    Probably the same as clicking
+    // 3. Update Moves
+  }
+
   return (
-    <canvas
-      ref={stonesCanvasRef}
-      onClick={handleClick}
-      style={{
-        position: "absolute",
-        zIndex: 2,
-      }}
-      id="stones"
-    ></canvas>
+    <Stack position="absolute" spacing={1}>
+      <canvas
+        ref={stonesCanvasRef}
+        onClick={handleClick}
+        style={{
+          position: "relative",
+          zIndex: 2,
+        }}
+        id="stones"
+      ></canvas>
+      <Stack direction="row" justifyContent="center">
+        <IconButton onClick={handleUndo}>
+          <ArrowBack />
+        </IconButton>
+        <IconButton onClick={handleRedo}>
+          <ArrowForward />
+        </IconButton>
+      </Stack>
+    </Stack>
   );
 }
