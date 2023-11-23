@@ -7,9 +7,7 @@ export function GridCanvas({
   width,
   height,
 }: GridCanvasProps) {
-  const gridCanvasRef = useRef(
-    document.createElement("canvas")
-  );
+  const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const gridCanvas = gridCanvasRef.current!;

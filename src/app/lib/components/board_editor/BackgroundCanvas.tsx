@@ -7,9 +7,8 @@ export function BackgroundCanvas({
   width,
   height,
 }: BackgroundCanvasProps) {
-  const backgroundCanvasRef = useRef(
-    document.createElement("canvas")
-  );
+  const backgroundCanvasRef =
+    useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     function setupBackground() {

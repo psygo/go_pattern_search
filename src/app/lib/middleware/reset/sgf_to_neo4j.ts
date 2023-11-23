@@ -1,5 +1,10 @@
+import { readFileSync } from "fs";
 import { join } from "path";
-import { readdirSync } from "fs";
+
+// @ts-ignore
+import GameTree from "@sabaki/immutable-gametree";
+// @ts-ignore
+import { parseFile } from "@sabaki/sgf";
 
 import { nanoid } from "nanoid";
 
@@ -12,12 +17,12 @@ import {
   GameNode,
   GameNodeData,
   GameTreeNodeObj,
+  getId,
   MoveNode,
   ParentId,
+  Sgf,
   SgfData,
   TreeNodeId,
-  sgfAsString,
-  sgfFileToGameTrees,
 } from "@models/exports";
 
 export async function createGameAndMoveNodesIndexes() {
@@ -223,4 +228,36 @@ export async function sgfToNeo4j(filename: Filename) {
 
 function currentMove(sgfData: SgfData) {
   return sgfData.B?.first() ?? sgfData.W?.first() ?? "";
+}
+
+export function sgfAsString(filename: Filename): Sgf {
+  const gamePath = join(
+    __dirname,
+    "../../../../..",
+    "games",
+    filename
+  );
+
+  const sgfString = readFileSync(gamePath).toString();
+
+  return sgfString;
+}
+
+export function sgfFileToGameTrees(filename: Filename) {
+  const gamePath = join(
+    __dirname,
+    "../../../../..",
+    "games",
+    filename
+  );
+
+  const rootNodes = parseFile(gamePath, { getId });
+
+  const gameTrees: GameTree[] = rootNodes.map(
+    (rootNode: any) => {
+      return new GameTree({ getId, root: rootNode });
+    }
+  );
+
+  return gameTrees;
 }

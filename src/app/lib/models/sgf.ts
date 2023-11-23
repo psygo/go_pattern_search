@@ -1,12 +1,3 @@
-import { readFileSync } from "fs";
-import { join } from "path";
-
-// @ts-ignore
-import { parseFile } from "@sabaki/sgf";
-// @ts-ignore
-import GameTree from "@sabaki/immutable-gametree";
-
-import { Filename } from "@models/utils/exports";
 
 import { TreeNodeId } from "./game_tree";
 import { BoardCoordinates } from "./board_coordinates";
@@ -73,37 +64,5 @@ export const getId = (
   (id: TreeNodeId) => () =>
     id++
 )(0);
-
-export function sgfAsString(filename: Filename): Sgf {
-  const gamePath = join(
-    __dirname,
-    "../../../../..",
-    "games",
-    filename
-  );
-
-  const sgfString = readFileSync(gamePath).toString();
-
-  return sgfString;
-}
-
-export function sgfFileToGameTrees(filename: Filename) {
-  const gamePath = join(
-    __dirname,
-    "../../../../..",
-    "games",
-    filename
-  );
-
-  const rootNodes = parseFile(gamePath, { getId });
-
-  const gameTrees: GameTree[] = rootNodes.map(
-    (rootNode: any) => {
-      return new GameTree({ getId, root: rootNode });
-    }
-  );
-
-  return gameTrees;
-}
 
 //----------------------------------------------------------
