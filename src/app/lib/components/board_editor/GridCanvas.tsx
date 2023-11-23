@@ -32,32 +32,42 @@ export function GridCanvas({
     }
 
     function drawGrid() {
-      const xCoordLegendIterator =
-        boardCoordinatesIterator();
-      for (const x of boardGridIterator(width, boardSize)) {
-        const legend = (
-          xCoordLegendIterator.next().value as string
-        ).toUpperCase();
+      function drawXGrid() {
+        const xCoordLegendIterator =
+          boardCoordinatesIterator();
+        for (const x of boardGridIterator(
+          width,
+          boardSize
+        )) {
+          const legend = (
+            xCoordLegendIterator.next().value as string
+          ).toUpperCase();
 
-        gridCtx.moveTo(0.5 + x + p, p);
-        gridCtx.fillText(legend, x + p - 2.5, p - 2.5);
-        gridCtx.lineTo(0.5 + x + p, height + p);
+          gridCtx.moveTo(0.5 + x + p, p);
+          gridCtx.fillText(legend, x + p - 2.5, p - 2.5);
+          gridCtx.lineTo(0.5 + x + p, height + p);
+        }
       }
 
-      const yCoordLegendIterator =
-        boardCoordinatesIterator();
-      for (const y of boardGridIterator(
-        height,
-        boardSize
-      )) {
-        const legend = (
-          yCoordLegendIterator.next().value as string
-        ).toUpperCase();
+      function drawYGrid() {
+        const yCoordLegendIterator =
+          boardCoordinatesIterator();
+        for (const y of boardGridIterator(
+          height,
+          boardSize
+        )) {
+          const legend = (
+            yCoordLegendIterator.next().value as string
+          ).toUpperCase();
 
-        gridCtx.moveTo(p, 0.5 + y + p);
-        gridCtx.fillText(legend, p - 10, y + p + 5);
-        gridCtx.lineTo(width + p, 0.5 + y + p);
+          gridCtx.moveTo(p, 0.5 + y + p);
+          gridCtx.fillText(legend, p - 10, y + p + 5);
+          gridCtx.lineTo(width + p, 0.5 + y + p);
+        }
       }
+
+      drawXGrid();
+      drawYGrid();
 
       gridCtx.strokeStyle = "black";
       gridCtx.stroke();
