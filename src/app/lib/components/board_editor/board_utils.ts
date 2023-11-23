@@ -1,3 +1,8 @@
+import {
+  BoardCoordinate,
+  BoardCoordinates,
+} from "@models/exports";
+
 export function* boardGridIterator(
   length: number,
   boardSize: number,
@@ -18,12 +23,28 @@ export function boardGridArray(
   return [...boardGridIterator(length, boardSize, padding)];
 }
 
-function findClosest(grid: number[], goal: number) {
-  return grid.reduce((prev, curr) =>
+function findClosest(array: number[], goal: number) {
+  return array.reduce((prev, curr) =>
     Math.abs(curr - goal) < Math.abs(prev - goal)
       ? curr
       : prev
   );
+}
+
+export function coordsToMove(
+  grid: number[],
+  x: number,
+  y: number
+) {
+  const idxX = grid.findIndex((coord) => coord === x);
+  const idxY = grid.findIndex((coord) => coord === y);
+
+  const coordX = Object.values(BoardCoordinate)[idxX + 1];
+  const coordY = Object.values(BoardCoordinate)[idxY + 1];
+
+  const move = (coordX + coordY) as BoardCoordinates;
+
+  return move;
 }
 
 export function findWhereToPutStoneOnGrid(

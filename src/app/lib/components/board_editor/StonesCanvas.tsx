@@ -6,10 +6,15 @@ import {
   useState,
 } from "react";
 
-import { Player } from "@models/exports";
+import {
+  BoardCoordinate,
+  BoardCoordinates,
+  Player,
+} from "@models/exports";
 
 import {
   boardGridArray,
+  coordsToMove,
   findWhereToPutStoneOnGrid,
   setupGridWidthHeightAndScale,
 } from "./board_utils";
@@ -29,6 +34,9 @@ export function StonesCanvas({
 
   const [currentPlayer, setCurrentPlayer] = useState(
     Player.Black
+  );
+  const [moves, setMoves] = useState<BoardCoordinates[]>(
+    []
   );
 
   const toggleCurrentPlayer = useCallback(() => {
@@ -55,25 +63,29 @@ export function StonesCanvas({
       e.clientX - rect.left,
       e.clientY - rect.top,
     ];
-
     const [centerX, centerY] = findWhereToPutStoneOnGrid(
       boardGrid,
       x,
       y
     );
+    const move = coordsToMove(boardGrid, centerX, centerY);
 
-    stonesCtx.beginPath();
-    stonesCtx.arc(centerX, centerY, 12, 0, 2 * Math.PI);
+    if (!moves.includes(move)) {
+      setMoves(moves.concat(move));
 
-    stonesCtx.fillStyle =
-      currentPlayer === Player.Black ? "black" : "white";
-    stonesCtx.fill();
-    stonesCtx.lineWidth = 1.5;
-    stonesCtx.strokeStyle =
-      currentPlayer === Player.Black ? "white" : "black";
-    stonesCtx.stroke();
+      stonesCtx.beginPath();
+      stonesCtx.arc(centerX, centerY, 12, 0, 2 * Math.PI);
 
-    toggleCurrentPlayer();
+      stonesCtx.fillStyle =
+        currentPlayer === Player.Black ? "black" : "white";
+      stonesCtx.fill();
+      stonesCtx.lineWidth = 1.5;
+      stonesCtx.strokeStyle =
+        currentPlayer === Player.Black ? "white" : "black";
+      stonesCtx.stroke();
+
+      toggleCurrentPlayer();
+    }
   }
 
   return (
