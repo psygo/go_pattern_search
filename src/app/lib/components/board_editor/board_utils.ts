@@ -18,6 +18,25 @@ export function boardGridArray(
   return [...boardGridIterator(length, boardSize, padding)];
 }
 
+function findClosest(grid: number[], goal: number) {
+  return grid.reduce((prev, curr) =>
+    Math.abs(curr - goal) < Math.abs(prev - goal)
+      ? curr
+      : prev
+  );
+}
+
+export function findWhereToPutStoneOnGrid(
+  grid: number[],
+  x: number,
+  y: number
+) {
+  const closestX = findClosest(grid, x);
+  const closestY = findClosest(grid, y);
+
+  return [closestX, closestY];
+}
+
 export function setupGridWidthHeightAndScale(
   size: number,
   canvas: HTMLCanvasElement

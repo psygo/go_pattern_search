@@ -8,15 +8,25 @@ import {
 
 import { Player } from "@models/exports";
 
-import { setupGridWidthHeightAndScale } from "./board_utils";
+import {
+  boardGridArray,
+  findWhereToPutStoneOnGrid,
+  setupGridWidthHeightAndScale,
+} from "./board_utils";
 import { GridCanvasProps } from "./GridCanvas";
 
 type StonesCanvasProps = GridCanvasProps;
 export function StonesCanvas({
   size,
   boardSize = 19,
-  padding = 15
+  padding = 15,
 }: StonesCanvasProps) {
+  const boardGrid = boardGridArray(
+    size,
+    boardSize,
+    padding
+  );
+
   const [currentPlayer, setCurrentPlayer] = useState(
     Player.Black
   );
@@ -41,14 +51,19 @@ export function StonesCanvas({
     const stonesCtx = stonesCanvas.getContext("2d")!;
     const rect = stonesCanvas.getBoundingClientRect();
 
-    stonesCtx.beginPath();
-    stonesCtx.arc(
+    const [x, y] = [
       e.clientX - rect.left,
       e.clientY - rect.top,
-      12,
-      0,
-      2 * Math.PI
+    ];
+
+    const [centerX, centerY] = findWhereToPutStoneOnGrid(
+      boardGrid,
+      x,
+      y
     );
+
+    stonesCtx.beginPath();
+    stonesCtx.arc(centerX, centerY, 12, 0, 2 * Math.PI);
 
     stonesCtx.fillStyle =
       currentPlayer === Player.Black ? "black" : "white";
