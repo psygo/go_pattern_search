@@ -8,12 +8,14 @@ import {
 
 import { Player } from "@models/exports";
 
-import { BoardEditorProps } from "./BoardEditor";
+import { setupGridWidthHeightAndScale } from "./board_utils";
+import { GridCanvasProps } from "./GridCanvas";
 
-type StonesCanvasProps = BoardEditorProps;
+type StonesCanvasProps = GridCanvasProps;
 export function StonesCanvas({
   size,
   boardSize = 19,
+  padding = 15
 }: StonesCanvasProps) {
   const [currentPlayer, setCurrentPlayer] = useState(
     Player.Black
@@ -31,23 +33,7 @@ export function StonesCanvas({
 
   useEffect(() => {
     const stonesCanvas = stonesCanvasRef.current!;
-    const stonesCtx = stonesCanvas.getContext("2d")!;
-
-    function setupGridWidthHeightAndScale() {
-      stonesCanvas.style.width = size + "px";
-      stonesCanvas.style.height = size + "px";
-
-      // Otherwise we get blurry lines
-      // Referenece: [Stack Overflow - Canvas drawings, like lines, are blurry](https://stackoverflow.com/a/59143499/4756173)
-      const scale = window.devicePixelRatio;
-
-      stonesCanvas.width = size * scale;
-      stonesCanvas.height = size * scale;
-
-      stonesCtx.scale(scale, scale);
-    }
-
-    setupGridWidthHeightAndScale();
+    setupGridWidthHeightAndScale(size, stonesCanvas);
   }, [size]);
 
   function handleClick(e: MouseEvent<HTMLCanvasElement>) {

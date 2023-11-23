@@ -6,14 +6,17 @@ import { boardCoordinatesIterator } from "@models/board_coordinates";
 
 import {
   boardGridArray,
-  boardGridIterator,
+  setupGridWidthHeightAndScale,
 } from "./board_utils";
 import { BoardEditorProps } from "./BoardEditor";
 
-type GridCanvasProps = BoardEditorProps;
+export type GridCanvasProps = BoardEditorProps & {
+  padding?: number;
+};
 export function GridCanvas({
   size,
   boardSize = 19,
+  padding = 15,
 }: GridCanvasProps) {
   const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -21,23 +24,8 @@ export function GridCanvas({
     const gridCanvas = gridCanvasRef.current!;
     const gridCtx = gridCanvas.getContext("2d")!;
 
-    function setupGridWidthHeightAndScale() {
-      gridCanvas.style.width = size + "px";
-      gridCanvas.style.height = size + "px";
-
-      // Otherwise we get blurry lines
-      // Referenece: [Stack Overflow - Canvas drawings, like lines, are blurry](https://stackoverflow.com/a/59143499/4756173)
-      const scale = window.devicePixelRatio;
-
-      gridCanvas.width = size * scale;
-      gridCanvas.height = size * scale;
-
-      gridCtx.scale(scale, scale);
-    }
-
     function drawGrid() {
-      const p = 15;
-      const grid = boardGridArray(size, boardSize, p);
+      const grid = boardGridArray(size, boardSize, padding);
 
       const lastGridLineCoord = grid.last();
 
@@ -50,8 +38,8 @@ export function GridCanvas({
             xCoordLegendIterator.next().value as string
           ).toUpperCase();
 
-          gridCtx.moveTo(x, p);
-          gridCtx.fillText(legendX, x - 2.5, p - 2.5);
+          gridCtx.moveTo(x, padding);
+          gridCtx.fillText(legendX, x - 3, padding - 2.5);
           gridCtx.lineTo(x, lastGridLineCoord);
         }
       }
@@ -65,8 +53,8 @@ export function GridCanvas({
             yCoordLegendIterator.next().value as string
           ).toUpperCase();
 
-          gridCtx.moveTo(p, y);
-          gridCtx.fillText(legendY, p - 10, y + 5);
+          gridCtx.moveTo(padding, y);
+          gridCtx.fillText(legendY, padding - 10, y + 4);
           gridCtx.lineTo(lastGridLineCoord, y);
         }
       }
@@ -79,12 +67,13 @@ export function GridCanvas({
     }
 
     function setupGrid() {
-      setupGridWidthHeightAndScale();
+      const gridCanvas = gridCanvasRef.current!;
+      setupGridWidthHeightAndScale(size, gridCanvas);
       drawGrid();
     }
 
     setupGrid();
-  }, [size, boardSize]);
+  }, [size, boardSize, padding]);
 
   return (
     <canvas

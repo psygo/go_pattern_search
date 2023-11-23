@@ -17,3 +17,21 @@ export function boardGridArray(
 ) {
   return [...boardGridIterator(length, boardSize, padding)];
 }
+
+export function setupGridWidthHeightAndScale(
+  size: number,
+  canvas: HTMLCanvasElement
+) {
+  canvas.style.width = size + "px";
+  canvas.style.height = size + "px";
+
+  // Otherwise we get blurry lines
+  // Referenece: [Stack Overflow - Canvas drawings, like lines, are blurry](https://stackoverflow.com/a/59143499/4756173)
+  const scale = window.devicePixelRatio;
+
+  canvas.width = size * scale;
+  canvas.height = size * scale;
+
+  const canvasCtx = canvas.getContext("2d")!;
+  canvasCtx.scale(scale, scale);
+}
