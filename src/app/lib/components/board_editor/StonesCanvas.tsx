@@ -14,6 +14,7 @@ type StonesCanvasProps = BoardEditorProps;
 export function StonesCanvas({
   width,
   height,
+  boardSize = 19,
 }: StonesCanvasProps) {
   const [currentPlayer, setCurrentPlayer] = useState(
     Player.Black

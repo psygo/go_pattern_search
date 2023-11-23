@@ -1,11 +1,13 @@
 import { useEffect, useRef } from "react";
 
+import { boardGridIterator } from "./board_utils";
 import { BoardEditorProps } from "./BoardEditor";
 
 type GridCanvasProps = BoardEditorProps;
 export function GridCanvas({
   width,
   height,
+  boardSize = 19,
 }: GridCanvasProps) {
   const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -29,17 +31,19 @@ export function GridCanvas({
     }
 
     function drawGrid() {
-      const step = width / 19;
-      for (let x = 0; x <= width; x += step) {
+      for (const x of boardGridIterator(width, boardSize)) {
         gridCtx.moveTo(0.5 + x + p, p);
         gridCtx.fillText("A", x + p - 2.5, p - 2.5);
         gridCtx.lineTo(0.5 + x + p, height + p);
       }
 
-      for (let x = 0; x <= height; x += step) {
-        gridCtx.moveTo(p, 0.5 + x + p);
-        gridCtx.fillText("A", p - 10, x + p + 5);
-        gridCtx.lineTo(width + p, 0.5 + x + p);
+      for (const y of boardGridIterator(
+        height,
+        boardSize
+      )) {
+        gridCtx.moveTo(p, 0.5 + y + p);
+        gridCtx.fillText("A", p - 10, y + p + 5);
+        gridCtx.lineTo(width + p, 0.5 + y + p);
       }
 
       gridCtx.strokeStyle = "black";
@@ -52,7 +56,7 @@ export function GridCanvas({
     }
 
     setupGrid();
-  }, [width, height]);
+  }, [width, height, boardSize]);
 
   return (
     <canvas
