@@ -47,6 +47,20 @@ export function coordsToMove(
   return move;
 }
 
+export function moveToCoords(
+  grid: number[],
+  move: BoardCoordinates
+) {
+  const idxX = Object.values(BoardCoordinate).findIndex(
+    (bc) => bc === move[0]
+  );
+  const idxY = Object.values(BoardCoordinate).findIndex(
+    (bc) => bc === move[1]
+  );
+
+  return [grid[idxX - 1], grid[idxY - 1]];
+}
+
 export function findWhereToPutStoneOnGrid(
   grid: number[],
   x: number,

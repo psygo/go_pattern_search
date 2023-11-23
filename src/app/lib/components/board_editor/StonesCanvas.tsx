@@ -18,6 +18,7 @@ import {
   boardGridArray,
   coordsToMove,
   findWhereToPutStoneOnGrid,
+  moveToCoords,
   setupGridWidthHeightAndScale,
 } from "./board_utils";
 import { GridCanvasProps } from "./GridCanvas";
@@ -28,6 +29,9 @@ export function StonesCanvas({
   boardSize = 19,
   padding = 15,
 }: StonesCanvasProps) {
+  const stoneRadius = 12;
+  const borderStrokeWidth = 1.5;
+
   const boardGrid = boardGridArray(
     size,
     boardSize,
@@ -79,32 +83,47 @@ export function StonesCanvas({
       setCurrentMoves(currentMoves.concat(move));
       setAllMoves(currentMoves.concat(move));
 
-      // 1. Stone
-      stonesCtx.beginPath();
-      stonesCtx.arc(centerX, centerY, 12, 0, 2 * Math.PI);
-
-      stonesCtx.fillStyle =
-        currentPlayer === Player.Black ? "black" : "white";
-      stonesCtx.fill();
-      stonesCtx.lineWidth = 1.5;
-      stonesCtx.strokeStyle =
-        currentPlayer === Player.Black ? "white" : "black";
-      stonesCtx.stroke();
-
-      // 2. Move Numbering
-      const moveNumber = currentMoves.length + 1;
-      stonesCtx.textAlign = "center";
-      stonesCtx.fillStyle =
-        currentPlayer === Player.Black ? "white" : "black";
-      stonesCtx.font = "10pt sans-serif";
-      stonesCtx.fillText(
-        moveNumber.toString(),
-        centerX,
-        centerY + 4.5
-      );
+      drawStone(stonesCtx, centerX, centerY);
+      drawMoveNumber(stonesCtx, centerX, centerY);
 
       toggleCurrentPlayer();
     }
+  }
+
+  function drawStone(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number
+  ) {
+    // 1. Circle
+    ctx.beginPath();
+    ctx.arc(x, y, stoneRadius, 0, 2 * Math.PI);
+
+    // 2. Fill the Circle
+    ctx.fillStyle =
+      currentPlayer === Player.Black ? "black" : "white";
+    ctx.fill();
+
+    // 3. Border Stroke
+    ctx.lineWidth = borderStrokeWidth;
+    ctx.strokeStyle =
+      currentPlayer === Player.Black ? "white" : "black";
+    ctx.stroke();
+  }
+
+  function drawMoveNumber(
+    ctx: CanvasRenderingContext2D,
+    x: number,
+    y: number
+  ) {
+    const moveNumber = currentMoves.length + 1;
+
+    ctx.textAlign = "center";
+    ctx.fillStyle =
+      currentPlayer === Player.Black ? "white" : "black";
+    ctx.font = "10pt sans-serif";
+
+    ctx.fillText(moveNumber.toString(), x, y + 4.5);
   }
 
   function handleUndo() {
@@ -112,10 +131,22 @@ export function StonesCanvas({
     const lastMove = currentMoves.last();
 
     // 2. Find the Stone Coordinates
+    const [x, y] = moveToCoords(boardGrid, lastMove);
 
     // 3. Clear the Stone
+    const stonesCanvas = stonesCanvasRef.current!;
+    const stonesCtx = stonesCanvas.getContext("2d")!;
+    const rect = stonesCanvas.getBoundingClientRect();
+
+    stonesCtx.clearRect(
+      x - stoneRadius - borderStrokeWidth,
+      y - stoneRadius - borderStrokeWidth,
+      2 * (stoneRadius + borderStrokeWidth),
+      2 * (stoneRadius + borderStrokeWidth)
+    );
 
     // 4. Update Moves
+    setCurrentMoves(currentMoves.slice(0, -1));
   }
 
   function handleRedo() {
