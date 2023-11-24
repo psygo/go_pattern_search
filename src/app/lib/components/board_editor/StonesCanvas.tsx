@@ -25,6 +25,7 @@ import {
 import {
   BoardEditorProps,
   defaultBoardSize,
+  defaultDisableInteraction,
   defaultPadding,
   defaultShowControls,
   defaultSize,
@@ -38,6 +39,7 @@ export function StonesCanvas({
   boardSize = defaultBoardSize,
   padding = defaultPadding,
   showControls = defaultShowControls,
+  disableEditing = defaultDisableInteraction,
 }: StonesCanvasProps) {
   const stoneRadius = 12;
   const borderStrokeWidth = 1.5;
@@ -78,6 +80,8 @@ export function StonesCanvas({
   }, [size]);
 
   function handleClick(e: MouseEvent<HTMLCanvasElement>) {
+    if (disableEditing) return;
+
     const stonesCanvas = stonesCanvasRef.current!;
     const stonesCtx = stonesCanvas.getContext("2d")!;
     const rect = stonesCanvas.getBoundingClientRect();

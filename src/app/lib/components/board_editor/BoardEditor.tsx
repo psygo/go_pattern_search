@@ -10,20 +10,22 @@ export const defaultSize = 500;
 export const defaultPadding = 15;
 export const defaultBoardSize = 19;
 export const defaultShowControls = true;
+export const defaultDisableInteraction = false;
 
-// TODO: Add disable interaction
 // TODO: Add initial moves setup
 export type BoardEditorProps = {
+  onMovesChanged?: (moves: BoardCoordinates[]) => {};
   size?: number;
   boardSize?: number;
-  onMovesChanged?: (moves: BoardCoordinates[]) => {};
   showControls?: boolean;
+  disableEditing?: boolean;
 };
 export function BoardEditor({
   onMovesChanged,
   size = defaultSize,
   boardSize = defaultBoardSize,
   showControls = defaultShowControls,
+  disableEditing = defaultDisableInteraction,
 }: BoardEditorProps) {
   return (
     <Box sx={{ position: "relative" }}>
@@ -32,6 +34,7 @@ export function BoardEditor({
         boardSize={boardSize}
         onMovesChanged={onMovesChanged}
         showControls={showControls}
+        disableEditing={disableEditing}
       />
       <GridCanvas size={size} boardSize={boardSize} />
       <BackgroundCanvas size={size} />
