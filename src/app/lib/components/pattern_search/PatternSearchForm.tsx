@@ -12,6 +12,7 @@ import {
 } from "@mui/material";
 
 import { BoardEditor } from "@components/board_editor/exports";
+import { BoardCoordinates } from "../../models/board_coordinates";
 
 export function PatternSearchForm() {
   const router = useRouter();
@@ -44,7 +45,9 @@ export function PatternSearchForm() {
           </ToggleButton>
         </Stack>
 
-        <BoardEditor />
+        <BoardEditor
+          initialMoves={["ff", "gg"] as BoardCoordinates[]}
+        />
       </Stack>
     </form>
   );

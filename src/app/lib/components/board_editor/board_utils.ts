@@ -1,11 +1,28 @@
 import {
   BoardCoordinateValues,
   BoardCoordinates,
+  Player,
 } from "@models/exports";
+
+//----------------------------------------------------------
+// 1. Constants
+
+export const TwoPI = 2 * Math.PI;
+export const stoneRadius = 12;
+export const borderStrokeWidth = 1.5;
+export const stoneFullRadius =
+  stoneRadius + borderStrokeWidth;
+export const stoneFullDiameter = 2 * stoneFullRadius;
+
+//----------------------------------------------------------
+// 2. Type Utils
 
 export type WithPadding = {
   padding?: number;
 };
+
+//----------------------------------------------------------
+// 3. Board-Coord Utils
 
 export function* boardGridIterator(
   length: number,
@@ -93,3 +110,45 @@ export function setupGridWidthHeightAndScale(
   const canvasCtx = canvas.getContext("2d")!;
   canvasCtx.scale(scale, scale);
 }
+
+//----------------------------------------------------------
+// 4. Drawing
+
+export function drawStoneOnCtx(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  player: Player
+) {
+  // 1. Circle
+  ctx.beginPath();
+  ctx.arc(x, y, stoneRadius, 0, TwoPI);
+
+  // 2. Fill the Circle
+  ctx.fillStyle =
+    player === Player.Black ? "black" : "white";
+  ctx.fill();
+
+  // 3. Border Stroke
+  ctx.lineWidth = borderStrokeWidth;
+  ctx.strokeStyle =
+    player === Player.Black ? "white" : "black";
+  ctx.stroke();
+}
+
+export function drawMoveNumberOnCtx(
+  ctx: CanvasRenderingContext2D,
+  x: number,
+  y: number,
+  player: Player,
+  number: number
+) {
+  ctx.textAlign = "center";
+  ctx.fillStyle =
+    player === Player.Black ? "white" : "black";
+  ctx.font = "10pt sans-serif";
+
+  ctx.fillText(number.toString(), x, y + 4.5);
+}
+
+//----------------------------------------------------------

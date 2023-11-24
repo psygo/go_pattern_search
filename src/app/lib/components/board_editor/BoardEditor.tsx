@@ -14,6 +14,7 @@ export const defaultDisableInteraction = false;
 
 // TODO: Add initial moves setup
 export type BoardEditorProps = {
+  initialMoves?: BoardCoordinates[];
   onMovesChanged?: (moves: BoardCoordinates[]) => {};
   size?: number;
   boardSize?: number;
@@ -21,6 +22,7 @@ export type BoardEditorProps = {
   disableEditing?: boolean;
 };
 export function BoardEditor({
+  initialMoves,
   onMovesChanged,
   size = defaultSize,
   boardSize = defaultBoardSize,
@@ -30,9 +32,10 @@ export function BoardEditor({
   return (
     <Box sx={{ position: "relative" }}>
       <StonesCanvas
+        initialMoves={initialMoves}
+        onMovesChanged={onMovesChanged}
         size={size}
         boardSize={boardSize}
-        onMovesChanged={onMovesChanged}
         showControls={showControls}
         disableEditing={disableEditing}
       />

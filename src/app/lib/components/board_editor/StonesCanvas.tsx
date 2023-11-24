@@ -17,9 +17,13 @@ import { BoardCoordinates, Player } from "@models/exports";
 import {
   boardGridArray,
   coordsToMove,
+  drawMoveNumberOnCtx,
+  drawStoneOnCtx,
   findWhereToPutStoneOnGrid,
   moveToCoords,
   setupGridWidthHeightAndScale,
+  stoneFullDiameter,
+  stoneFullRadius,
   WithPadding,
 } from "./board_utils";
 import {
@@ -31,11 +35,10 @@ import {
   defaultSize,
 } from "./BoardEditor";
 
-const TwoPI = 2 * Math.PI;
-
 export type StonesCanvasProps = BoardEditorProps &
   WithPadding;
 export function StonesCanvas({
+  initialMoves,
   onMovesChanged,
   size = defaultSize,
   boardSize = defaultBoardSize,
@@ -43,18 +46,22 @@ export function StonesCanvas({
   showControls = defaultShowControls,
   disableEditing = defaultDisableInteraction,
 }: StonesCanvasProps) {
-  const stoneRadius = 12;
-  const borderStrokeWidth = 1.5;
-  const stoneFullRadius = stoneRadius + borderStrokeWidth;
-  const stoneFullDiameter = 2 * stoneFullRadius;
-
   const boardGrid = boardGridArray(
     size,
     boardSize,
     padding
   );
 
+  // function whichPlayer() {
+  //   return initialMoves
+  //     ? initialMoves.length % 2 === 0
+  //       ? Player.Black
+  //       : Player.White
+  //     : Player.White;
+  // }
+
   const [currentPlayer, setCurrentPlayer] = useState(
+    // whichPlayer()
     Player.Black
   );
   const [currentMoves, setCurrentMoves] = useState<
@@ -81,7 +88,37 @@ export function StonesCanvas({
     setupGridWidthHeightAndScale(size, stonesCanvas);
     const numberingCanvas = numberingCanvasRef.current!;
     setupGridWidthHeightAndScale(size, numberingCanvas);
-  }, [size]);
+
+    // if (initialMoves) {
+    //   const stonesCtx = stonesCanvas.getContext("2d")!;
+    //   const numberingCtx =
+    //     numberingCanvas.getContext("2d")!;
+
+    //   for (const [i, move] of initialMoves.entries()) {
+    //     const idxX = BoardCoordinateValues.findIndex(
+    //       (bc) => bc === move[0]
+    //     );
+    //     const idxY = BoardCoordinateValues.findIndex(
+    //       (bc) => bc === move[1]
+    //     );
+
+    //     const x = boardGrid[idxX - 1];
+    //     const y = boardGrid[idxY - 1];
+
+    //     const whichPlayer =
+    //       i % 2 === 0 ? Player.Black : Player.White;
+
+    //     drawStoneOnCtx(stonesCtx, x, y, whichPlayer);
+    //     drawMoveNumberOnCtx(
+    //       numberingCtx,
+    //       x,
+    //       y,
+    //       whichPlayer,
+    //       i + 1
+    //     );
+    //   }
+    // }
+  }, [size, initialMoves]);
 
   function handleClick(e: MouseEvent<HTMLCanvasElement>) {
     if (disableEditing) return;
@@ -106,9 +143,9 @@ export function StonesCanvas({
 
     if (!currentMoves.includes(nextMove)) {
       updateAllMovesOnClick(nextMove);
+
       const newCurrentMoves = currentMoves.concat(nextMove);
       setCurrentMoves(newCurrentMoves);
-
       if (onMovesChanged) onMovesChanged(newCurrentMoves);
 
       drawStone(centerX, centerY);
@@ -138,20 +175,7 @@ export function StonesCanvas({
     const stonesCanvas = stonesCanvasRef.current!;
     const stonesCtx = stonesCanvas.getContext("2d")!;
 
-    // 1. Circle
-    stonesCtx.beginPath();
-    stonesCtx.arc(x, y, stoneRadius, 0, TwoPI);
-
-    // 2. Fill the Circle
-    stonesCtx.fillStyle =
-      currentPlayer === Player.Black ? "black" : "white";
-    stonesCtx.fill();
-
-    // 3. Border Stroke
-    stonesCtx.lineWidth = borderStrokeWidth;
-    stonesCtx.strokeStyle =
-      currentPlayer === Player.Black ? "white" : "black";
-    stonesCtx.stroke();
+    drawStoneOnCtx(stonesCtx, x, y, currentPlayer);
   }
 
   function drawMoveNumber(x: number, y: number) {
@@ -160,15 +184,12 @@ export function StonesCanvas({
 
     const moveNumber = currentMoves.length + 1;
 
-    numberingCtx.textAlign = "center";
-    numberingCtx.fillStyle =
-      currentPlayer === Player.Black ? "white" : "black";
-    numberingCtx.font = "10pt sans-serif";
-
-    numberingCtx.fillText(
-      moveNumber.toString(),
+    drawMoveNumberOnCtx(
+      numberingCtx,
       x,
-      y + 4.5
+      y,
+      currentPlayer,
+      moveNumber
     );
   }
 
