@@ -6,6 +6,9 @@ import { BackgroundCanvas } from "./BackgroundCanvas";
 import { GridCanvas } from "./GridCanvas";
 import { StonesCanvas } from "./StonesCanvas";
 
+// TODO: Add disable numbering
+// TODO: Add disable interaction
+// TODO: Add initial moves setup
 export type BoardEditorProps = {
   size: number;
   boardSize?: number;

@@ -58,10 +58,14 @@ export function StonesCanvas({
   }, [currentPlayer]);
 
   const stonesCanvasRef = useRef<HTMLCanvasElement>(null);
+  const numberingCanvasRef =
+    useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
     const stonesCanvas = stonesCanvasRef.current!;
     setupGridWidthHeightAndScale(size, stonesCanvas);
+    const numberingCanvas = numberingCanvasRef.current!;
+    setupGridWidthHeightAndScale(size, numberingCanvas);
   }, [size]);
 
   function handleClick(e: MouseEvent<HTMLCanvasElement>) {
@@ -90,8 +94,8 @@ export function StonesCanvas({
 
       if (onMovesChanged) onMovesChanged(currentMoves);
 
-      drawStone(stonesCtx, centerX, centerY);
-      drawMoveNumber(stonesCtx, centerX, centerY);
+      drawStone(centerX, centerY);
+      drawMoveNumber(centerX, centerY);
 
       toggleCurrentPlayer();
     }
@@ -113,40 +117,42 @@ export function StonesCanvas({
       setAllMoves(currentMoves.concat(nextMove));
   }
 
-  function drawStone(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number
-  ) {
+  function drawStone(x: number, y: number) {
+    const stonesCanvas = stonesCanvasRef.current!;
+    const stonesCtx = stonesCanvas.getContext("2d")!;
+
     // 1. Circle
-    ctx.beginPath();
-    ctx.arc(x, y, stoneRadius, 0, 2 * Math.PI);
+    stonesCtx.beginPath();
+    stonesCtx.arc(x, y, stoneRadius, 0, 2 * Math.PI);
 
     // 2. Fill the Circle
-    ctx.fillStyle =
+    stonesCtx.fillStyle =
       currentPlayer === Player.Black ? "black" : "white";
-    ctx.fill();
+    stonesCtx.fill();
 
     // 3. Border Stroke
-    ctx.lineWidth = borderStrokeWidth;
-    ctx.strokeStyle =
+    stonesCtx.lineWidth = borderStrokeWidth;
+    stonesCtx.strokeStyle =
       currentPlayer === Player.Black ? "white" : "black";
-    ctx.stroke();
+    stonesCtx.stroke();
   }
 
-  function drawMoveNumber(
-    ctx: CanvasRenderingContext2D,
-    x: number,
-    y: number
-  ) {
+  function drawMoveNumber(x: number, y: number) {
+    const numberingCanvas = numberingCanvasRef.current!;
+    const numberingCtx = numberingCanvas.getContext("2d")!;
+
     const moveNumber = currentMoves.length + 1;
 
-    ctx.textAlign = "center";
-    ctx.fillStyle =
+    numberingCtx.textAlign = "center";
+    numberingCtx.fillStyle =
       currentPlayer === Player.Black ? "white" : "black";
-    ctx.font = "10pt sans-serif";
+    numberingCtx.font = "10pt sans-serif";
 
-    ctx.fillText(moveNumber.toString(), x, y + 4.5);
+    numberingCtx.fillText(
+      moveNumber.toString(),
+      x,
+      y + 4.5
+    );
   }
 
   function handleUndo() {
@@ -157,6 +163,16 @@ export function StonesCanvas({
     const [x, y] = moveToCoords(boardGrid, lastMove);
 
     // 3. Clear the Stone
+    clearStone(x, y);
+    clearMoveNumber(x, y);
+
+    // 4. Update Moves
+    setCurrentMoves(currentMoves.slice(0, -1));
+
+    if (onMovesChanged) onMovesChanged(currentMoves);
+  }
+
+  function clearStone(x: number, y: number) {
     const stonesCanvas = stonesCanvasRef.current!;
     const stonesCtx = stonesCanvas.getContext("2d")!;
 
@@ -166,11 +182,18 @@ export function StonesCanvas({
       2 * (stoneRadius + borderStrokeWidth),
       2 * (stoneRadius + borderStrokeWidth)
     );
+  }
 
-    // 4. Update Moves
-    setCurrentMoves(currentMoves.slice(0, -1));
+  function clearMoveNumber(x: number, y: number) {
+    const numberingCanvas = numberingCanvasRef.current!;
+    const numberingCtx = numberingCanvas.getContext("2d")!;
 
-    if (onMovesChanged) onMovesChanged(currentMoves);
+    numberingCtx.clearRect(
+      x - stoneRadius - borderStrokeWidth,
+      y - stoneRadius - borderStrokeWidth,
+      2 * (stoneRadius + borderStrokeWidth),
+      2 * (stoneRadius + borderStrokeWidth)
+    );
   }
 
   function handleRedo() {
@@ -184,11 +207,8 @@ export function StonesCanvas({
     // 2. Draw Next Move
     const [x, y] = moveToCoords(boardGrid, nextMove);
 
-    const stonesCanvas = stonesCanvasRef.current!;
-    const stonesCtx = stonesCanvas.getContext("2d")!;
-
-    drawStone(stonesCtx, x, y);
-    drawMoveNumber(stonesCtx, x, y);
+    drawStone(x, y);
+    drawMoveNumber(x, y);
 
     // 3. Update Moves and Player
     toggleCurrentPlayer();
@@ -199,12 +219,23 @@ export function StonesCanvas({
 
   return (
     <Stack position="absolute" spacing={1}>
-      <canvas
-        id="stones"
-        style={{ zIndex: 2 }}
-        ref={stonesCanvasRef}
-        onClick={handleClick}
-      ></canvas>
+      <Stack id="canvas">
+        <canvas
+          id="numbering"
+          style={{
+            zIndex: 3,
+            position: "absolute",
+            pointerEvents: "none",
+          }}
+          ref={numberingCanvasRef}
+        ></canvas>
+        <canvas
+          id="stones"
+          style={{ zIndex: 2 }}
+          ref={stonesCanvasRef}
+          onClick={handleClick}
+        ></canvas>
+      </Stack>
 
       <Stack
         id="board-controls"
