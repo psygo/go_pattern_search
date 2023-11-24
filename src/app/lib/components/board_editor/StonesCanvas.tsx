@@ -12,15 +12,12 @@ import {
   ArrowForward,
 } from "@mui/icons-material";
 
-import {
-  BoardCoordinates,
-  BoardCoordinateValues,
-  Player,
-} from "@models/exports";
+import { BoardCoordinates, Player } from "@models/exports";
 
 import {
   boardGridArray,
   coordsToMove,
+  drawInitialMoves,
   drawMoveNumber,
   drawStone,
   findWhereToPutStoneOnGrid,
@@ -86,34 +83,18 @@ export function StonesCanvas({
 
   useEffect(() => {
     const stonesCanvas = stonesCanvasRef.current!;
-    setupGridWidthHeightAndScale(size, stonesCanvas);
     const numberingCanvas = numberingCanvasRef.current!;
+
+    setupGridWidthHeightAndScale(size, stonesCanvas);
     setupGridWidthHeightAndScale(size, numberingCanvas);
 
     if (initialMoves) {
-      for (const [i, move] of initialMoves.entries()) {
-        const idxX = BoardCoordinateValues.findIndex(
-          (bc) => bc === move[0]
-        );
-        const idxY = BoardCoordinateValues.findIndex(
-          (bc) => bc === move[1]
-        );
-
-        const x = boardGrid[idxX - 1];
-        const y = boardGrid[idxY - 1];
-
-        const whichPlayer =
-          i % 2 === 0 ? Player.Black : Player.White;
-
-        drawStone(stonesCanvas, x, y, whichPlayer);
-        drawMoveNumber(
-          numberingCanvas,
-          x,
-          y,
-          whichPlayer,
-          i + 1
-        );
-      }
+      drawInitialMoves(
+        boardGrid,
+        stonesCanvas,
+        numberingCanvas,
+        initialMoves
+      );
     }
     // Don't include `boardGrid`
     // eslint-disable-next-line react-hooks/exhaustive-deps

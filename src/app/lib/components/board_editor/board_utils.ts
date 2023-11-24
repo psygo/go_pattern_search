@@ -111,6 +111,23 @@ export function setupGridWidthHeightAndScale(
   canvasCtx.scale(scale, scale);
 }
 
+export function moveCoordsFromGridArray(
+  grid: number[],
+  move: BoardCoordinates
+) {
+  const idxX = BoardCoordinateValues.findIndex(
+    (bc) => bc === move[0]
+  );
+  const idxY = BoardCoordinateValues.findIndex(
+    (bc) => bc === move[1]
+  );
+
+  const x = grid[idxX - 1];
+  const y = grid[idxY - 1];
+
+  return [x, y];
+}
+
 //----------------------------------------------------------
 // 4. Drawing
 
@@ -153,6 +170,29 @@ export function drawMoveNumber(
   ctx.font = "10pt sans-serif";
 
   ctx.fillText(number.toString(), x, y + 4.5);
+}
+
+export function drawInitialMoves(
+  grid: number[],
+  stonesCanvas: HTMLCanvasElement,
+  numberingCanvas: HTMLCanvasElement,
+  initialMoves: BoardCoordinates[]
+) {
+  for (const [i, move] of initialMoves.entries()) {
+    const [x, y] = moveCoordsFromGridArray(grid, move);
+
+    const whichPlayer =
+      i % 2 === 0 ? Player.Black : Player.White;
+
+    drawStone(stonesCanvas, x, y, whichPlayer);
+    drawMoveNumber(
+      numberingCanvas,
+      x,
+      y,
+      whichPlayer,
+      i + 1
+    );
+  }
 }
 
 //----------------------------------------------------------
