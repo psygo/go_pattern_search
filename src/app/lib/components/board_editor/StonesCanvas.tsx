@@ -21,8 +21,8 @@ import {
 import {
   boardGridArray,
   coordsToMove,
-  drawMoveNumberOnCtx,
-  drawStoneOnCtx,
+  drawMoveNumber,
+  drawStone,
   findWhereToPutStoneOnGrid,
   moveToCoords,
   setupGridWidthHeightAndScale,
@@ -105,8 +105,8 @@ export function StonesCanvas({
         const whichPlayer =
           i % 2 === 0 ? Player.Black : Player.White;
 
-        drawStoneOnCtx(stonesCanvas, x, y, whichPlayer);
-        drawMoveNumberOnCtx(
+        drawStone(stonesCanvas, x, y, whichPlayer);
+        drawMoveNumber(
           numberingCanvas,
           x,
           y,
@@ -147,8 +147,19 @@ export function StonesCanvas({
       setCurrentMoves(newCurrentMoves);
       if (onMovesChanged) onMovesChanged(newCurrentMoves);
 
-      drawStone(centerX, centerY);
-      drawMoveNumber(centerX, centerY);
+      drawStone(
+        stonesCanvas,
+        centerX,
+        centerY,
+        currentPlayer
+      );
+      drawMoveNumber(
+        numberingCanvasRef.current!,
+        centerX,
+        centerY,
+        currentPlayer,
+        currentMoves.length + 1
+      );
 
       toggleCurrentPlayer();
     }
@@ -168,26 +179,6 @@ export function StonesCanvas({
 
     if (nextMove !== nextMoveOnAllMoves)
       setAllMoves(currentMoves.concat(nextMove));
-  }
-
-  function drawStone(x: number, y: number) {
-    const stonesCanvas = stonesCanvasRef.current!;
-
-    drawStoneOnCtx(stonesCanvas, x, y, currentPlayer);
-  }
-
-  function drawMoveNumber(x: number, y: number) {
-    const numberingCanvas = numberingCanvasRef.current!;
-
-    const moveNumber = currentMoves.length + 1;
-
-    drawMoveNumberOnCtx(
-      numberingCanvas,
-      x,
-      y,
-      currentPlayer,
-      moveNumber
-    );
   }
 
   function handleUndo() {
@@ -245,8 +236,19 @@ export function StonesCanvas({
     // 2. Draw Next Move
     const [x, y] = moveToCoords(boardGrid, nextMove);
 
-    drawStone(x, y);
-    drawMoveNumber(x, y);
+    drawStone(
+      stonesCanvasRef.current!,
+      x,
+      y,
+      currentPlayer
+    );
+    drawMoveNumber(
+      numberingCanvasRef.current!,
+      x,
+      y,
+      currentPlayer,
+      currentMoves.length + 1
+    );
 
     // 3. Update Moves and Player
     toggleCurrentPlayer();

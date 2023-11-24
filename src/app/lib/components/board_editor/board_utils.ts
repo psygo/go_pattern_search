@@ -114,7 +114,7 @@ export function setupGridWidthHeightAndScale(
 //----------------------------------------------------------
 // 4. Drawing
 
-export function drawStoneOnCtx(
+export function drawStone(
   canvas: HTMLCanvasElement,
   x: number,
   y: number,
@@ -138,7 +138,7 @@ export function drawStoneOnCtx(
   ctx.stroke();
 }
 
-export function drawMoveNumberOnCtx(
+export function drawMoveNumber(
   canvas: HTMLCanvasElement,
   x: number,
   y: number,
