@@ -31,6 +31,8 @@ import {
   defaultSize,
 } from "./BoardEditor";
 
+const TwoPI = 2 * Math.PI;
+
 export type StonesCanvasProps = BoardEditorProps &
   WithPadding;
 export function StonesCanvas({
@@ -43,6 +45,8 @@ export function StonesCanvas({
 }: StonesCanvasProps) {
   const stoneRadius = 12;
   const borderStrokeWidth = 1.5;
+  const stoneFullRadius = stoneRadius + borderStrokeWidth;
+  const stoneFullDiameter = 2 * stoneFullRadius;
 
   const boardGrid = boardGridArray(
     size,
@@ -83,7 +87,6 @@ export function StonesCanvas({
     if (disableEditing) return;
 
     const stonesCanvas = stonesCanvasRef.current!;
-    const stonesCtx = stonesCanvas.getContext("2d")!;
     const rect = stonesCanvas.getBoundingClientRect();
 
     const [x, y] = [
@@ -137,7 +140,7 @@ export function StonesCanvas({
 
     // 1. Circle
     stonesCtx.beginPath();
-    stonesCtx.arc(x, y, stoneRadius, 0, 2 * Math.PI);
+    stonesCtx.arc(x, y, stoneRadius, 0, TwoPI);
 
     // 2. Fill the Circle
     stonesCtx.fillStyle =
@@ -194,10 +197,10 @@ export function StonesCanvas({
     const stonesCtx = stonesCanvas.getContext("2d")!;
 
     stonesCtx.clearRect(
-      x - stoneRadius - borderStrokeWidth,
-      y - stoneRadius - borderStrokeWidth,
-      2 * (stoneRadius + borderStrokeWidth),
-      2 * (stoneRadius + borderStrokeWidth)
+      x - stoneFullRadius,
+      y - stoneFullRadius,
+      stoneFullDiameter,
+      stoneFullDiameter
     );
   }
 
@@ -206,10 +209,10 @@ export function StonesCanvas({
     const numberingCtx = numberingCanvas.getContext("2d")!;
 
     numberingCtx.clearRect(
-      x - stoneRadius - borderStrokeWidth,
-      y - stoneRadius - borderStrokeWidth,
-      2 * (stoneRadius + borderStrokeWidth),
-      2 * (stoneRadius + borderStrokeWidth)
+      x - stoneFullRadius,
+      y - stoneFullRadius,
+      stoneFullDiameter,
+      stoneFullDiameter
     );
   }
 
