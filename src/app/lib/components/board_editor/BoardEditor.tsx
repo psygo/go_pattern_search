@@ -1,5 +1,7 @@
 import { Box } from "@mui/material";
 
+import { BoardCoordinates } from "@models/board_coordinates";
+
 import { BackgroundCanvas } from "./BackgroundCanvas";
 import { GridCanvas } from "./GridCanvas";
 import { StonesCanvas } from "./StonesCanvas";
@@ -7,6 +9,7 @@ import { StonesCanvas } from "./StonesCanvas";
 export type BoardEditorProps = {
   size: number;
   boardSize?: number;
+  onMovesChanged?: (moves: BoardCoordinates[]) => {};
 };
 export function BoardEditor({
   size,

@@ -2,7 +2,6 @@ import {
   MouseEvent,
   useCallback,
   useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -29,6 +28,7 @@ export function StonesCanvas({
   size,
   boardSize = 19,
   padding = 15,
+  onMovesChanged,
 }: StonesCanvasProps) {
   const stoneRadius = 12;
   const borderStrokeWidth = 1.5;
@@ -78,19 +78,39 @@ export function StonesCanvas({
       x,
       y
     );
-    const move = coordsToMove(boardGrid, centerX, centerY);
+    const nextMove = coordsToMove(
+      boardGrid,
+      centerX,
+      centerY
+    );
 
-    if (!currentMoves.includes(move)) {
-      setCurrentMoves(currentMoves.concat(move));
-      // TODO: if the next move is the same as in `allMoves`,
-      //       then don't overwrite `allmoves`
-      setAllMoves(currentMoves.concat(move));
+    if (!currentMoves.includes(nextMove)) {
+      updateAllMovesOnClick(nextMove);
+      setCurrentMoves(currentMoves.concat(nextMove));
+
+      if (onMovesChanged) onMovesChanged(currentMoves);
 
       drawStone(stonesCtx, centerX, centerY);
       drawMoveNumber(stonesCtx, centerX, centerY);
 
       toggleCurrentPlayer();
     }
+  }
+
+  // Only overwrite all moves if the next move is different.
+  function updateAllMovesOnClick(
+    nextMove: BoardCoordinates
+  ) {
+    const lastMove = currentMoves.last();
+
+    const lastMoveIdxOnAllMoves = allMoves.findIndex(
+      (m) => m === lastMove
+    );
+    const nextMoveOnAllMoves =
+      allMoves[lastMoveIdxOnAllMoves + 1];
+
+    if (nextMove !== nextMoveOnAllMoves)
+      setAllMoves(currentMoves.concat(nextMove));
   }
 
   function drawStone(
@@ -149,6 +169,8 @@ export function StonesCanvas({
 
     // 4. Update Moves
     setCurrentMoves(currentMoves.slice(0, -1));
+
+    if (onMovesChanged) onMovesChanged(currentMoves);
   }
 
   function handleRedo() {
@@ -171,17 +193,17 @@ export function StonesCanvas({
     // 3. Update Moves and Player
     toggleCurrentPlayer();
     setCurrentMoves(currentMoves.concat(nextMove));
+
+    if (onMovesChanged) onMovesChanged(currentMoves);
   }
 
   return (
     <Stack position="absolute" spacing={1}>
       <canvas
+        id="stones"
+        style={{ zIndex: 2 }}
         ref={stonesCanvasRef}
         onClick={handleClick}
-        style={{
-          zIndex: 2,
-        }}
-        id="stones"
       ></canvas>
 
       <Stack
