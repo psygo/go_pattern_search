@@ -7,16 +7,24 @@ import { boardCoordinatesIterator } from "@models/board_coordinates";
 import {
   boardGridArray,
   setupGridWidthHeightAndScale,
+  WithPadding,
 } from "./board_utils";
-import { BoardEditorProps } from "./BoardEditor";
+import {
+  BoardEditorProps,
+  defaultBoardSize,
+  defaultPadding,
+  defaultSize,
+} from "./BoardEditor";
 
-export type GridCanvasProps = BoardEditorProps & {
-  padding?: number;
-};
+export type GridCanvasProps = Pick<
+  BoardEditorProps,
+  "size" | "boardSize"
+> &
+  WithPadding;
 export function GridCanvas({
-  size,
-  boardSize = 19,
-  padding = 15,
+  size = defaultSize,
+  boardSize = defaultBoardSize,
+  padding = defaultPadding,
 }: GridCanvasProps) {
   const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 

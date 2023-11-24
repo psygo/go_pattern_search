@@ -1,10 +1,13 @@
 import { useEffect, useRef } from "react";
 
-import { BoardEditorProps } from "./BoardEditor";
+import {
+  BoardEditorProps,
+  defaultSize,
+} from "./BoardEditor";
 
 type BackgroundCanvasProps = Pick<BoardEditorProps, "size">;
 export function BackgroundCanvas({
-  size,
+  size = defaultSize,
 }: BackgroundCanvasProps) {
   const backgroundCanvasRef =
     useRef<HTMLCanvasElement>(null);

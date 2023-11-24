@@ -3,6 +3,10 @@ import {
   BoardCoordinates,
 } from "@models/exports";
 
+export type WithPadding = {
+  padding?: number;
+};
+
 export function* boardGridIterator(
   length: number,
   boardSize: number,

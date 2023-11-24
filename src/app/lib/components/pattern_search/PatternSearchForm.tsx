@@ -44,7 +44,7 @@ export function PatternSearchForm() {
           </ToggleButton>
         </Stack>
 
-        <BoardEditor size={500} />
+        <BoardEditor />
       </Stack>
     </form>
   );

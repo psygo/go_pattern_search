@@ -20,15 +20,24 @@ import {
   findWhereToPutStoneOnGrid,
   moveToCoords,
   setupGridWidthHeightAndScale,
+  WithPadding,
 } from "./board_utils";
-import { GridCanvasProps } from "./GridCanvas";
+import {
+  BoardEditorProps,
+  defaultBoardSize,
+  defaultPadding,
+  defaultShowControls,
+  defaultSize,
+} from "./BoardEditor";
 
-type StonesCanvasProps = GridCanvasProps;
+export type StonesCanvasProps = BoardEditorProps &
+  WithPadding;
 export function StonesCanvas({
-  size,
-  boardSize = 19,
-  padding = 15,
   onMovesChanged,
+  size = defaultSize,
+  boardSize = defaultBoardSize,
+  padding = defaultPadding,
+  showControls = defaultShowControls,
 }: StonesCanvasProps) {
   const stoneRadius = 12;
   const borderStrokeWidth = 1.5;
@@ -168,7 +177,8 @@ export function StonesCanvas({
       clearStone(x, y);
       clearMoveNumber(x, y);
 
-      // 4. Update Moves
+      // 4. Update Moves and Player
+      toggleCurrentPlayer();
       setCurrentMoves(currentMoves.slice(0, -1));
 
       if (onMovesChanged) onMovesChanged(currentMoves);
@@ -240,18 +250,20 @@ export function StonesCanvas({
         ></canvas>
       </Stack>
 
-      <Stack
-        id="board-controls"
-        direction="row"
-        justifyContent="center"
-      >
-        <IconButton onClick={handleUndo}>
-          <ArrowBack />
-        </IconButton>
-        <IconButton onClick={handleRedo}>
-          <ArrowForward />
-        </IconButton>
-      </Stack>
+      {showControls && (
+        <Stack
+          id="board-controls"
+          direction="row"
+          justifyContent="center"
+        >
+          <IconButton onClick={handleUndo}>
+            <ArrowBack />
+          </IconButton>
+          <IconButton onClick={handleRedo}>
+            <ArrowForward />
+          </IconButton>
+        </Stack>
+      )}
     </Stack>
   );
 }

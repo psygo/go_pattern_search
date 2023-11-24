@@ -6,21 +6,33 @@ import { BackgroundCanvas } from "./BackgroundCanvas";
 import { GridCanvas } from "./GridCanvas";
 import { StonesCanvas } from "./StonesCanvas";
 
-// TODO: Add disable numbering
+export const defaultSize = 500;
+export const defaultPadding = 15;
+export const defaultBoardSize = 19;
+export const defaultShowControls = true;
+
 // TODO: Add disable interaction
 // TODO: Add initial moves setup
 export type BoardEditorProps = {
-  size: number;
+  size?: number;
   boardSize?: number;
   onMovesChanged?: (moves: BoardCoordinates[]) => {};
+  showControls?: boolean;
 };
 export function BoardEditor({
-  size,
-  boardSize = 19,
+  onMovesChanged,
+  size = defaultSize,
+  boardSize = defaultBoardSize,
+  showControls = defaultShowControls,
 }: BoardEditorProps) {
   return (
     <Box sx={{ position: "relative" }}>
-      <StonesCanvas size={size} boardSize={boardSize} />
+      <StonesCanvas
+        size={size}
+        boardSize={boardSize}
+        onMovesChanged={onMovesChanged}
+        showControls={showControls}
+      />
       <GridCanvas size={size} boardSize={boardSize} />
       <BackgroundCanvas size={size} />
     </Box>
