@@ -77,6 +77,8 @@ export function MovesCanvas({
     );
   }, [currentPlayer]);
 
+  // TODO: Create contexts and separate each subcanvas into
+  //       a different component.
   const stonesCanvasRef = useRef<HTMLCanvasElement>(null);
   const numberingCanvasRef =
     useRef<HTMLCanvasElement>(null);

@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Paper } from "@mui/material";
 
 import { BoardCoordinates } from "@models/board_coordinates";
 
@@ -12,7 +12,8 @@ export const defaultBoardSize = 19;
 export const defaultShowControls = true;
 export const defaultDisableInteraction = false;
 
-// TODO: Add initial moves setup
+// TODO: Add toggle numbering
+// TODO: Add sizing
 export type BoardEditorProps = {
   initialMoves?: BoardCoordinates[];
   onMovesChanged?: (moves: BoardCoordinates[]) => {};
@@ -30,7 +31,15 @@ export function BoardEditor({
   disableEditing = defaultDisableInteraction,
 }: BoardEditorProps) {
   return (
-    <Box sx={{ position: "relative" }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        p: 2,
+        pb: 6,
+        justifyContent: "center",
+        alignContent: "center",
+      }}
+    >
       <MovesCanvas
         initialMoves={initialMoves}
         onMovesChanged={onMovesChanged}
@@ -41,6 +50,6 @@ export function BoardEditor({
       />
       <GridCanvas size={size} boardSize={boardSize} />
       <BackgroundCanvas size={size} />
-    </Box>
+    </Paper>
   );
 }

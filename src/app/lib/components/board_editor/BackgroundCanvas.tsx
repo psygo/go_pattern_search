@@ -30,10 +30,7 @@ export function BackgroundCanvas({
       ref={backgroundCanvasRef}
       width={size}
       height={size}
-      style={{
-        position: "absolute",
-        zIndex: 0,
-      }}
+      style={{ zIndex: 0 }}
       id="background"
     ></canvas>
   );
