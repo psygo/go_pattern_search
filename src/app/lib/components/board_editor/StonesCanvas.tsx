@@ -90,9 +90,10 @@ export function StonesCanvas({
 
     if (!currentMoves.includes(nextMove)) {
       updateAllMovesOnClick(nextMove);
-      setCurrentMoves(currentMoves.concat(nextMove));
+      const newCurrentMoves = currentMoves.concat(nextMove);
+      setCurrentMoves(newCurrentMoves);
 
-      if (onMovesChanged) onMovesChanged(currentMoves);
+      if (onMovesChanged) onMovesChanged(newCurrentMoves);
 
       drawStone(centerX, centerY);
       drawMoveNumber(centerX, centerY);
@@ -156,20 +157,22 @@ export function StonesCanvas({
   }
 
   function handleUndo() {
-    // 1. Find Last Move
-    const lastMove = currentMoves.last();
+    if (currentMoves.length > 0) {
+      // 1. Find Last Move
+      const lastMove = currentMoves.last();
 
-    // 2. Find the Stone Coordinates
-    const [x, y] = moveToCoords(boardGrid, lastMove);
+      // 2. Find the Stone Coordinates
+      const [x, y] = moveToCoords(boardGrid, lastMove);
 
-    // 3. Clear the Stone
-    clearStone(x, y);
-    clearMoveNumber(x, y);
+      // 3. Clear the Stone and the Move Number
+      clearStone(x, y);
+      clearMoveNumber(x, y);
 
-    // 4. Update Moves
-    setCurrentMoves(currentMoves.slice(0, -1));
+      // 4. Update Moves
+      setCurrentMoves(currentMoves.slice(0, -1));
 
-    if (onMovesChanged) onMovesChanged(currentMoves);
+      if (onMovesChanged) onMovesChanged(currentMoves);
+    }
   }
 
   function clearStone(x: number, y: number) {
@@ -219,7 +222,7 @@ export function StonesCanvas({
 
   return (
     <Stack position="absolute" spacing={1}>
-      <Stack id="canvas">
+      <Stack id="canvases">
         <canvas
           id="numbering"
           style={{
