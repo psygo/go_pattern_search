@@ -4,7 +4,7 @@ import { BoardCoordinates } from "@models/board_coordinates";
 
 import { BackgroundCanvas } from "./BackgroundCanvas";
 import { GridCanvas } from "./GridCanvas";
-import { StonesCanvas } from "./StonesCanvas";
+import { MovesCanvas } from "./MovesCanvas";
 
 export const defaultSize = 500;
 export const defaultPadding = 15;
@@ -31,7 +31,7 @@ export function BoardEditor({
 }: BoardEditorProps) {
   return (
     <Box sx={{ position: "relative" }}>
-      <StonesCanvas
+      <MovesCanvas
         initialMoves={initialMoves}
         onMovesChanged={onMovesChanged}
         size={size}

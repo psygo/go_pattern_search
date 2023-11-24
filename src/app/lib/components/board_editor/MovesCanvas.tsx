@@ -36,9 +36,9 @@ import {
   defaultSize,
 } from "./BoardEditor";
 
-export type StonesCanvasProps = BoardEditorProps &
+export type MovesCanvasProps = BoardEditorProps &
   WithPadding;
-export function StonesCanvas({
+export function MovesCanvas({
   initialMoves,
   onMovesChanged,
   size = defaultSize,
@@ -46,7 +46,7 @@ export function StonesCanvas({
   padding = defaultPadding,
   showControls = defaultShowControls,
   disableEditing = defaultDisableInteraction,
-}: StonesCanvasProps) {
+}: MovesCanvasProps) {
   const boardGrid = boardGridArray(
     size,
     boardSize,
