@@ -12,7 +12,11 @@ import {
   ArrowForward,
 } from "@mui/icons-material";
 
-import { BoardCoordinates, Player } from "@models/exports";
+import {
+  BoardCoordinates,
+  BoardCoordinateValues,
+  Player,
+} from "@models/exports";
 
 import {
   boardGridArray,
@@ -52,24 +56,21 @@ export function StonesCanvas({
     padding
   );
 
-  // function whichPlayer() {
-  //   return initialMoves
-  //     ? initialMoves.length % 2 === 0
-  //       ? Player.Black
-  //       : Player.White
-  //     : Player.White;
-  // }
-
+  const whichInitialPlayer = initialMoves
+    ? initialMoves.length % 2 === 0
+      ? Player.Black
+      : Player.White
+    : Player.White;
   const [currentPlayer, setCurrentPlayer] = useState(
-    // whichPlayer()
-    Player.Black
+    whichInitialPlayer
   );
+
   const [currentMoves, setCurrentMoves] = useState<
     BoardCoordinates[]
-  >([]);
+  >(initialMoves || []);
   const [allMoves, setAllMoves] = useState<
     BoardCoordinates[]
-  >([]);
+  >(initialMoves || []);
 
   const toggleCurrentPlayer = useCallback(() => {
     setCurrentPlayer(
@@ -89,35 +90,33 @@ export function StonesCanvas({
     const numberingCanvas = numberingCanvasRef.current!;
     setupGridWidthHeightAndScale(size, numberingCanvas);
 
-    // if (initialMoves) {
-    //   const stonesCtx = stonesCanvas.getContext("2d")!;
-    //   const numberingCtx =
-    //     numberingCanvas.getContext("2d")!;
+    if (initialMoves) {
+      for (const [i, move] of initialMoves.entries()) {
+        const idxX = BoardCoordinateValues.findIndex(
+          (bc) => bc === move[0]
+        );
+        const idxY = BoardCoordinateValues.findIndex(
+          (bc) => bc === move[1]
+        );
 
-    //   for (const [i, move] of initialMoves.entries()) {
-    //     const idxX = BoardCoordinateValues.findIndex(
-    //       (bc) => bc === move[0]
-    //     );
-    //     const idxY = BoardCoordinateValues.findIndex(
-    //       (bc) => bc === move[1]
-    //     );
+        const x = boardGrid[idxX - 1];
+        const y = boardGrid[idxY - 1];
 
-    //     const x = boardGrid[idxX - 1];
-    //     const y = boardGrid[idxY - 1];
+        const whichPlayer =
+          i % 2 === 0 ? Player.Black : Player.White;
 
-    //     const whichPlayer =
-    //       i % 2 === 0 ? Player.Black : Player.White;
-
-    //     drawStoneOnCtx(stonesCtx, x, y, whichPlayer);
-    //     drawMoveNumberOnCtx(
-    //       numberingCtx,
-    //       x,
-    //       y,
-    //       whichPlayer,
-    //       i + 1
-    //     );
-    //   }
-    // }
+        drawStoneOnCtx(stonesCanvas, x, y, whichPlayer);
+        drawMoveNumberOnCtx(
+          numberingCanvas,
+          x,
+          y,
+          whichPlayer,
+          i + 1
+        );
+      }
+    }
+    // Don't include `boardGrid`
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [size, initialMoves]);
 
   function handleClick(e: MouseEvent<HTMLCanvasElement>) {
@@ -173,19 +172,17 @@ export function StonesCanvas({
 
   function drawStone(x: number, y: number) {
     const stonesCanvas = stonesCanvasRef.current!;
-    const stonesCtx = stonesCanvas.getContext("2d")!;
 
-    drawStoneOnCtx(stonesCtx, x, y, currentPlayer);
+    drawStoneOnCtx(stonesCanvas, x, y, currentPlayer);
   }
 
   function drawMoveNumber(x: number, y: number) {
     const numberingCanvas = numberingCanvasRef.current!;
-    const numberingCtx = numberingCanvas.getContext("2d")!;
 
     const moveNumber = currentMoves.length + 1;
 
     drawMoveNumberOnCtx(
-      numberingCtx,
+      numberingCanvas,
       x,
       y,
       currentPlayer,

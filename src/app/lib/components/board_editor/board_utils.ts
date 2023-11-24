@@ -115,11 +115,13 @@ export function setupGridWidthHeightAndScale(
 // 4. Drawing
 
 export function drawStoneOnCtx(
-  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,
   x: number,
   y: number,
   player: Player
 ) {
+  const ctx = canvas.getContext("2d")!;
+
   // 1. Circle
   ctx.beginPath();
   ctx.arc(x, y, stoneRadius, 0, TwoPI);
@@ -137,12 +139,14 @@ export function drawStoneOnCtx(
 }
 
 export function drawMoveNumberOnCtx(
-  ctx: CanvasRenderingContext2D,
+  canvas: HTMLCanvasElement,
   x: number,
   y: number,
   player: Player,
   number: number
 ) {
+  const ctx = canvas.getContext("2d")!;
+
   ctx.textAlign = "center";
   ctx.fillStyle =
     player === Player.Black ? "white" : "black";
