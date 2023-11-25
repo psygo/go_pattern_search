@@ -49,6 +49,7 @@ export function MovesCanvas({
   padding = defaultPadding,
   showControls = defaultShowControls,
   disableEditing = defaultDisableInteraction,
+  disableInteraction = defaultDisableInteraction,
 }: MovesCanvasProps) {
   const scale = size / defaultSize;
 
@@ -110,6 +111,7 @@ export function MovesCanvas({
 
   function handleClick(e: MouseEvent<HTMLCanvasElement>) {
     if (disableEditing) return;
+    if (disableInteraction) return;
 
     const stonesCanvas = stonesCanvasRef.current!;
     const rect = stonesCanvas.getBoundingClientRect();
@@ -174,6 +176,8 @@ export function MovesCanvas({
   }
 
   function handleUndo() {
+    if (disableInteraction) return;
+
     if (currentMoves.length > 0) {
       // 1. Find Last Move
       const lastMove = currentMoves.last();
@@ -218,6 +222,8 @@ export function MovesCanvas({
   }
 
   function handleRedo() {
+    if (disableInteraction) return;
+
     // 1. Find Next Move
     const nextMoveIdx = currentMoves.length;
 
@@ -272,7 +278,7 @@ export function MovesCanvas({
         ></canvas>
       </Stack>
 
-      {showControls && (
+      {!disableInteraction && showControls && (
         <Stack
           id="board-controls"
           direction="row"

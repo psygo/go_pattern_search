@@ -22,6 +22,7 @@ export type BoardEditorProps = {
   showControls?: boolean;
   showCoords?: boolean;
   disableEditing?: boolean;
+  disableInteraction?: boolean;
 };
 export function BoardEditor({
   initialMoves,
@@ -31,6 +32,7 @@ export function BoardEditor({
   showControls = defaultShowControls,
   showCoords = defaultShowCoords,
   disableEditing = defaultDisableInteraction,
+  disableInteraction = defaultDisableInteraction,
 }: BoardEditorProps) {
   return (
     <Box
@@ -48,6 +50,7 @@ export function BoardEditor({
         boardSize={boardSize}
         showControls={showControls}
         disableEditing={disableEditing}
+        disableInteraction={disableInteraction}
       />
       <GridCanvas
         size={size}
