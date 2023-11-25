@@ -10,16 +10,17 @@ export const defaultSize = 500;
 export const defaultPadding = 20;
 export const defaultBoardSize = 19;
 export const defaultShowControls = true;
+export const defaultShowCoords = true;
 export const defaultDisableInteraction = false;
 
 // TODO: Add toggle numbering
-// TODO: Add sizing
 export type BoardEditorProps = {
   initialMoves?: BoardCoordinates[];
   onMovesChanged?: (moves: BoardCoordinates[]) => {};
   size?: number;
   boardSize?: number;
   showControls?: boolean;
+  showCoords?: boolean;
   disableEditing?: boolean;
 };
 export function BoardEditor({
@@ -28,6 +29,7 @@ export function BoardEditor({
   size = defaultSize,
   boardSize = defaultBoardSize,
   showControls = defaultShowControls,
+  showCoords = defaultShowCoords,
   disableEditing = defaultDisableInteraction,
 }: BoardEditorProps) {
   return (
@@ -47,7 +49,11 @@ export function BoardEditor({
         showControls={showControls}
         disableEditing={disableEditing}
       />
-      <GridCanvas size={size} boardSize={boardSize} />
+      <GridCanvas
+        size={size}
+        boardSize={boardSize}
+        showCoords={showCoords}
+      />
       <BackgroundCanvas size={size} />
     </Box>
   );

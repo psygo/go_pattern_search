@@ -46,7 +46,8 @@ export function PatternSearchForm() {
         </Stack>
 
         <BoardEditor
-          size={300}
+          size={200}
+          showCoords={false}
           initialMoves={
             ["ff", "gg", "hh"] as BoardCoordinates[]
           }

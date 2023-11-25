@@ -14,18 +14,20 @@ import {
   BoardEditorProps,
   defaultBoardSize,
   defaultPadding,
+  defaultShowCoords,
   defaultSize,
 } from "./BoardEditor";
 
 export type GridCanvasProps = Pick<
   BoardEditorProps,
-  "size" | "boardSize"
+  "size" | "boardSize" | "showCoords"
 > &
   WithPadding;
 export function GridCanvas({
   size = defaultSize,
   boardSize = defaultBoardSize,
   padding = defaultPadding,
+  showCoords = defaultShowCoords,
 }: GridCanvasProps) {
   const scale = size / defaultSize;
 
@@ -37,7 +39,7 @@ export function GridCanvas({
 
     function drawGrid() {
       const grid = boardGridArray(
-        size - padding,
+        size - padding * scale,
         boardSize,
         padding * scale
       );
@@ -55,14 +57,16 @@ export function GridCanvas({
 
           gridCtx.moveTo(x, padding * scale);
 
-          gridCtx.font = `${
-            defaultMoveNumberFontSize * scale
-          }pt sans-serif`;
-          gridCtx.fillText(
-            legendX,
-            x - 2 * scale,
-            padding * scale - 2.5
-          );
+          if (showCoords) {
+            gridCtx.font = `${
+              defaultMoveNumberFontSize * scale
+            }pt sans-serif`;
+            gridCtx.fillText(
+              legendX,
+              x - 2 * scale,
+              padding * scale - 2.5
+            );
+          }
 
           gridCtx.lineTo(x, lastGridLineCoord);
         }
@@ -79,11 +83,17 @@ export function GridCanvas({
 
           gridCtx.moveTo(padding * scale, y);
 
-          gridCtx.fillText(
-            legendY,
-            padding * scale - 10,
-            y + 4 * scale
-          );
+          if (showCoords) {
+            gridCtx.font = `${
+              defaultMoveNumberFontSize * scale
+            }pt sans-serif`;
+            gridCtx.fillText(
+              legendY,
+              padding * scale - 10,
+              y + 4 * scale
+            );
+          }
+
           gridCtx.lineTo(lastGridLineCoord, y);
         }
       }
@@ -102,7 +112,7 @@ export function GridCanvas({
     }
 
     setupGrid();
-  }, [size, boardSize, padding, scale]);
+  }, [size, boardSize, padding, scale, showCoords]);
 
   return (
     <canvas
