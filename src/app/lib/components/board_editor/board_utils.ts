@@ -1,3 +1,5 @@
+import {} from "@utils/string";
+
 import {
   BoardCoordinateValues,
   BoardCoordinates,
@@ -73,10 +75,10 @@ export function moveToCoords(
   move: BoardCoordinates
 ) {
   const idxX = BoardCoordinateValues.findIndex(
-    (bc) => bc === move[0]
+    (bc) => bc === move.first()
   );
   const idxY = BoardCoordinateValues.findIndex(
-    (bc) => bc === move[1]
+    (bc) => bc === move.second()
   );
 
   return [grid[idxX - 1], grid[idxY - 1]];
