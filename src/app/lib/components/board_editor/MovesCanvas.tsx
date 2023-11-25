@@ -198,10 +198,10 @@ export function MovesCanvas({
     const stonesCtx = stonesCanvas.getContext("2d")!;
 
     stonesCtx.clearRect(
-      x - stoneFullRadius,
-      y - stoneFullRadius,
-      stoneFullDiameter,
-      stoneFullDiameter
+      x - stoneFullRadius * scale,
+      y - stoneFullRadius * scale,
+      stoneFullDiameter * scale,
+      stoneFullDiameter * scale
     );
   }
 
@@ -210,10 +210,10 @@ export function MovesCanvas({
     const numberingCtx = numberingCanvas.getContext("2d")!;
 
     numberingCtx.clearRect(
-      x - stoneFullRadius,
-      y - stoneFullRadius,
-      stoneFullDiameter,
-      stoneFullDiameter
+      x - stoneFullRadius * scale,
+      y - stoneFullRadius * scale,
+      stoneFullDiameter * scale,
+      stoneFullDiameter * scale
     );
   }
 
@@ -232,14 +232,17 @@ export function MovesCanvas({
       stonesCanvasRef.current!,
       x,
       y,
-      currentPlayer
+      currentPlayer,
+      defaultStoneRadius * scale,
+      defaultBorderStrokeWidth * scale
     );
     drawMoveNumber(
       numberingCanvasRef.current!,
       x,
       y,
       currentPlayer,
-      currentMoves.length + 1
+      currentMoves.length + 1,
+      defaultMoveNumberFontSize * scale
     );
 
     // 3. Update Moves and Player
