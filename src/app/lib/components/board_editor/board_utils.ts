@@ -7,24 +7,14 @@ import {
 } from "@models/exports";
 
 //----------------------------------------------------------
-// 1. Constants
-
-export const TwoPI = 2 * Math.PI;
-export const stoneRadius = 12;
-export const borderStrokeWidth = 1.5;
-export const stoneFullRadius =
-  stoneRadius + borderStrokeWidth;
-export const stoneFullDiameter = 2 * stoneFullRadius;
-
-//----------------------------------------------------------
-// 2. Type Utils
+// 1. Type Utils
 
 export type WithPadding = {
   padding?: number;
 };
 
 //----------------------------------------------------------
-// 3. Board-Coord Utils
+// 2. Board-Coord Utils
 
 export function* boardGridIterator(
   length: number,
@@ -46,7 +36,7 @@ export function boardGridArray(
   return [...boardGridIterator(length, boardSize, padding)];
 }
 
-function findClosest(array: number[], goal: number) {
+function findClosestInGrid(array: number[], goal: number) {
   return array.reduce((prev, curr) =>
     Math.abs(curr - goal) < Math.abs(prev - goal)
       ? curr
@@ -89,8 +79,8 @@ export function findWhereToPutStoneOnGrid(
   x: number,
   y: number
 ) {
-  const closestX = findClosest(grid, x);
-  const closestY = findClosest(grid, y);
+  const closestX = findClosestInGrid(grid, x);
+  const closestY = findClosestInGrid(grid, y);
 
   return [closestX, closestY];
 }
@@ -133,11 +123,45 @@ export function moveCoordsFromGridArray(
 //----------------------------------------------------------
 // 4. Drawing
 
+// TODO: Use an object like this instead of the current
+//       options
+export type GobanOptions = {
+  dimensions?: {
+    size?: number;
+    boardSize?: number;
+    padding?: number;
+  };
+  stones?: {
+    stoneRadius?: number;
+    stoneBorderStroke?: number;
+    moveNumberFont: string;
+    moveNumberFontsize: string;
+  };
+  coordinates?: {
+    coordFont?: string;
+    coordFontsize?: number;
+  };
+  interactivity?: {
+    showControls?: boolean;
+    disableEditing?: boolean;
+  };
+};
+
+export const TwoPI = 2 * Math.PI;
+
+export const defaultStoneRadius = 12;
+export const defaultBorderStrokeWidth = 1.5;
+export const stoneFullRadius =
+  defaultStoneRadius + defaultBorderStrokeWidth;
+export const stoneFullDiameter = 2 * stoneFullRadius;
+
 export function drawStone(
   canvas: HTMLCanvasElement,
   x: number,
   y: number,
-  player: Player
+  player: Player,
+  stoneRadius: number = defaultStoneRadius,
+  borderStrokeWidth: number = defaultBorderStrokeWidth
 ) {
   const ctx = canvas.getContext("2d")!;
 
@@ -157,28 +181,37 @@ export function drawStone(
   ctx.stroke();
 }
 
+export const defaultMoveNumberFontSize = 10;
+export const defaultMoveNumberFont = "sans-serif";
+
 export function drawMoveNumber(
   canvas: HTMLCanvasElement,
   x: number,
   y: number,
   player: Player,
-  number: number
+  number: number,
+  fontSize: number = defaultMoveNumberFontSize,
+  font: string = defaultMoveNumberFont
 ) {
   const ctx = canvas.getContext("2d")!;
 
   ctx.textAlign = "center";
   ctx.fillStyle =
     player === Player.Black ? "white" : "black";
-  ctx.font = "10pt sans-serif";
+  ctx.font = `${fontSize}pt ${font}`;
 
-  ctx.fillText(number.toString(), x, y + 4.5);
+  const verticalOffset =
+    4.5 * (fontSize / defaultMoveNumberFontSize);
+
+  ctx.fillText(number.toString(), x, y + verticalOffset);
 }
 
 export function drawInitialMoves(
   grid: number[],
   stonesCanvas: HTMLCanvasElement,
   numberingCanvas: HTMLCanvasElement,
-  initialMoves: BoardCoordinates[]
+  initialMoves: BoardCoordinates[],
+  scale: number
 ) {
   for (const [i, move] of initialMoves.entries()) {
     const [x, y] = moveCoordsFromGridArray(grid, move);
@@ -186,13 +219,21 @@ export function drawInitialMoves(
     const whichPlayer =
       i % 2 === 0 ? Player.Black : Player.White;
 
-    drawStone(stonesCanvas, x, y, whichPlayer);
+    drawStone(
+      stonesCanvas,
+      x,
+      y,
+      whichPlayer,
+      defaultStoneRadius * scale,
+      defaultBorderStrokeWidth * scale
+    );
     drawMoveNumber(
       numberingCanvas,
       x,
       y,
       whichPlayer,
-      i + 1
+      i + 1,
+      defaultMoveNumberFontSize * scale
     );
   }
 }

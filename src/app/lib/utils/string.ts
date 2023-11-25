@@ -1,7 +1,7 @@
 export {};
 
 /**
- * Extra Utilities on `Array`
+ * Extra Utilities on `string`
  */
 declare global {
   interface String {

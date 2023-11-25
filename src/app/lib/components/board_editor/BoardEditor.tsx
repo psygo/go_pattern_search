@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Box, Paper } from "@mui/material";
 
 import { BoardCoordinates } from "@models/board_coordinates";
 
@@ -31,8 +31,7 @@ export function BoardEditor({
   disableEditing = defaultDisableInteraction,
 }: BoardEditorProps) {
   return (
-    <Paper
-      variant="outlined"
+    <Box
       sx={{
         p: 2,
         pb: 6,
@@ -50,6 +49,6 @@ export function BoardEditor({
       />
       <GridCanvas size={size} boardSize={boardSize} />
       <BackgroundCanvas size={size} />
-    </Paper>
+    </Box>
   );
 }

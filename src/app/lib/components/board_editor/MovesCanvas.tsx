@@ -17,6 +17,9 @@ import { BoardCoordinates, Player } from "@models/exports";
 import {
   boardGridArray,
   coordsToMove,
+  defaultBorderStrokeWidth,
+  defaultMoveNumberFontSize,
+  defaultStoneRadius,
   drawInitialMoves,
   drawMoveNumber,
   drawStone,
@@ -47,6 +50,8 @@ export function MovesCanvas({
   showControls = defaultShowControls,
   disableEditing = defaultDisableInteraction,
 }: MovesCanvasProps) {
+  const scale = size / defaultSize;
+
   const boardGrid = boardGridArray(
     size,
     boardSize,
@@ -95,7 +100,8 @@ export function MovesCanvas({
         boardGrid,
         stonesCanvas,
         numberingCanvas,
-        initialMoves
+        initialMoves,
+        scale
       );
     }
     // Don't include `boardGrid`
@@ -134,14 +140,17 @@ export function MovesCanvas({
         stonesCanvas,
         centerX,
         centerY,
-        currentPlayer
+        currentPlayer,
+        defaultStoneRadius * scale,
+        defaultBorderStrokeWidth * scale
       );
       drawMoveNumber(
         numberingCanvasRef.current!,
         centerX,
         centerY,
         currentPlayer,
-        currentMoves.length + 1
+        currentMoves.length + 1,
+        defaultMoveNumberFontSize * scale
       );
 
       toggleCurrentPlayer();
