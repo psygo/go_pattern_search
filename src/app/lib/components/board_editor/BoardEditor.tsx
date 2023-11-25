@@ -7,7 +7,7 @@ import { GridCanvas } from "./GridCanvas";
 import { MovesCanvas } from "./MovesCanvas";
 
 export const defaultSize = 500;
-export const defaultPadding = 15;
+export const defaultPadding = 20;
 export const defaultBoardSize = 19;
 export const defaultShowControls = true;
 export const defaultDisableInteraction = false;

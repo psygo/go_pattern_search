@@ -149,7 +149,7 @@ export type GobanOptions = {
 
 export const TwoPI = 2 * Math.PI;
 
-export const defaultStoneRadius = 12;
+export const defaultStoneRadius = 11;
 export const defaultBorderStrokeWidth = 1.5;
 export const stoneFullRadius =
   defaultStoneRadius + defaultBorderStrokeWidth;

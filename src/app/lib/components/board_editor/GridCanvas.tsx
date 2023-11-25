@@ -6,6 +6,7 @@ import { boardCoordinatesIterator } from "@models/board_coordinates";
 
 import {
   boardGridArray,
+  defaultMoveNumberFontSize,
   setupGridWidthHeightAndScale,
   WithPadding,
 } from "./board_utils";
@@ -26,6 +27,8 @@ export function GridCanvas({
   boardSize = defaultBoardSize,
   padding = defaultPadding,
 }: GridCanvasProps) {
+  const scale = size / defaultSize;
+
   const gridCanvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
@@ -33,7 +36,11 @@ export function GridCanvas({
     const gridCtx = gridCanvas.getContext("2d")!;
 
     function drawGrid() {
-      const grid = boardGridArray(size, boardSize, padding);
+      const grid = boardGridArray(
+        size - padding,
+        boardSize,
+        padding * scale
+      );
 
       const lastGridLineCoord = grid.last();
 
@@ -46,8 +53,17 @@ export function GridCanvas({
             xCoordLegendIterator.next().value as string
           ).toUpperCase();
 
-          gridCtx.moveTo(x, padding);
-          gridCtx.fillText(legendX, x - 3, padding - 2.5);
+          gridCtx.moveTo(x, padding * scale);
+
+          gridCtx.font = `${
+            defaultMoveNumberFontSize * scale
+          }pt sans-serif`;
+          gridCtx.fillText(
+            legendX,
+            x - 2 * scale,
+            padding * scale - 2.5
+          );
+
           gridCtx.lineTo(x, lastGridLineCoord);
         }
       }
@@ -61,8 +77,13 @@ export function GridCanvas({
             yCoordLegendIterator.next().value as string
           ).toUpperCase();
 
-          gridCtx.moveTo(padding, y);
-          gridCtx.fillText(legendY, padding - 10, y + 4);
+          gridCtx.moveTo(padding * scale, y);
+
+          gridCtx.fillText(
+            legendY,
+            padding * scale - 10,
+            y + 4 * scale
+          );
           gridCtx.lineTo(lastGridLineCoord, y);
         }
       }
@@ -81,7 +102,7 @@ export function GridCanvas({
     }
 
     setupGrid();
-  }, [size, boardSize, padding]);
+  }, [size, boardSize, padding, scale]);
 
   return (
     <canvas

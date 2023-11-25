@@ -53,9 +53,9 @@ export function MovesCanvas({
   const scale = size / defaultSize;
 
   const boardGrid = boardGridArray(
-    size,
+    size - padding,
     boardSize,
-    padding
+    padding * scale
   );
 
   const whichInitialPlayer = initialMoves
