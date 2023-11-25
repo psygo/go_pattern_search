@@ -246,6 +246,9 @@ export function drawInitialMoves(
 export const sgf1 =
   "(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-11-16]AB[qc][pc][oc]AW[od][pd][qd]C[Hello there]PB[Player 1]BR[1p]PW[Philippe Fanaro]WR[2d]GN[Game Name]EV[Event 1]GC[This is an info comment]RE[B+1.5];B[pg]C[This is the second comment];W[qi](;PL[B]AB[qk][ok];B[pm](;W[qo];B[dp];W[dl];B[dn])(;W[rm];B[ro]))(;B[dd];W[df]))";
 
+export const sgf7 =
+  "(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-11-25];B[pd](;W[md])(;W[pf]))(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-11-25];B[qd](;W[oc])(;W[pd]))";
+
 export type BranchSegments = {
   id: number;
   parentId: number | null;
@@ -262,38 +265,41 @@ export function parseStackToBranchSegments(
 ) {
   const trees: BranchSegments[] = [];
   const treeTempArray: BranchSegments[] = [];
-  let currentParentIdx: number | null = null;
+  let currentParentId: number | null = null;
 
   for (let i = 0; i < stack.length; i++) {
     const s = stack[i];
 
     if (s === "(") {
-      if (currentParentIdx === null) {
-        const newTree: BranchSegments = {
-          id: treeTempArray.length,
-          parentId: null,
-          data: stack[i + 1],
-          children: [],
-        };
+      const newId = treeTempArray.length;
+      const data = stack[i + 1];
+
+      const newTree: BranchSegments = {
+        id: newId,
+        parentId: currentParentId,
+        data,
+        children: [],
+      };
+
+      if (currentParentId === null) {
         trees.push(newTree);
+
         treeTempArray.push(newTree);
-        currentParentIdx = treeTempArray.length - 1;
+        currentParentId = newId;
       } else {
-        const newTree: BranchSegments = {
-          id: treeTempArray.length,
-          parentId: currentParentIdx,
-          data: stack[i + 1],
-          children: [],
-        };
-        treeTempArray[currentParentIdx].children.push(
+        treeTempArray[currentParentId].children.push(
           newTree
         );
         treeTempArray.push(newTree);
-        currentParentIdx = treeTempArray.length - 1;
+        currentParentId = newId;
       }
     } else if (s === ")") {
-      currentParentIdx =
-        treeTempArray.penultimate().parentId;
+      const currentParent = treeTempArray
+        .filter((t) => t.id === currentParentId)
+        .first();
+      const grandParentId = currentParent.parentId;
+
+      currentParentId = grandParentId;
     }
   }
 
