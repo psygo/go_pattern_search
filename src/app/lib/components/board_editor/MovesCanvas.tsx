@@ -25,7 +25,9 @@ import {
   drawStone,
   findWhereToPutStoneOnGrid,
   moveToCoords,
+  parseStringToTrees,
   setupGridWidthHeightAndScale,
+  sgf1,
   stoneFullDiameter,
   stoneFullRadius,
   WithPadding,
@@ -51,6 +53,8 @@ export function MovesCanvas({
   disableEditing = defaultDisableInteraction,
   disableInteraction = defaultDisableInteraction,
 }: MovesCanvasProps) {
+  console.log(parseStringToTrees(sgf1));
+
   const scale = size / defaultSize;
 
   const boardGrid = boardGridArray(

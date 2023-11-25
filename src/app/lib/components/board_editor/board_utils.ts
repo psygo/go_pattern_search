@@ -4,6 +4,7 @@ import {
   BoardCoordinateValues,
   BoardCoordinates,
   Player,
+  Sgf,
 } from "@models/exports";
 
 //----------------------------------------------------------
@@ -236,6 +237,86 @@ export function drawInitialMoves(
       defaultMoveNumberFontSize * scale
     );
   }
+}
+
+//----------------------------------------------------------
+// Custom SGF Parser
+// TODO: Complete this
+
+export const sgf1 =
+  "(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-11-16]AB[qc][pc][oc]AW[od][pd][qd]C[Hello there]PB[Player 1]BR[1p]PW[Philippe Fanaro]WR[2d]GN[Game Name]EV[Event 1]GC[This is an info comment]RE[B+1.5];B[pg]C[This is the second comment];W[qi](;PL[B]AB[qk][ok];B[pm](;W[qo];B[dp];W[dl];B[dn])(;W[rm];B[ro]))(;B[dd];W[df]))";
+
+export type BranchSegments = {
+  id: number;
+  parentId: number | null;
+  data: string;
+  children: BranchSegments[];
+};
+
+export function parseStringToTrees(s: string) {
+  return parseStackToBranchSegments(parseStringToStack(s));
+}
+
+export function parseStackToBranchSegments(
+  stack: string[]
+) {
+  const trees: BranchSegments[] = [];
+  const treeTempArray: BranchSegments[] = [];
+  let currentParentIdx: number | null = null;
+
+  for (let i = 0; i < stack.length; i++) {
+    const s = stack[i];
+
+    if (s === "(") {
+      if (currentParentIdx === null) {
+        const newTree: BranchSegments = {
+          id: treeTempArray.length,
+          parentId: null,
+          data: stack[i + 1],
+          children: [],
+        };
+        trees.push(newTree);
+        treeTempArray.push(newTree);
+        currentParentIdx = treeTempArray.length - 1;
+      } else {
+        const newTree: BranchSegments = {
+          id: treeTempArray.length,
+          parentId: currentParentIdx,
+          data: stack[i + 1],
+          children: [],
+        };
+        treeTempArray[currentParentIdx].children.push(
+          newTree
+        );
+        treeTempArray.push(newTree);
+        currentParentIdx = treeTempArray.length - 1;
+      }
+    } else if (s === ")") {
+      currentParentIdx =
+        treeTempArray.penultimate().parentId;
+    }
+  }
+
+  return trees;
+}
+
+export function parseStringToStack(sgf: Sgf) {
+  const stack: string[] = [];
+  let currentString = "";
+
+  for (let i = 0; i < sgf.length; i++) {
+    const char = sgf[i];
+
+    if (char === "(" || char === ")") {
+      if (currentString) stack.push(currentString);
+      currentString = "";
+      stack.push(char);
+    } else {
+      currentString += char;
+    }
+  }
+
+  return stack;
 }
 
 //----------------------------------------------------------
