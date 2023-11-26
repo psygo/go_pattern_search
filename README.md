@@ -13,35 +13,39 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 - Pattern-Search
   - [x] Sequential Pattern-Search
   - Stone-based filtering
-    - [ ] Contains only selected stones
-    - [ ] Contains selected stones
-  - [ ] Rotation on Searches
+    - [x] Contains only selected stones
+    - [x] Contains selected stones
+  - [x] Rotation on Searches
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
-  - [ ] Quadrant-barsed pattern search (reflections also count)
+  - [ ] Quadrant-based pattern search (reflections also count)
+  - [ ] Region-based pattern search (reflections also count)
 - DB
   - [ ] SGF fields for the game nodes
   - Indexes
-    - [ ] Index on moves
-    - [ ] Index on edited stones
+    - [x] Index on moves
+    - [x] Index on edited stones
   - Data
     - [ ] Add large number of games (GoGod? Go4Go?)
     - [ ] Add tsumegos
     - [ ] Add lecture-based content (à la Yunguseng Dojang (Inseong Hwang))
 - UI
   - Goban Component
-    - [ ] Stone placement
-    - [ ] Stone deletion
-    - [ ] Move numbering
+    - [x] Stone placement
+    - [x] Stone deletion
+    - [x] Move numbering
+    - Game Rules
+      - [ ] Capture
+      - [ ] Suicide
+      - [ ] Ko
   - Filters
-    - [ ] Sequential
-    - [ ] Stone-based (for edited stones)
-    - [ ] Rotation
+    - [x] Sequential
+    - [x] Stone-based (for edited stones)
     - [ ] Region-based
     - Stone-based filtering
       - [ ] Contains only selected stones
       - [ ] Contains selected stones
-  - [ ] URL-based filtering for the search
+  - [x] URL-based filtering for the search
   - [ ] Regular-search, such as player name, date, etc.
   - [ ] Add text/move-comment search.
 
