@@ -19,3 +19,28 @@ GET {{API_URL}}/health
 POST {{API_URL}}/reset
 
 ############################################################
+
+# 1. Pattern Search
+
+@PATTERN_SEARCH=pattern-search
+
+### 1.1. Sequential
+
+@SEQUENTIAL_PATTERN=pdppddcp
+
+GET {{API_URL}}/{{PATTERN_SEARCH}}/sequential/{{SEQUENTIAL_PATTERN}}
+
+## 1.2. Stones
+
+@BLACK_STONES_EQUALS=qcpcoc
+@WHITE_STONES_EQUALS=odpdqd
+
+### 1.2.1 Stones Contains
+
+GET {{API_URL}}/{{PATTERN_SEARCH}}/stones/{{BLACK_STONES_EQUALS}}/{{WHITE_STONES_EQUALS}}
+
+### 1.2.2 Stones Equals
+
+GET {{API_URL}}/{{PATTERN_SEARCH}}/stones/{{BLACK_STONES_EQUALS}}/{{WHITE_STONES_EQUALS}}?equals=true
+
+############################################################

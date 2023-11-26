@@ -85,8 +85,8 @@ export async function stonesEqualsSearch(
                       )
                 )
                 
-          WITH COLLECT(gm) AS n
-          WITH [node IN n WHERE (node:GameNode) | node] AS gs
+          WITH COLLECT(gm) AS nodes
+          WITH [node IN nodes WHERE node:GameNode | node] AS gs
 
           RETURN DISTINCT(gs)
         `,
@@ -101,21 +101,10 @@ export async function stonesEqualsSearch(
 }
 
 export async function stonesContainsSearch(
-  black_stones: Pattern,
-  white_stones: Pattern
+  blackStones: Pattern,
+  whiteStones: Pattern
 ) {
   try {
-    const allBlackStones = [
-      "qc",
-      "pc",
-      "oc",
-    ] as BoardCoordinates[];
-    const allWhiteStones = [
-      "od",
-      "pd",
-      "qd",
-    ] as BoardCoordinates[];
-
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
         /* cypher */ `
@@ -123,33 +112,33 @@ export async function stonesContainsSearch(
 
           WHERE (
                       SIZE(apoc.coll.intersection(
-                        $allBlackStones, 
+                        $blackStones, 
                         gm.all_black_stones
                       )) > 0
                   AND
                       SIZE(apoc.coll.intersection(
-                        $allWhiteStones, 
+                        $whiteStones, 
                         gm.all_white_stones
                       )) > 0
                 )
              OR (
                       SIZE(apoc.coll.intersection(
-                        $allWhiteStones, 
+                        $whiteStones, 
                         gm.all_black_stones
                       )) > 0
                   AND
                       SIZE(apoc.coll.intersection(
-                        $allWhiteStones, 
+                        $whiteStones, 
                         gm.all_white_stones
                       )) > 0
                 )
           
-          WITH COLLECT(gm) AS n
-          WITH [node IN n WHERE (node:GameNode) | node] AS gs
+          WITH COLLECT(gm) AS nodes
+          WITH [node IN nodes WHERE node:GameNode | node] AS gs
 
           RETURN DISTINCT(gs)
         `,
-        { allBlackStones, allWhiteStones }
+        { blackStones, whiteStones }
       )
     );
 
