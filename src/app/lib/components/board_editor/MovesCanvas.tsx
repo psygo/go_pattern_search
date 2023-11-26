@@ -54,7 +54,7 @@ export function MovesCanvas({
   disableEditing = defaultDisableInteraction,
   disableInteraction = defaultDisableInteraction,
 }: MovesCanvasProps) {
-  console.log(parseStringToTrees(sgf7));
+  console.log(parseStringToTrees(sgf1));
 
   const scale = size / defaultSize;
 

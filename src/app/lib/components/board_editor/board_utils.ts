@@ -241,7 +241,6 @@ export function drawInitialMoves(
 
 //----------------------------------------------------------
 // Custom SGF Parser
-// TODO: Complete this
 
 export const sgf1 =
   "(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-11-16]AB[qc][pc][oc]AW[od][pd][qd]C[Hello there]PB[Player 1]BR[1p]PW[Philippe Fanaro]WR[2d]GN[Game Name]EV[Event 1]GC[This is an info comment]RE[B+1.5];B[pg]C[This is the second comment];W[qi](;PL[B]AB[qk][ok];B[pm](;W[qo];B[dp];W[dl];B[dn])(;W[rm];B[ro]))(;B[dd];W[df]))";
@@ -250,14 +249,56 @@ export const sgf7 =
   "(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-11-25];B[pd](;W[md])(;W[pf]))(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.52.2]KM[6.5]SZ[19]DT[2023-11-25];B[qd](;W[oc])(;W[pd]))";
 
 export type BranchSegments = {
-  id: number;
-  parentId: number | null;
+  id?: number;
+  parentId?: number | null;
   data: string;
   children: BranchSegments[];
 };
 
 export function parseStringToTrees(s: string) {
-  return parseStackToBranchSegments(parseStringToStack(s));
+  return parseBranchSegmentsToTree(
+    parseStackToBranchSegments(parseStringToStack(s))
+  );
+}
+
+function recursivelyDismantleBranch(
+  data: string,
+  pastChildren: BranchSegments[]
+): BranchSegments {
+  const possibleMoves = data
+    .split(";")
+    .filter((pb) => pb !== "");
+
+  const firstMove = possibleMoves.first();
+  const otherMoves = possibleMoves.slice(1).join(";");
+
+  return {
+    data: firstMove,
+    children:
+      possibleMoves.length > 1
+        ? [
+            recursivelyDismantleBranch(
+              otherMoves,
+              pastChildren
+            ),
+          ]
+        : pastChildren.map((c) =>
+            recursivelyDismantleBranch(c.data, c.children)
+          ),
+  };
+}
+
+export function parseBranchSegmentsToTree(
+  bs: BranchSegments[]
+) {
+  const newBs: BranchSegments[] = [];
+  for (const b of bs) {
+    newBs.push(
+      recursivelyDismantleBranch(b.data, b.children)
+    );
+  }
+
+  return newBs;
 }
 
 export function parseStackToBranchSegments(
@@ -297,7 +338,7 @@ export function parseStackToBranchSegments(
       const currentParent = treeTempArray
         .filter((t) => t.id === currentParentId)
         .first();
-      const grandParentId = currentParent.parentId;
+      const grandParentId = currentParent.parentId!;
 
       currentParentId = grandParentId;
     }
