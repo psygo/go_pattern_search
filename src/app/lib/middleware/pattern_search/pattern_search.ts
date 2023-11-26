@@ -44,13 +44,18 @@ export async function sequentialPatternSearch(
       )
     );
 
-    return getAllNodes<NeoGameNode>(results);
+    return getAllNodes<NeoGameNode>(results) ?? [];
   } catch (e) {
     console.error(e);
   }
 }
 
-export async function stoneEqualsSearch(pattern: Pattern) {
+export async function stonesEqualsSearch(
+  // TODO: In the case of stone search, the pattern is more
+  //       like a set than a list.
+  black_stones: Pattern,
+  white_stones: Pattern
+) {
   try {
     const allBlackStones = [
       "qc",
@@ -100,14 +105,15 @@ export async function stoneEqualsSearch(pattern: Pattern) {
       )
     );
 
-    return getAllNodes<NeoGameNode>(results);
+    return getAllNodes<NeoGameNode>(results) ?? [];
   } catch (e) {
     console.error(e);
   }
 }
 
-export async function stoneContainsSearch(
-  pattern: Pattern
+export async function stonesContainsSearch(
+  black_stones: Pattern,
+  white_stones: Pattern
 ) {
   try {
     const allBlackStones = [
@@ -158,7 +164,7 @@ export async function stoneContainsSearch(
       )
     );
 
-    return getAllNodes<NeoGameNode>(results);
+    return getAllNodes<NeoGameNode>(results) ?? [];
   } catch (e) {
     console.error(e);
   }

@@ -4,6 +4,7 @@ import {
   StonesSearchReqParams,
   StonesSearchReqParamsSchema,
 } from "@models/validation/exports";
+import { stonesEqualsSearch } from "../../../../../lib/middleware/pattern_search/pattern_search";
 
 export type StonesSearchParams = {
   params: StonesSearchReqParams;
@@ -18,10 +19,17 @@ export async function GET(
   { params }: StonesSearchParams
 ) {
   try {
-    const { black_stones, white_stones } =
-      StonesSearchReqParamsSchema.parse(params);
+    const {
+      black_stones: blackStones,
+      white_stones: whiteStones,
+    } = StonesSearchReqParamsSchema.parse(params);
 
-    return NextResponse.json({});
+    const gameNodes = await stonesEqualsSearch(
+      blackStones,
+      whiteStones
+    );
+
+    return NextResponse.json(gameNodes);
   } catch (e) {
     console.error(e);
 
