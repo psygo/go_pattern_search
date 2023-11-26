@@ -53,21 +53,10 @@ export async function sequentialPatternSearch(
 export async function stonesEqualsSearch(
   // TODO: In the case of stone search, the pattern is more
   //       like a set than a list.
-  black_stones: Pattern,
-  white_stones: Pattern
+  blackStones: Pattern,
+  whiteStones: Pattern
 ) {
   try {
-    const allBlackStones = [
-      "qc",
-      "pc",
-      "oc",
-    ] as BoardCoordinates[];
-    const allWhiteStones = [
-      "od",
-      "pd",
-      "qd",
-    ] as BoardCoordinates[];
-
     const results = await neo4jSession.executeRead((tx) =>
       tx.run(
         /* cypher */ `
@@ -75,23 +64,23 @@ export async function stonesEqualsSearch(
           
           WHERE (
                       apoc.coll.isEqualCollection(
-                        $allBlackStones, 
+                        $blackStones, 
                         gm.all_black_stones
                       )
                   AND
                       apoc.coll.isEqualCollection(
-                        $allWhiteStones, 
+                        $whiteStones, 
                         gm.all_white_stones
                       )
                 )
              OR (
                       apoc.coll.isEqualCollection(
-                        $allWhiteStones, 
+                        $whiteStones, 
                         gm.all_black_stones
                       )
                   AND
                       apoc.coll.isEqualCollection(
-                        $allWhiteStones, 
+                        $whiteStones, 
                         gm.all_white_stones
                       )
                 )
@@ -101,7 +90,7 @@ export async function stonesEqualsSearch(
 
           RETURN DISTINCT(gs)
         `,
-        { allBlackStones, allWhiteStones }
+        { blackStones, whiteStones }
       )
     );
 

@@ -4,7 +4,8 @@ import {
   StonesSearchReqParams,
   StonesSearchReqParamsSchema,
 } from "@models/validation/exports";
-import { stonesEqualsSearch } from "../../../../../lib/middleware/pattern_search/pattern_search";
+
+import { stonesEqualsSearch } from "@middleware/pattern_search/exports";
 
 export type StonesSearchParams = {
   params: StonesSearchReqParams;
