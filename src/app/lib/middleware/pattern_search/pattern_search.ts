@@ -8,21 +8,14 @@ import {
   NeoGameNode,
 } from "@models/exports";
 
-import { allIsomorphisms, permute } from "./isomorphism";
-
-export async function patternSearch(
-  pattern: Pattern,
-  isStoneSearch: boolean = false
-) {
-  return isStoneSearch
-    ? await stoneEqualsSearch(pattern)
-    : await sequentialPatternSearch(pattern);
-}
+import { allIsomorphisms } from "./isomorphism";
 
 /**
  * An adaptation of [@cybersam's answer on Stack Overflow](https://stackoverflow.com/a/77499034/4756173).
  */
-async function sequentialPatternSearch(pattern: Pattern) {
+export async function sequentialPatternSearch(
+  pattern: Pattern
+) {
   try {
     const patternLength = pattern.length;
     const allPatterns = allIsomorphisms(pattern);
@@ -57,7 +50,7 @@ async function sequentialPatternSearch(pattern: Pattern) {
   }
 }
 
-async function stoneEqualsSearch(pattern: Pattern) {
+export async function stoneEqualsSearch(pattern: Pattern) {
   try {
     const allBlackStones = [
       "qc",
@@ -113,7 +106,9 @@ async function stoneEqualsSearch(pattern: Pattern) {
   }
 }
 
-async function stoneContainsSearch(pattern: Pattern) {
+export async function stoneContainsSearch(
+  pattern: Pattern
+) {
   try {
     const allBlackStones = [
       "qc",

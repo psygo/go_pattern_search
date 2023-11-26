@@ -10,16 +10,19 @@ export const PatternSchema = z
   );
 export type Pattern = z.infer<typeof PatternSchema>;
 
-export const PatternSearchReqParamsSchema = z.object({
+// 1. Sequential
+export const SequentialSearchReqParamsSchema = z.object({
   pattern: PatternSchema,
 });
-export type PatternSearchReqParams = z.infer<
-  typeof PatternSearchReqParamsSchema
+export type SequentialSearchReqParams = z.infer<
+  typeof SequentialSearchReqParamsSchema
 >;
 
-export const PatternSearchReqSearchParamsSchema = z.object({
-  "stone-search": z
-    .string()
-    .transform((s) => s === "true" || s === "")
-    .optional(),
+// 2. Stones
+export const StonesSearchReqParamsSchema = z.object({
+  black_stones: PatternSchema,
+  white_stones: PatternSchema,
 });
+export type StonesSearchReqParams = z.infer<
+  typeof StonesSearchReqParamsSchema
+>;
