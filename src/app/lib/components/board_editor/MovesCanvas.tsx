@@ -135,8 +135,7 @@ export function MovesCanvas({
       updateAllMovesOnClick(nextMove);
 
       const newCurrentMoves = currentMoves.concat(nextMove);
-      setCurrentMoves(newCurrentMoves);
-      if (onMovesChanged) onMovesChanged(newCurrentMoves);
+      onMovesChangedHook(newCurrentMoves, currentPlayer);
 
       drawStone(
         stonesCanvas,
@@ -157,6 +156,14 @@ export function MovesCanvas({
 
       toggleCurrentPlayer();
     }
+  }
+
+  function onMovesChangedHook(
+    moves: BoardCoordinates[],
+    player: Player
+  ) {
+    if (onMovesChanged)
+      onMovesChanged(moves.last(), player);
   }
 
   // Only overwrite all moves if the next move is different.
@@ -190,10 +197,12 @@ export function MovesCanvas({
       clearMoveNumber(x, y);
 
       // 4. Update Moves and Player
-      toggleCurrentPlayer();
-      setCurrentMoves(currentMoves.slice(0, -1));
+      const updatedMoves = currentMoves.slice(0, -1);
 
-      if (onMovesChanged) onMovesChanged(currentMoves);
+      onMovesChangedHook(updatedMoves, currentPlayer);
+
+      toggleCurrentPlayer();
+      setCurrentMoves(updatedMoves);
     }
   }
 
@@ -252,10 +261,12 @@ export function MovesCanvas({
     );
 
     // 3. Update Moves and Player
-    toggleCurrentPlayer();
-    setCurrentMoves(currentMoves.concat(nextMove));
+    const updatedMoves = currentMoves.concat(nextMove);
 
-    if (onMovesChanged) onMovesChanged(currentMoves);
+    onMovesChangedHook(updatedMoves, currentPlayer);
+
+    toggleCurrentPlayer();
+    setCurrentMoves(updatedMoves);
   }
 
   return (

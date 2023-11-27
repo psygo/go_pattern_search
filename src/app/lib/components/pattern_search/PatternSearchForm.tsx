@@ -10,7 +10,8 @@ import {
   ToggleButton,
   Typography,
 } from "@mui/material";
-import { BoardCoordinates } from "@models/board_coordinates";
+
+import { Player } from "@models/sgf";
 
 import { BoardEditor } from "@components/board_editor/exports";
 
@@ -54,10 +55,20 @@ export function PatternSearchForm() {
           size={200}
           showCoords={false}
           initialMoves={movesAndStones.moves}
-          onMovesChanged={(m) => {
+          onMovesChanged={(m, p) => {
+            const updatedBlackStones =
+              p === Player.Black
+                ? movesAndStones.blackStones.concat(m)
+                : movesAndStones.blackStones;
+            const updatedWhiteStones =
+              p === Player.White
+                ? movesAndStones.whiteStones.concat(m)
+                : movesAndStones.whiteStones;
+
             setMovesAndStones({
-              ...movesAndStones,
-              moves: m,
+              moves: movesAndStones.moves.concat(m),
+              blackStones: updatedBlackStones,
+              whiteStones: updatedWhiteStones,
             });
 
             console.log(movesAndStones);

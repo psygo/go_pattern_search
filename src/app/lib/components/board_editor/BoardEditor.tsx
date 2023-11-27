@@ -1,6 +1,6 @@
-import { Box, Paper } from "@mui/material";
+import { Box } from "@mui/material";
 
-import { BoardCoordinates } from "@models/board_coordinates";
+import { BoardCoordinates, Player } from "@models/exports";
 
 import { BackgroundCanvas } from "./BackgroundCanvas";
 import { GridCanvas } from "./GridCanvas";
@@ -16,7 +16,10 @@ export const defaultDisableInteraction = false;
 // TODO: Add toggle numbering
 export type BoardEditorProps = {
   initialMoves?: BoardCoordinates[];
-  onMovesChanged?: (moves: BoardCoordinates[]) => void;
+  onMovesChanged?: (
+    newMove: BoardCoordinates,
+    player: Player
+  ) => void;
   size?: number;
   boardSize?: number;
   showControls?: boolean;
