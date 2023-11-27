@@ -99,6 +99,7 @@ async function createGameNode(gameNode: GameNode) {
             AB:               $gameNode.data.AB,
             AW:               $gameNode.data.AW,
             first_20_moves:   $gameNode.first_20_moves,
+            filename:         $gameNode.filename,
             all_black_stones: $gameNode.data.AB,
             all_white_stones: $gameNode.data.AW
           })

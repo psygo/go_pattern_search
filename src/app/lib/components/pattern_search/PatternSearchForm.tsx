@@ -119,14 +119,28 @@ export function PatternSearchForm() {
           {gameNodesFound.map((g, i) => {
             return (
               <Paper key={i} variant="outlined">
-                <BoardEditor
-                  initialMoves={g.properties.first_20_moves}
-                  disableEditing={true}
-                  disableInteraction={true}
-                  showCoords={false}
-                  showControls={false}
-                  size={200}
-                />
+                <Stack direction="row">
+                  <BoardEditor
+                    initialMoves={
+                      g.properties.first_20_moves
+                    }
+                    disableEditing={true}
+                    disableInteraction={true}
+                    showCoords={false}
+                    showControls={false}
+                    size={200}
+                  />
+
+                  <Stack
+                    spacing={2}
+                    mt={-10}
+                    justifyContent="center"
+                  >
+                    <Typography>
+                      {g.properties.filename}
+                    </Typography>
+                  </Stack>
+                </Stack>
               </Paper>
             );
           })}
