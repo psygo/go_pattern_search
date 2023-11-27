@@ -17,24 +17,18 @@ import {
 
 import { API_URL } from "@config/api_config";
 
-import {
-  getId,
-  NeoGameNode,
-  parseStringToTrees,
-  Player,
-} from "@models/exports";
+import { NeoGameNode, Player } from "@models/exports";
 
 import { BoardEditor } from "@components/board_editor/exports";
 
 import { useMovesContext } from "./MovesContext";
 
 export function PatternSearchForm() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
 
-  const pattern = searchParams.get("pattern") ?? "";
-  const isStoneSearch =
-    searchParams.get("stone-search") === "true";
+  const [isStonesSearch, setIsStonesSearch] =
+    useState(false);
 
   const { movesAndStones, setMovesAndStones } =
     useMovesContext();
@@ -49,12 +43,20 @@ export function PatternSearchForm() {
     e.preventDefault();
 
     const movesAsString = movesAndStones.moves.join("");
+    const blackStones = movesAndStones.blackStones.join("");
+    const whiteStones = movesAndStones.whiteStones.join("");
 
-    const res = await fetch(
-      `${API_URL}/pattern-search/sequential/${movesAsString}`
-    );
+    const url = isStonesSearch
+      ? `${API_URL}/pattern-search/stones/${blackStones}/${whiteStones}`
+      : `${API_URL}/pattern-search/sequential/${movesAsString}`;
+
+    console.log(url);
+
+    const res = await fetch(url);
 
     const gameNodes: NeoGameNode[] = await res.json();
+
+    console.log(gameNodes);
 
     setGameNodesFound(gameNodes);
   }
@@ -67,14 +69,15 @@ export function PatternSearchForm() {
             <ToggleButton
               sx={{ maxWidth: "max-content" }}
               value="check"
-              selected={isStoneSearch}
+              selected={isStonesSearch}
               onChange={() => {
-                router.push(
-                  `/pattern-search/stones/${pattern}/`,
-                  {
-                    scroll: false,
-                  }
-                );
+                setIsStonesSearch(!isStonesSearch);
+                // router.push(
+                //   `/pattern-search/stones/${movesAndStones.blackStones}/${movesAndStones.whiteStones}`,
+                //   {
+                //     scroll: false,
+                //   }
+                // );
               }}
             >
               <Typography variant="caption">
@@ -106,8 +109,6 @@ export function PatternSearchForm() {
                 blackStones: updatedBlackStones,
                 whiteStones: updatedWhiteStones,
               });
-
-              console.log(movesAndStones);
             }}
           />
         </Stack>
