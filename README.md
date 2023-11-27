@@ -58,6 +58,12 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 ## 2. Dev Setup
 
+1. Open Neo4j Desktop, and create a new project.
+2. Launch the Neo4j server.
+3. Create a new user with admin privileges, which will be used in the environment variables.
+4. Update the environment variables accordingly.
+5. Launch the NextJS project.
+
 ### 2.1. Tech Stack
 
 - Neo4j (Graph DBMS)
@@ -65,9 +71,23 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 - Sabaki's SGF Parser
 - Custom Go Board HTML Canvas Component
 
-## 2.2. Environment Variables
+### 2.2. Environment Variables
 
-<!-- TODO: -->
+#### 2.2.1. `.env`
+
+```env
+NEXTJS_PORT=
+```
+
+#### 2.2.1. `.env.local`
+
+```env
+PORT=
+
+NEO4J_PORT=
+NEO4J_USER=
+NEO4J_PASSWORD=
+```
 
 ## 3. References
 
