@@ -73,6 +73,7 @@ export async function stonesEqualsSearch(
                         gm.all_white_stones
                       )
                 )
+             // Flipped Version
              OR (
                       apoc.coll.isEqualCollection(
                         $whiteStones, 
@@ -121,6 +122,7 @@ export async function stonesContainsSearch(
                         gm.all_white_stones
                       )) > 0
                 )
+             // Flipped Version
              OR (
                       SIZE(apoc.coll.intersection(
                         $whiteStones, 
@@ -128,7 +130,7 @@ export async function stonesContainsSearch(
                       )) > 0
                   AND
                       SIZE(apoc.coll.intersection(
-                        $whiteStones, 
+                        $blackStones, 
                         gm.all_white_stones
                       )) > 0
                 )

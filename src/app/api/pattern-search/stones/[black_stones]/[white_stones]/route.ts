@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   StonesSearchReqParams,
   StonesSearchReqParamsSchema,
+  StonesSearchReqSearchParamsSchema,
 } from "@models/validation/exports";
 
 import {
@@ -16,10 +17,10 @@ export type StonesSearchParams = {
 /**
  * Stone Search
  *
- * `/pattern-search/stone/[black_stones]/[white_stones]`
+ * `/pattern-search/stone/[black_stones]/[white_stones]?equals`
  */
 export async function GET(
-  _: NextRequest,
+  req: NextRequest,
   { params }: StonesSearchParams
 ) {
   try {
@@ -28,10 +29,19 @@ export async function GET(
       white_stones: whiteStones,
     } = StonesSearchReqParamsSchema.parse(params);
 
-    const gameNodes = await stonesContainsSearch(
-      blackStones,
-      whiteStones
-    );
+    const { searchParams } = new URL(req.url);
+
+    const { equals } =
+      StonesSearchReqSearchParamsSchema.parse(
+        Object.fromEntries(searchParams)
+      );
+
+    const gameNodes = equals
+      ? await stonesEqualsSearch(blackStones, whiteStones)
+      : await stonesContainsSearch(
+          blackStones,
+          whiteStones
+        );
 
     return NextResponse.json(gameNodes);
   } catch (e) {
