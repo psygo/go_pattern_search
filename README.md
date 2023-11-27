@@ -10,6 +10,8 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 ### 1.1. Tasks
 
+> (Kind lost my patience with implementing a Goban, so the current one is kind of crap, sorry. Everything seemed to be working fine but then I added some sizing parameters and things went awry.)
+
 - Pattern-Search
   - [x] Sequential Pattern-Search
   - Stone-based filtering
@@ -54,12 +56,18 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 - [ ] Webscrape [101 Weiqi](https://www.101weiqi.com/) for its tsumegos.
 - [ ] Include [Yunguseng Dojang](https://yunguseng.com/)'s files so we can index their large library.
 
-## 2. Tech Stack
+## 2. Dev Setup
+
+### 2.1. Tech Stack
 
 - Neo4j (Graph DBMS)
 - NextJS (ReactJS) + MUI
 - Sabaki's SGF Parser
 - Custom Go Board HTML Canvas Component
+
+## 2.2. Environment Variables
+
+<!-- TODO: -->
 
 ## 3. References
 

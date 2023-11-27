@@ -58,7 +58,9 @@ export type GameNodeData = Pick<SgfData, "AB" | "AW"> &
 export type GameNode = WithGameId &
   WithTreeNodeId &
   WithSgf & {
+    filename?: string;
     data: GameNodeData;
+    first_20_moves: BoardCoordinates[];
   };
 
 export type NeoGameNode = WithId & {

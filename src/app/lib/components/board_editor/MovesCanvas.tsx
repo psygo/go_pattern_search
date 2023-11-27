@@ -42,8 +42,8 @@ import {
 export type MovesCanvasProps = BoardEditorProps &
   WithPadding;
 export function MovesCanvas({
-  initialMoves,
   onMovesChanged,
+  initialMoves = [],
   size = defaultSize,
   boardSize = defaultBoardSize,
   padding = defaultPadding,

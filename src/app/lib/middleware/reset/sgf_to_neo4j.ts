@@ -24,6 +24,7 @@ import {
   SgfData,
   TreeNodeId,
 } from "@models/exports";
+import { first } from "lodash";
 
 export async function createGameAndMoveNodesIndexes() {
   try {
@@ -97,6 +98,7 @@ async function createGameNode(gameNode: GameNode) {
             sgf:              $gameNode.sgf,
             AB:               $gameNode.data.AB,
             AW:               $gameNode.data.AW,
+            first_20_moves:   $gameNode.first_20_moves,
             all_black_stones: $gameNode.data.AB,
             all_white_stones: $gameNode.data.AW
           })
@@ -164,6 +166,8 @@ export async function sgfsToNeo4j(
     "test4.sgf",
     "test5.sgf",
     "test6.sgf",
+    "test7.sgf",
+    "test8.sgf",
   ];
 
   for (const filename of filenames) {
@@ -171,10 +175,27 @@ export async function sgfsToNeo4j(
   }
 }
 
+export function first20Moves(
+  gameTree: GameTree,
+  firstId: number
+) {
+  return [...gameTree.listNodesVertically(firstId, 1, {})]
+    .map((n) => {
+      const data = n.data;
+
+      const move = ((data.B || data.W) ?? "").first();
+
+      return move;
+    })
+    .filter((s) => s !== "");
+}
+
 export async function sgfToNeo4j(filename: Filename) {
   const gameId: GameId = nanoid(NANOID_SIZE);
 
   const sgf = sgfAsString(filename);
+
+  const firstId = getId() + 1;
 
   const gameTrees = sgfFileToGameTrees(filename);
   const firstGameTree = gameTrees.first();
@@ -197,7 +218,11 @@ export async function sgfToNeo4j(filename: Filename) {
     game_id: gameId,
     sgf: sgf,
     data: gameNodeData,
+    filename,
+    first_20_moves: first20Moves(firstGameTree, firstId),
   };
+
+  // console.log(gameNode);
 
   await createGameNode(gameNode);
 

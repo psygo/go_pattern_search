@@ -15,11 +15,11 @@ export const defaultDisableInteraction = false;
 
 // TODO: Add toggle numbering
 export type BoardEditorProps = {
-  initialMoves?: BoardCoordinates[];
   onMovesChanged?: (
     newMove: BoardCoordinates,
     player: Player
   ) => void;
+  initialMoves?: BoardCoordinates[];
   size?: number;
   boardSize?: number;
   showControls?: boolean;
@@ -28,8 +28,8 @@ export type BoardEditorProps = {
   disableInteraction?: boolean;
 };
 export function BoardEditor({
-  initialMoves,
   onMovesChanged,
+  initialMoves = [],
   size = defaultSize,
   boardSize = defaultBoardSize,
   showControls = defaultShowControls,
