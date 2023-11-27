@@ -10,9 +10,11 @@ import {
   ToggleButton,
   Typography,
 } from "@mui/material";
+import { BoardCoordinates } from "@models/board_coordinates";
 
 import { BoardEditor } from "@components/board_editor/exports";
-import { BoardCoordinates } from "../../models/board_coordinates";
+
+import { useMovesContext } from "./MovesContext";
 
 export function PatternSearchForm() {
   const router = useRouter();
@@ -21,6 +23,9 @@ export function PatternSearchForm() {
   const pattern = searchParams.get("pattern") ?? "";
   const isStoneSearch =
     searchParams.get("stone-search") === "true";
+
+  const { movesAndStones, setMovesAndStones } =
+    useMovesContext();
 
   return (
     <form id="pattern-search">
@@ -32,7 +37,7 @@ export function PatternSearchForm() {
             selected={isStoneSearch}
             onChange={() => {
               router.push(
-                `?pattern=${pattern}&stone-search=${!isStoneSearch}`,
+                `/pattern-search/stones/${pattern}/`,
                 {
                   scroll: false,
                 }
@@ -48,9 +53,15 @@ export function PatternSearchForm() {
         <BoardEditor
           size={200}
           showCoords={false}
-          initialMoves={
-            ["ff", "gg", "hh"] as BoardCoordinates[]
-          }
+          initialMoves={movesAndStones.moves}
+          onMovesChanged={(m) => {
+            setMovesAndStones({
+              ...movesAndStones,
+              moves: m,
+            });
+
+            console.log(movesAndStones);
+          }}
         />
       </Stack>
     </form>

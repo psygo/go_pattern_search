@@ -35,7 +35,7 @@ export const StonesSearchReqSearchParamsSchema = z.object({
   equals: z
     .string()
     .transform((s) => s === "")
-    .or(z.undefined().transform((s) => false)),
+    .or(z.undefined().transform(() => false)),
 });
 
 //----------------------------------------------------------
