@@ -81,15 +81,18 @@ export async function stonesEqualsSearch(
                       )
                   AND
                       apoc.coll.isEqualCollection(
-                        $whiteStones, 
+                        $blackStones, 
                         gm.all_white_stones
                       )
                 )
                 
-          WITH COLLECT(gm) AS nodes
-          WITH [node IN nodes WHERE node:GameNode | node] AS gs
+          WITH DISTINCT(gm.game_id) AS game_ids
 
-          RETURN DISTINCT(gs)
+          MATCH (g:GameNode)
+
+          WHERE g.game_id IN game_ids
+
+          RETURN g
         `,
         { blackStones, whiteStones }
       )
@@ -135,10 +138,13 @@ export async function stonesContainsSearch(
                       )) > 0
                 )
           
-          WITH COLLECT(gm) AS nodes
-          WITH [node IN nodes WHERE node:GameNode | node] AS gs
+          WITH DISTINCT(gm.game_id) AS game_ids
 
-          RETURN DISTINCT(gs)
+          MATCH (g:GameNode)
+
+          WHERE g.game_id IN game_ids
+
+          RETURN g
         `,
         { blackStones, whiteStones }
       )
