@@ -1,0 +1,9 @@
+(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.51.1]KM[6.5]SZ[19]DT[2020-08-03]AW[ss][sr][or][os][pq][pp][po][qo][ro][so]AB[rr][qp][rp][sp][pr][ps](;B[qq]TE[1](;W[rs]C[The answer in the book is `A` for a seki, but `B` seems to work.
+
+***
+
+A resposta no livro é `A` para se obter um seki, mas `B` parece funcionar.]LB[qr:A][sq:B](;B[qr];W[sq])(;B[sq];W[qr];B[qs]))(;W[sq];B[rs]))(;B[qr]BM[1];W[qq];B[rq];W[rs]C[This will later on yield a bent-4 in the corner.
+
+***
+
+Esta forma gera o 4 curvado no canto.]))

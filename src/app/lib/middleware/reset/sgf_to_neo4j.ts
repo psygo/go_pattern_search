@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readdirSync, readFileSync } from "fs";
 import { join } from "path";
 
 // @ts-ignore
@@ -7,6 +7,9 @@ import GameTree from "@sabaki/immutable-gametree";
 import { parseFile } from "@sabaki/sgf";
 
 import { nanoid } from "nanoid";
+
+import {} from "@utils/array";
+import {} from "@utils/string";
 
 import { NANOID_SIZE, neo4jSession } from "@config/db";
 
@@ -24,7 +27,6 @@ import {
   SgfData,
   TreeNodeId,
 } from "@models/exports";
-import { first } from "lodash";
 
 export async function createGameAndMoveNodesIndexes() {
   try {
@@ -156,23 +158,14 @@ export async function sgfsToNeo4j(
   const gamesDir = join(
     __dirname,
     "../../../../..",
-    directory
+    directory,
+    "Thousand_Tsumego_Collection"
   );
 
-  // const filenames = readdirSync(gamesDir);
-  const filenames = [
-    "test1.sgf",
-    "test2.sgf",
-    "test3.sgf",
-    "test4.sgf",
-    "test5.sgf",
-    "test6.sgf",
-    "test7.sgf",
-    "test8.sgf",
-  ];
+  const filenames = readdirSync(gamesDir);
 
   for (const filename of filenames) {
-    await sgfToNeo4j(filename);
+    await sgfToNeo4j(filename, gamesDir);
   }
 }
 
@@ -188,17 +181,21 @@ export function first20Moves(
 
       return move;
     })
-    .filter((s) => s !== "");
+    .filter((s) => s !== "")
+    .slice(0, 20);
 }
 
-export async function sgfToNeo4j(filename: Filename) {
+export async function sgfToNeo4j(
+  filename: Filename,
+  path: string
+) {
   const gameId: GameId = nanoid(NANOID_SIZE);
 
-  const sgf = sgfAsString(filename);
+  const sgf = sgfAsString(filename, path);
 
   const firstId = getId() + 1;
 
-  const gameTrees = sgfFileToGameTrees(filename);
+  const gameTrees = sgfFileToGameTrees(filename, path);
   const firstGameTree = gameTrees.first();
   const allNodes: GameTreeNodeObj[] = [
     ...firstGameTree.listNodes(),
@@ -256,28 +253,22 @@ function currentMove(sgfData: SgfData) {
   return sgfData.B?.first() ?? sgfData.W?.first() ?? "";
 }
 
-export function sgfAsString(filename: Filename): Sgf {
-  const gamePath = join(
-    __dirname,
-    "../../../../..",
-    "games",
-    filename
-  );
-
-  const sgfString = readFileSync(gamePath).toString();
+export function sgfAsString(
+  filename: Filename,
+  path: string
+): Sgf {
+  const fullPath = join(path, filename);
+  const sgfString = readFileSync(fullPath).toString();
 
   return sgfString;
 }
 
-export function sgfFileToGameTrees(filename: Filename) {
-  const gamePath = join(
-    __dirname,
-    "../../../../..",
-    "games",
-    filename
-  );
-
-  const rootNodes = parseFile(gamePath, { getId });
+export function sgfFileToGameTrees(
+  filename: Filename,
+  path: string
+) {
+  const fullPath = join(path, filename);
+  const rootNodes = parseFile(fullPath, { getId });
 
   const gameTrees: GameTree[] = rootNodes.map(
     (rootNode: any) => {

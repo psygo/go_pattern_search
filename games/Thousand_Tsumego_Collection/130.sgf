@@ -1,0 +1,13 @@
+(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.51.1]KM[6.5]SZ[19]DT[2020-07-16]AW[sr][sq][rq][qq][qr][pq]AB[pr][oq][op][pp][qp][rp][sp](;B[rs]TE[1];W[or]LB[nr:A][qs:B]C[The correct move is **A**, but **B** can also work, though it's more iffy and less optimal.
+
+***
+
+O movimento correto é **A**, mas **B** também pode funcionar, apesar de que é muito mais condicional e subótimo.]IT[](;B[nr];W[ps];B[ns](;W[os];B[qs])(;W[qs];B[os]))(;B[qs](;W[ps];B[nr];W[rr];B[ns];W[ss];B[os])(;W[nr]IT[];B[ps]LB[os:A]C[If White doesn't play at **A**, Black can kill the corner &mdash; otherwise it's a seki. It's an extra option for her, since the corner was dead anyway.
+
+***
+
+Se Brancas não jogam em **A**, Pretas podem matar o canto &mdash; caso contrário, é um seki. É uma opção extra para Brancas, já que o canto estava morto de qualquer maneira.];W[os]C[It's a seki in the corner now, but...
+
+***
+
+É um seki agora, mas...];B[mq];W[mr];B[lr](;W[nq];B[mp];W[np];B[no])(;W[lq];B[kr];W[nq];B[mp];W[np];B[no];W[mo];B[lp];W[oo];B[nn])(;W[kr];B[lq];W[ls];B[ms];W[ns];B[nq]))))(;B[or]BM[1];W[rs]))

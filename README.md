@@ -53,8 +53,12 @@ Another alternative to modeling this problem is through _Regular Expressions_ &m
 
 ### 1.2. Ideas
 
-- [ ] Webscrape [101 Weiqi](https://www.101weiqi.com/) for its tsumegos.
+- [x] Test it with GoGoD Games
+  - Seems to work fine with it, it takes a couple of seconds once you get to 1,000s of games, but I think that might be fixed with some caching.
 - [ ] Include [Yunguseng Dojang](https://yunguseng.com/)'s files so we can index their large library.
+  - There's something weird about this. There's something strange about the parsing of his files, such that they get bloated and overflow Neo4j's memory???
+    - The same thing is happening for adding the tsumego collection.
+- [ ] Webscrape [101 Weiqi](https://www.101weiqi.com/) for its tsumegos.
 
 ## 2. Dev Setup
 

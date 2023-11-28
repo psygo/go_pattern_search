@@ -1,0 +1,17 @@
+(;GM[1]FF[4]CA[UTF-8]AP[CGoban:3]ST[2]
+RU[Japanese]SZ[19]KM[6.50]
+PW[YD S37 9th lecture]PB[Unusual moves vol.2]
+(;AW[dd][pe][dp]AB[pc][np][qp]TR[pe]
+;B[qe]
+;W[qf]
+;B[re])
+(;AW[dd][od][dp]AB[qd][np][qp]TR[od]
+;B[oe])
+(;AW[dd][pe][dp]AB[pc][np][qp]TR[pe]
+;B[nc]
+;W[qc]
+;B[qd]
+;W[pd]
+;B[rc]
+;W[qb]
+;B[pb]))

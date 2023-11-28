@@ -1,0 +1,55 @@
+(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.51.1]KM[6.5]SZ[19]DT[2020-07-20]AB[sr][ss][or][nr][mq][mo][mm][nm][ol][pl][ql][rl][sm][pm][pn][po][pp][qo][ro][so]AW[sq][rq][qq][qr][qs][pq][oq][op][oo][on][om][nl][nk][pk][ok][qk][rk][sk][rn]C[This is a very tricky problem involving the recapture of stones. We will try to rationalize how to think about the recursive recapturing of stones. Go through the correct answer first if you want to understand how to better think about this topic.
+
+***
+
+Esse é um problema bastante traiçoeiro envolvendo recaptura de pedras. Nós vamos tentar racionalizar como pensar sobre a captura recursiva das pedras. Vá para a resposta correta primeiro se você quiser entender melhor como pensar sobre este tópico.]HO[1](;B[sl]TE[1]C[The **A** group with the dead shape inside that takes forever to kill has 7 internal liberties &mdash; not counting the 3 "external" ones (▲).
+
+This type of liberty race is an example of the Fibonacci sequence. Without **B**, it would take 8 liberties to capture **A**, and, internally, the recaptures will have 5 and 3 liberties respectively.
+
+***
+
+O grupo **A** com a forma morta interna que demora a eternidade para morrer possui 7 liberdades internas &mdash; sem contar as 3 "externas" (▲).
+
+Esse tipo de corrida de liberdades é um exemplo da sequência de Fibonacci. Sem **B**, haveria 8 liberdades para capturar **A**, e, internamente, as recapturas terão 5 e 3 liberdades, respectivamente.]LB[po:A][rn:B]TR[qp][rp][sp];W[qp];B[nq];W[rp];B[no];W[sp]C[It will take 9 moves or 7 liberties &mdash; that's a "formula" for the big eye dead shape at **C** &mdash; to capture **A**, and the same for White. But it's Black's turn after White has filled all of the ▲ liberties.
+
+***
+
+Vai demorar 9 jogadas ou 7 liberdades &mdash; isso vem da forma morta em **C** &mdash; para capturar **A**, e o mesmo para Brancas. Mas é o turno das Pretas depois de as Brancas terem preenchido as liberdades ▲.]LB[po:A][rn:C][sr:B]TR[qp][rp][sp]HO[1];B[nn];W[rm];B[pr];W[sn];B[np];W[qn]C[The important part is to recognize that, since **A** is sente against Black, it kind of shouldn't count as a liberty. So **A** and the next move are only counted as 1 liberty.
+
+***
+
+A parte importante é reconhecer que, já que **A** é sente contra Pretas, não deveria contar como liberdade. Então **A** e o próximo movimento são contados somente como uma liberdade.]LB[qn:A];B[qm];W[rn]C[So far, then, with this move, White has played only a corrected amount of 3 moves.
+
+***
+
+Até aqui, com este movimento, Brancas jogaram uma quantidade corrigida de 3 movimentos no total.];B[ps];W[sn]C[Since **A** is sente, it won't count, so White only has 3 liberties. The same goes for Black, but it's Black's turn.
+
+***
+
+Já que **A** é sente, ele não conta, então Brancas somente possuem 3 liberdades. O mesmo vale para Pretas, porém é o turno delas.]LB[rr:A];B[rr];W[rs];B[sr];W[rm]C[Again, White plays a sente move, so it should not be counted because it only affects the local group and not the liberty race as a whole.
+
+***
+
+De novo, Brancas jogam um movimento sente, então ele não deveria ser contabilizado pois somente afeta o grupo localmente e não a corrida de liberdades global.];B[qn];W[rn]C[So far, this is the 5th move White has played to try to capture Black. If, after **A** or **B**, Black chooses to capture the 2 stones, nothing will change with respect to its total of liberties, because, after applying the same "sente-doesn't-count" logic, Black has only 2 more liberties anyway.
+
+***
+
+Por enquanto, este é o 5o movimento branco tentando capturar Pretas. Se, após **A** ou **B**, Pretas escolhem capturar as 2 pedras, nada mudará em relação ao total de liberdades, pois, após aplicar a mesma lógica de "sente-não-conta", Pretas possuem somente 2 liberdades de qualquer maneira.]LB[rm:B][sn:A];B[rr];W[ss];B[rr])(;B[rm]BM[1];W[qn]LB[rm:A][sl:B]C[**A** is filling in a liberty, while **B** would have preserved it. Alternatively, it also creates a smaller internal eye than with **B**.
+
+***
+
+**A** preenche uma liberdade que seria preservada por **B**. Alternativamente, **A** também cria um olho interno menor do que **B**.];B[nq]C[Following from the main variation's explanations, we have that, after White fills up all of the ▲ liberties:
+
+- White: 1 external liberties + 3 internal (**A**) = 5.
+- Black: 1 (**B**) + 3 internal (**C**) = 4.
+
+It's White's turn, and she can has 1 extra liberty on this race, so White can even tenuki.
+
+***
+
+Seguindo as explicações da variação principal, nós temos que, depois de Brancas terem preenchido todas as liberdades ▲:
+
+- Brancas: 2 liberdades externas + 3 internas (**A**) = 5.
+- Pretas: 1 (**B**) + 3 internas (**C**) = 4.
+
+É o turno das Brancas, e elas possuem uma liberdade extra, portanto, Brancas podem até fazer tenuki.]LB[qn:C][sl:B][sr:A]TR[qp][rp][sp]HO[1];W[aa];B[no];W[sl];B[pr];W[qp];B[ps];W[rp];B[nn];W[sp];B[np];W[qm];B[sn];W[qn];B[rr];W[rs];B[sr];W[qm];B[rn];W[qm]))

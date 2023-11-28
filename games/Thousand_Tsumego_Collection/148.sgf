@@ -1,0 +1,25 @@
+(;GM[1]FF[4]CA[UTF-8]AP[Sabaki:0.51.1]KM[6.5]SZ[19]DT[2020-07-17]AB[rq][rp][qo][rn][qm][om][mn][mo][mp][mq][mr][nr][pp]AW[po][oo][no][np][nq][or][qr][qq][qp]AE[pr](;B[pq]C[The crucial shape point. But there are so many traps Black can fall into.
+
+***
+
+O ponto crucial da forma. Mas há ainda muitas armadilhas para as Pretas ainda.]TE[1];W[rr]LB[pr:A][rs:B]C[Both **A** and **B** work as a follow up.
+
+***
+
+Ambos **A** e **B** funcionam na sequência.](;B[pr]C[It is crucial to create cutting points here.
+
+***
+
+É crucial criar pontos de corte aqui.];W[ps];B[rs];W[sr];B[qs];W[os];B[sq])(;B[rs];W[qs];B[sr];W[os];B[pr])(;B[ps]BM[1];W[os];B[pr];W[oq];B[sr];W[op]))(;B[os]BM[1](;W[pq]C[Wrong move for White.
+
+***
+
+Jogada errada para Brancas.]GB[1];B[ps])(;W[ps];B[oq](;W[pq]C[Ko. Not optimal for White, but, at least, she isn't dead.
+
+***
+
+Ko. Não é ótimo para Brancas, mas, ao menos, elas não estão mortas.]GB[1])(;W[pr](;B[rr];W[op])(;B[pq];W[rr];B[sr];W[rs]))))(;B[rr]C[Naïve.
+
+***
+
+Ingênuo.]BM[1];W[pq];B[op];W[qs]))
